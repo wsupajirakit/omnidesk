@@ -1,0 +1,144 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`[WRAP-AI W1a] the neutral call matches the recorded wire body all blocks on together — order is rawJson→rules→siteRules→guide→doc→question 1`] = `
+{
+  "contents": [
+    {
+      "parts": [
+        {
+          "text": "[RAW_JSON_PROFILE_START]
+Raw Json Profile : enable = true
+Raw Json =
+{
+  "Path : api/v1/customer": {
+    "data": {
+      "name": "x"
+    }
+  }
+}
+[RAW_JSON_PROFILE_END]",
+        },
+        {
+          "text": "[RAW_JSON_PROFILE_RULES_START]
+json rules
+[RAW_JSON_PROFILE_RULES_END]",
+        },
+        {
+          "text": "[RAW_SITE_RULES_START]
+Site Rules =
+{
+  "SITE_RULES": {
+    "role": "site_rules",
+    "data": {
+      "min_deposit": 100
+    }
+  }
+}
+[RAW_SITE_RULES_END]",
+        },
+        {
+          "text": "[SITE_RULES_GUIDE_START]
+site guide
+[SITE_RULES_GUIDE_END]",
+        },
+        {
+          "text": "Document:
+doc",
+        },
+        {
+          "text": "Question:
+ยอดหนี้เท่าไหร่",
+        },
+      ],
+    },
+  ],
+  "generationConfig": {
+    "temperature": 0.4,
+    "thinkingConfig": {
+      "thinkingLevel": "minimal",
+    },
+    "topK": 20,
+    "topP": 0.4,
+  },
+  "system_instruction": {
+    "parts": [
+      {
+        "text": "---
+- If the answer is found, append "[[[FOUND]]]" at the end.
+- If the answer is NOT found, append "[[[NOT_FOUND]]]" at the end.
+- IMPORTANT: You MUST INCLUDE tags like [[[assist]]] exactly as they appear in the Document in your response.",
+      },
+    ],
+  },
+}
+`;
+
+exports[`[WRAP-AI W1a] the neutral call matches the recorded wire body plain question 1`] = `
+{
+  "contents": [
+    {
+      "parts": [
+        {
+          "text": "Question:
+ยอดหนี้เท่าไหร่",
+        },
+      ],
+    },
+  ],
+  "generationConfig": {
+    "temperature": 0.4,
+    "thinkingConfig": {
+      "thinkingLevel": "minimal",
+    },
+    "topK": 20,
+    "topP": 0.4,
+  },
+  "system_instruction": {
+    "parts": [
+      {
+        "text": "---
+- If the answer is found, append "[[[FOUND]]]" at the end.
+- If the answer is NOT found, append "[[[NOT_FOUND]]]" at the end.
+- IMPORTANT: You MUST INCLUDE tags like [[[assist]]] exactly as they appear in the Document in your response.",
+      },
+    ],
+  },
+}
+`;
+
+exports[`[WRAP-AI W1a] the neutral call matches the recorded wire body with docText → a document block before the question 1`] = `
+{
+  "contents": [
+    {
+      "parts": [
+        {
+          "text": "Document:
+the document body",
+        },
+        {
+          "text": "Question:
+ยอดหนี้เท่าไหร่",
+        },
+      ],
+    },
+  ],
+  "generationConfig": {
+    "temperature": 0.4,
+    "thinkingConfig": {
+      "thinkingLevel": "minimal",
+    },
+    "topK": 20,
+    "topP": 0.4,
+  },
+  "system_instruction": {
+    "parts": [
+      {
+        "text": "---
+- If the answer is found, append "[[[FOUND]]]" at the end.
+- If the answer is NOT found, append "[[[NOT_FOUND]]]" at the end.
+- IMPORTANT: You MUST INCLUDE tags like [[[assist]]] exactly as they appear in the Document in your response.",
+      },
+    ],
+  },
+}
+`;

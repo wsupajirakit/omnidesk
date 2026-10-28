@@ -1,0 +1,33 @@
+# [PROG-20260905-PLUGFMT] Files whose BYTES are load-bearing for a plug patch.
+#
+# `npm run format` is `prettier --write "src/**/*.ts" "z-test/**/*.ts"`. Until this file
+# existed there was nothing between that command and the three off-switches in `docs/`.
+#
+# MEASURED, not feared (05/09/2026, lane `wt-spinecut-05092026`): prettier rewrites 221
+# lines of `webhook.service.ts`, and those rewrites land inside 3 of the 6 spine hunks of
+# `strike-plug-in.patch` and 1 of the 9 of `menu-plug-in.patch`. Both would stop reverting.
+# `strike-suspend-plug-in.patch` survives — its three spans are not touched — so the
+# often-repeated "formatting breaks all three" is wrong; it breaks two.
+#
+# WHY THAT IS WORSE THAN IT SOUNDS. The failure surfaces as "patch does not apply", which
+# reads as a rotted patch and sends the next person hunting through `docs/` for a hunk that
+# is perfectly fine. Nothing guarded it: `plug-patch-contract.spec.ts` checks patch-against-
+# patch geometry, never patch-against-tree formatting. And the recovery —
+# `git checkout -- src/modules/webhook/` — is only safe on an otherwise clean tree, which
+# is exactly what a tree being formatted is not.
+#
+# WHY IGNORE RATHER THAN "FORMAT ONCE AND REGENERATE THE PATCHES". Regenerating is a real
+# option and it is planned (`todo/task/05092026/webhook_spine_reduction_program.md` §11),
+# but it is a day of work with its own risks, and this hazard fires the first time anybody
+# tidies the file's style. Ignoring costs nothing today: neither file has ever been
+# prettier-clean, so nothing is being given up.
+#
+# ⚠️ THE LIST IS GUARDED. `plug-files-prettier-ignored.spec.ts` derives the files from the
+# `+++` header of every `docs/*.patch` and fails if one of them is not covered here — so a
+# FOURTH plug on a new file cannot quietly miss this protection, and deleting a line here
+# turns a suite red instead of a patch.
+#
+# revert: delete this file and the spec beside it. `npm run format` then reformats the
+#         spine and two of the three plugs stop reverting on the next run.
+src/modules/webhook/webhook.service.ts
+src/modules/webhook/webhook.module.ts

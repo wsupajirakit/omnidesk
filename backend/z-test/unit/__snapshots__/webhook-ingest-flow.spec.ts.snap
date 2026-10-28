@@ -1,0 +1,419 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`[RULER-20260815-WLOGGOLDEN] webhook_logs rows are byte-frozen S1 plain text, provider rejects — incoming + generate_response fallback rows 1`] = `
+"[
+  {
+    "action_type": "incoming_line_webhook",
+    "channel": "webhook",
+    "endpoint": "/wh7unit/webhook",
+    "hook_alias": "wh7unit",
+    "hook_id": "a0d000000000000000000014",
+    "method": "POST",
+    "raw_request": {
+      "destination": "Uwh7",
+      "events": [
+        {
+          "eventId": "ev-text",
+          "message": {
+            "id": "m1",
+            "text": "สวัสดี",
+            "type": "text"
+          },
+          "replyToken": "rt-text",
+          "source": {
+            "type": "user",
+            "userId": "Uwh7unit0000000000000000000000001"
+          },
+          "timestamp": "<volatile>",
+          "type": "message"
+        }
+      ]
+    },
+    "status": "success"
+  },
+  {
+    "action_type": "generate_response",
+    "channel": "gemini",
+    "duration_ms": "<volatile>",
+    "endpoint": "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent",
+    "error_message": "no AI reply provider is bound",
+    "hook_alias": "wh7unit",
+    "hook_id": "a0d000000000000000000014",
+    "http_status": 0,
+    "line_event_id": "ev-text",
+    "line_key_mask": "wh...en",
+    "method": "POST",
+    "payload_summary": {
+      "answer_tags": [],
+      "doc_len": "0/0",
+      "doc_sha": "e3b0c442/e3b0c442",
+      "event_id": "ev-text",
+      "fast_mode": 0,
+      "question": "สวัสดี",
+      "thai_time": "<volatile>"
+    },
+    "request_meta": {
+      "event_id": "ev-text",
+      "reply_token": "rt-text"
+    },
+    "response_summary": {
+      "fallback": true,
+      "noData": true,
+      "response_ai": null,
+      "tag_status": null,
+      "text": null
+    },
+    "status": "error"
+  }
+]"
+`;
+
+exports[`[RULER-20260815-WLOGGOLDEN] webhook_logs rows are byte-frozen S2 text + linked profile + scripted answer — generate_response + line_reply rows 1`] = `
+"[
+  {
+    "action_type": "incoming_line_webhook",
+    "channel": "webhook",
+    "endpoint": "/wh7unit/webhook",
+    "hook_alias": "wh7unit",
+    "hook_id": "a0d000000000000000000014",
+    "method": "POST",
+    "raw_request": {
+      "destination": "Uwh7",
+      "events": [
+        {
+          "eventId": "ev-text",
+          "message": {
+            "id": "m1",
+            "text": "ยอดคงเหลือ",
+            "type": "text"
+          },
+          "replyToken": "rt-text",
+          "source": {
+            "type": "user",
+            "userId": "Uwh7unit0000000000000000000000001"
+          },
+          "timestamp": "<volatile>",
+          "type": "message"
+        }
+      ]
+    },
+    "status": "success"
+  },
+  {
+    "action_type": "generate_response",
+    "channel": "gemini",
+    "duration_ms": "<volatile>",
+    "endpoint": "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent",
+    "hook_alias": "wh7unit",
+    "hook_id": "a0d000000000000000000014",
+    "http_status": 0,
+    "line_event_id": "ev-text",
+    "line_key_mask": "wh...en",
+    "method": "POST",
+    "payload_summary": {
+      "answer_tags": [],
+      "doc_len": "0/0",
+      "doc_sha": "e3b0c442/e3b0c442",
+      "event_id": "ev-text",
+      "fast_mode": 0,
+      "question": "ยอดคงเหลือ",
+      "thai_time": "<volatile>"
+    },
+    "request_meta": {
+      "event_id": "ev-text",
+      "reply_token": "rt-text"
+    },
+    "response_summary": {
+      "fallback": false,
+      "noData": false,
+      "response_ai": null,
+      "tag_status": null,
+      "text": "สวัสดีค่ะ ยินดีให้บริการค่ะ"
+    },
+    "status": "success"
+  },
+  {
+    "action_type": "line_reply",
+    "channel": "line_api",
+    "duration_ms": "<volatile>",
+    "endpoint": "https://api.line.me/v2/bot/message/reply",
+    "error_message": "Request failed with status code 401",
+    "hook_alias": "wh7unit",
+    "hook_id": "a0d000000000000000000014",
+    "http_status": 401,
+    "line_event_id": "ev-text",
+    "line_key_mask": "wh...en",
+    "method": "POST",
+    "payload_summary": {
+      "alias": "wh7unit",
+      "message": "ยอดคงเหลือ",
+      "reply_token": "rt-text",
+      "user_id": "Uwh7unit0000000000000000000000001"
+    },
+    "request_meta": {
+      "event_id": "ev-text",
+      "reply_token": "rt-text"
+    },
+    "response_summary": {
+      "message": "Authentication failed"
+    },
+    "status": "error"
+  },
+  {
+    "action_type": "handle_webhook",
+    "channel": "webhook",
+    "endpoint": "/wh7unit/webhook",
+    "error_message": "Request failed with status code 401",
+    "hook_alias": "wh7unit",
+    "hook_id": "a0d000000000000000000014",
+    "line_key_mask": "wh...en",
+    "method": "POST",
+    "payload_summary": {
+      "alias": "wh7unit",
+      "event_id": "ev-text"
+    },
+    "request_meta": {
+      "endpoint": "/wh7unit/webhook",
+      "event_id": "ev-text",
+      "ip": "127.0.0.1",
+      "method": "POST",
+      "user_agent": "jest"
+    },
+    "status": "error"
+  }
+]"
+`;
+
+exports[`[RULER-20260815-WLOGGOLDEN] webhook_logs rows are byte-frozen S3 rate-limited text — rate_limit_reply row 1`] = `
+"[
+  {
+    "action_type": "incoming_line_webhook",
+    "channel": "webhook",
+    "endpoint": "/wh7unit/webhook",
+    "hook_alias": "wh7unit",
+    "hook_id": "a0d000000000000000000014",
+    "method": "POST",
+    "raw_request": {
+      "destination": "Uwh7",
+      "events": [
+        {
+          "eventId": "ev-text",
+          "message": {
+            "id": "m1",
+            "text": "สวัสดี",
+            "type": "text"
+          },
+          "replyToken": "rt-text",
+          "source": {
+            "type": "user",
+            "userId": "Uwh7unit0000000000000000000000001"
+          },
+          "timestamp": "<volatile>",
+          "type": "message"
+        }
+      ]
+    },
+    "status": "success"
+  },
+  {
+    "action_type": "handle_webhook",
+    "channel": "webhook",
+    "endpoint": "/wh7unit/webhook",
+    "error_message": "Request failed with status code 401",
+    "hook_alias": "wh7unit",
+    "hook_id": "a0d000000000000000000014",
+    "line_key_mask": "wh...en",
+    "method": "POST",
+    "payload_summary": {
+      "alias": "wh7unit",
+      "event_id": "ev-text"
+    },
+    "request_meta": {
+      "endpoint": "/wh7unit/webhook",
+      "event_id": "ev-text",
+      "ip": "127.0.0.1",
+      "method": "POST",
+      "user_agent": "jest"
+    },
+    "status": "error"
+  }
+]"
+`;
+
+exports[`[RULER-20260815-WLOGGOLDEN] webhook_logs rows are byte-frozen S4 hook status 0 — the off branch writes what it writes today 1`] = `
+"[
+  {
+    "action_type": "incoming_line_webhook",
+    "channel": "webhook",
+    "endpoint": "/wh7unit/webhook",
+    "hook_alias": "wh7unit",
+    "hook_id": "a0d000000000000000000014",
+    "method": "POST",
+    "raw_request": {
+      "destination": "Uwh7",
+      "events": [
+        {
+          "eventId": "ev-text",
+          "message": {
+            "id": "m1",
+            "text": "สวัสดี",
+            "type": "text"
+          },
+          "replyToken": "rt-text",
+          "source": {
+            "type": "user",
+            "userId": "Uwh7unit0000000000000000000000001"
+          },
+          "timestamp": "<volatile>",
+          "type": "message"
+        }
+      ]
+    },
+    "status": "success"
+  },
+  {
+    "action_type": "handle_webhook",
+    "channel": "webhook",
+    "endpoint": "/wh7unit/webhook",
+    "error_message": "Request failed with status code 401",
+    "hook_alias": "wh7unit",
+    "hook_id": "a0d000000000000000000014",
+    "line_key_mask": "wh...en",
+    "method": "POST",
+    "payload_summary": {
+      "alias": "wh7unit",
+      "event_id": "ev-text"
+    },
+    "request_meta": {
+      "endpoint": "/wh7unit/webhook",
+      "event_id": "ev-text",
+      "ip": "127.0.0.1",
+      "method": "POST",
+      "user_agent": "jest"
+    },
+    "status": "error"
+  }
+]"
+`;
+
+exports[`[RULER-20260815-WLOGGOLDEN] webhook_logs rows are byte-frozen S5 image + image_answer_text + linked profile — image_answer_reply row 1`] = `
+"[
+  {
+    "action_type": "incoming_line_webhook",
+    "channel": "webhook",
+    "endpoint": "/wh7unit/webhook",
+    "hook_alias": "wh7unit",
+    "hook_id": "a0d000000000000000000014",
+    "method": "POST",
+    "raw_request": {
+      "destination": "Uwh7",
+      "events": [
+        {
+          "eventId": "ev-image",
+          "message": {
+            "id": "m-image",
+            "type": "image"
+          },
+          "replyToken": "rt-image",
+          "source": {
+            "type": "user",
+            "userId": "Uwh7unit0000000000000000000000001"
+          },
+          "timestamp": "<volatile>",
+          "type": "message"
+        }
+      ]
+    },
+    "status": "success"
+  }
+]"
+`;
+
+exports[`[RULER-20260815-WLOGGOLDEN] webhook_logs rows are byte-frozen S6 image + unregistered customer — missing_profile_data_reply row 1`] = `
+"[
+  {
+    "action_type": "incoming_line_webhook",
+    "channel": "webhook",
+    "endpoint": "/wh7unit/webhook",
+    "hook_alias": "wh7unit",
+    "hook_id": "a0d000000000000000000014",
+    "method": "POST",
+    "raw_request": {
+      "destination": "Uwh7",
+      "events": [
+        {
+          "eventId": "ev-image",
+          "message": {
+            "id": "m-image",
+            "type": "image"
+          },
+          "replyToken": "rt-image",
+          "source": {
+            "type": "user",
+            "userId": "Uwh7unit0000000000000000000000001"
+          },
+          "timestamp": "<volatile>",
+          "type": "message"
+        }
+      ]
+    },
+    "status": "success"
+  },
+  {
+    "action_type": "handle_webhook",
+    "channel": "webhook",
+    "endpoint": "/wh7unit/webhook",
+    "error_message": "Request failed with status code 401",
+    "hook_alias": "wh7unit",
+    "hook_id": "a0d000000000000000000014",
+    "line_key_mask": "wh...en",
+    "method": "POST",
+    "payload_summary": {
+      "alias": "wh7unit",
+      "event_id": "ev-image"
+    },
+    "request_meta": {
+      "endpoint": "/wh7unit/webhook",
+      "event_id": "ev-image",
+      "ip": "127.0.0.1",
+      "method": "POST",
+      "user_agent": "jest"
+    },
+    "status": "error"
+  }
+]"
+`;
+
+exports[`[RULER-20260815-WLOGGOLDEN] webhook_logs rows are byte-frozen S7 bad signature — the incoming row and nothing else 1`] = `
+"[
+  {
+    "action_type": "incoming_line_webhook",
+    "channel": "webhook",
+    "endpoint": "/wh7unit/webhook",
+    "hook_alias": "wh7unit",
+    "hook_id": "a0d000000000000000000014",
+    "method": "POST",
+    "raw_request": {
+      "destination": "Uwh7",
+      "events": [
+        {
+          "eventId": "ev-text",
+          "message": {
+            "id": "m1",
+            "text": "สวัสดี",
+            "type": "text"
+          },
+          "replyToken": "rt-text",
+          "source": {
+            "type": "user",
+            "userId": "Uwh7unit0000000000000000000000001"
+          },
+          "timestamp": "<volatile>",
+          "type": "message"
+        }
+      ]
+    },
+    "status": "success"
+  }
+]"
+`;

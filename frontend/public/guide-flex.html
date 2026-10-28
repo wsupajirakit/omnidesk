@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>คู่มือตัวแปร Flex Card (LINE)</title>
+<style>
+  
+  :root{
+    --bg:#f6f8fb; --card:#fff; --ink:#0f172a; --muted:#64748b; --line:#e2e8f0;
+    --brand:#0d9488; --brand-soft:#ecfdf5; --brand-ink:#0f766e;
+    --warn:#b45309; --warn-soft:#fffbeb; --warn-line:#fde9c8;
+    --danger:#dc2626; --danger-soft:#fef2f2;
+    --info:#1d4ed8; --info-soft:#eff6ff;
+    --code-bg:#0f1729; --code-ink:#d7e0f4; --tag:#5eead4;
+    --chip:#eef2f7; --chip-ink:#334155;
+    --shadow:0 1px 2px rgba(15,23,42,.06),0 8px 24px -12px rgba(15,23,42,.14);
+  }
+  @media (prefers-color-scheme:dark){
+    :root{ --bg:#0b1220; --card:#111a2b; --ink:#e6edf7; --muted:#94a3b8; --line:#1f2c42;
+      --brand:#2dd4bf; --brand-soft:#062d29; --brand-ink:#5eead4;
+      --warn:#fbbf24; --warn-soft:#231a06; --warn-line:#3a2c0a;
+      --danger:#f87171; --danger-soft:#2b1112;
+      --info:#93c5fd; --info-soft:#0c1c38;
+      --code-bg:#080e1c; --code-ink:#c7d3ee; --tag:#5eead4;
+      --chip:#17233a; --chip-ink:#c2cde0;
+      --shadow:0 1px 2px rgba(0,0,0,.4),0 10px 30px -14px rgba(0,0,0,.6); }
+  }
+  :root[data-theme="dark"]{ --bg:#0b1220; --card:#111a2b; --ink:#e6edf7; --muted:#94a3b8; --line:#1f2c42;
+      --brand:#2dd4bf; --brand-soft:#062d29; --brand-ink:#5eead4;
+      --warn:#fbbf24; --warn-soft:#231a06; --warn-line:#3a2c0a;
+      --danger:#f87171; --danger-soft:#2b1112; --info:#93c5fd; --info-soft:#0c1c38;
+      --code-bg:#080e1c; --code-ink:#c7d3ee; --tag:#5eead4; --chip:#17233a; --chip-ink:#c2cde0;
+      --shadow:0 1px 2px rgba(0,0,0,.4),0 10px 30px -14px rgba(0,0,0,.6); }
+  :root[data-theme="light"]{ --bg:#f6f8fb; --card:#fff; --ink:#0f172a; --muted:#64748b; --line:#e2e8f0;
+      --brand:#0d9488; --brand-soft:#ecfdf5; --brand-ink:#0f766e;
+      --warn:#b45309; --warn-soft:#fffbeb; --warn-line:#fde9c8;
+      --danger:#dc2626; --danger-soft:#fef2f2; --info:#1d4ed8; --info-soft:#eff6ff;
+      --code-bg:#0f1729; --code-ink:#d7e0f4; --tag:#5eead4; --chip:#eef2f7; --chip-ink:#334155;
+      --shadow:0 1px 2px rgba(15,23,42,.06),0 8px 24px -12px rgba(15,23,42,.14); }
+
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto} *{animation:none!important;transition:none!important}}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:"IBM Plex Sans Thai","Noto Sans Thai",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    line-height:1.6;-webkit-font-smoothing:antialiased}
+  code,kbd,.mono{font-family:ui-monospace,"SF Mono","JetBrains Mono","Cascadia Code",Menlo,Consolas,monospace}
+  .wrap{max-width:1120px;margin:0 auto;padding:28px 20px 96px}
+
+  header.top{margin-bottom:20px}
+  .eyebrow{font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--brand-ink);font-weight:700;margin:0 0 6px}
+  h1{font-size:1.75rem;line-height:1.25;margin:0 0 6px;text-wrap:balance}
+  .sub{color:var(--muted);margin:0;max-width:70ch}
+  .themebtn{position:absolute;top:0;right:0;border:1px solid var(--line);background:var(--card);
+    color:var(--muted);border-radius:10px;padding:7px 11px;cursor:pointer;font-size:.85rem}
+  .themebtn:hover{color:var(--ink)}
+  .headrow{position:relative;padding-right:56px}
+
+  .flow{display:flex;flex-wrap:wrap;align-items:stretch;gap:10px;margin:18px 0 6px}
+  .flow .fstep{flex:1 1 200px;background:var(--card);border:1px solid var(--line);border-radius:14px;
+    padding:15px 17px;box-shadow:var(--shadow);position:relative}
+  .flow .fnum{width:28px;height:28px;border-radius:9px;background:var(--brand);color:#fff;font-weight:700;
+    display:grid;place-items:center;font-size:.9rem;margin-bottom:8px;font-variant-numeric:tabular-nums}
+  .flow .fttl{font-weight:700;margin:0 0 3px;font-size:1rem}
+  .flow .fdesc{color:var(--muted);font-size:.86rem;margin:0;line-height:1.5}
+  .flow .fdesc a{color:var(--brand-ink);font-weight:600;text-decoration:none;border-bottom:1px solid var(--brand)}
+  .flow .farrow{display:flex;align-items:center;color:var(--brand);font-size:1.5rem;flex:0 0 auto}
+  @media(max-width:720px){.flow{flex-direction:column}.flow .farrow{transform:rotate(90deg);justify-content:center}}
+
+  .grid2{display:grid;grid-template-columns:1fr;gap:14px;margin:18px 0 6px}
+  @media(min-width:760px){.grid2{grid-template-columns:1.15fr .85fr}}
+  .panel{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px;box-shadow:var(--shadow)}
+  .panel h2{font-size:1.02rem;margin:0 0 10px;display:flex;align-items:center;gap:8px}
+  .panel .ic{width:22px;height:22px;flex:0 0 22px;border-radius:6px;display:grid;place-items:center;font-size:.8rem;font-weight:700}
+  .ic.b{background:var(--brand-soft);color:var(--brand-ink)} .ic.w{background:var(--warn-soft);color:var(--warn)}
+  ul.tight{margin:0;padding-left:18px} ul.tight li{margin:5px 0}
+  ul.tight li b{font-weight:700}
+  .limit li::marker{color:var(--warn)}
+  .pill{display:inline-block;font-size:.74rem;padding:1px 8px;border-radius:999px;background:var(--chip);color:var(--chip-ink);
+    font-family:ui-monospace,monospace;border:1px solid var(--line)}
+  a.simlink{color:var(--brand-ink);text-decoration:none;border-bottom:1px solid var(--brand);font-weight:600}
+  a.simlink:hover{background:var(--brand-soft)}
+
+  .example{margin:6px 0 2px}
+  pre.code{background:var(--code-bg);color:var(--code-ink);border-radius:12px;padding:14px 16px;overflow-x:auto;
+    font-size:.82rem;line-height:1.65;margin:8px 0;font-family:ui-monospace,monospace;-webkit-overflow-scrolling:touch}
+  pre.code .t{color:var(--tag);font-weight:600}
+  pre.code .k{color:#94b8ff} pre.code .s{color:#c3e88d} pre.code .c{color:#5b6b8c;font-style:italic}
+
+  .toolbar{position:sticky;top:0;z-index:20;background:var(--bg);
+    padding:12px 0 10px;margin:8px 0 4px;border-bottom:1px solid var(--line)}
+  .toolbar .row1{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+  .search{flex:1 1 260px;position:relative}
+  .search input{width:100%;padding:11px 12px 11px 38px;border:1px solid var(--line);border-radius:11px;
+    background:var(--card);color:var(--ink);font-size:.95rem;font-family:inherit}
+  .search input:focus{outline:2px solid var(--brand);outline-offset:1px;border-color:transparent}
+  .search svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--muted)}
+  .search .clr{position:absolute;right:8px;top:50%;transform:translateY(-50%);border:0;background:none;
+    color:var(--muted);cursor:pointer;font-size:1.1rem;padding:4px;display:none}
+  .count{font-size:.85rem;color:var(--muted);white-space:nowrap;font-variant-numeric:tabular-nums}
+  .btns{display:flex;gap:6px}
+  .btns button{border:1px solid var(--line);background:var(--card);color:var(--muted);border-radius:9px;
+    padding:8px 11px;cursor:pointer;font-size:.82rem;font-family:inherit}
+  .btns button:hover{color:var(--ink);border-color:var(--brand)}
+  .chips{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}
+  .chip{border:1px solid var(--line);background:var(--card);color:var(--chip-ink);border-radius:999px;
+    padding:6px 13px;cursor:pointer;font-size:.82rem;font-family:inherit;transition:.12s;user-select:none}
+  .chip:hover{border-color:var(--brand)}
+  .chip[aria-pressed="true"]{background:var(--brand);color:#fff;border-color:var(--brand)}
+  .chip .n{opacity:.7;font-size:.76rem;margin-left:4px;font-variant-numeric:tabular-nums}
+
+  .cat{background:var(--card);border:1px solid var(--line);border-radius:14px;margin:12px 0;overflow:hidden;box-shadow:var(--shadow)}
+  .cat.hidden{display:none}
+  .cat > summary{list-style:none;cursor:pointer;padding:14px 18px;display:flex;align-items:center;gap:12px;
+    user-select:none;font-weight:700}
+  .cat > summary::-webkit-details-marker{display:none}
+  .cat > summary:hover{background:var(--brand-soft)}
+  .cat > summary:focus-visible{outline:2px solid var(--brand);outline-offset:-2px}
+  .cat .caret{transition:.18s;color:var(--muted);flex:0 0 auto}
+  .cat[open] .caret{transform:rotate(90deg)}
+  .cat .grptag{font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;padding:2px 8px;border-radius:6px;font-weight:700}
+  .grptag.profile{background:var(--brand-soft);color:var(--brand-ink)}
+  .grptag.rules{background:var(--info-soft);color:var(--info)}
+  .grptag.context{background:var(--warn-soft);color:var(--warn)}
+  
+  .ns{display:flex;gap:10px;flex-wrap:wrap;margin:8px 0 2px}
+  .ns .nsbox{flex:1 1 200px;border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:var(--bg)}
+  .ns .nsbox b{font-family:ui-monospace,monospace;color:var(--brand-ink)}
+  .ns .nsbox .lbl{font-size:.74rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;display:block;margin-bottom:3px}
+  .cat .cn{margin-left:auto;color:var(--muted);font-size:.82rem;font-weight:500;font-variant-numeric:tabular-nums}
+  .cat .body{padding:0 6px 8px}
+
+  .tbl{width:100%;border-collapse:collapse;font-size:.9rem}
+  .tbl th{text-align:left;color:var(--muted);font-weight:600;font-size:.76rem;text-transform:uppercase;
+    letter-spacing:.05em;padding:8px 10px;border-bottom:1px solid var(--line)}
+  .tbl td{padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+  .tbl tr:last-child td{border-bottom:0}
+  .tbl tr:hover td{background:var(--brand-soft)}
+  .tagcell{white-space:nowrap}
+  .tagbtn{display:inline-flex;align-items:center;gap:6px;background:var(--code-bg);color:var(--tag);
+    border:0;border-radius:8px;padding:5px 9px;cursor:pointer;font-family:ui-monospace,monospace;
+    font-size:.82rem;font-weight:600;transition:.12s}
+  .tagbtn:hover{filter:brightness(1.18)}
+  .tagbtn:active{transform:scale(.97)}
+  .tagbtn .cp{opacity:.55;font-size:.72rem}
+  .tagbtn.copied{background:var(--brand);color:#fff}
+  .desc{color:var(--ink)} .desc .en{color:var(--muted);font-size:.82rem;display:block;margin-top:1px}
+  .path{color:var(--muted);font-size:.78rem;word-break:break-all}
+  .ex{font-family:ui-monospace,monospace;font-size:.82rem}
+  .ex .empty{color:var(--muted);opacity:.6} .ex .val{color:var(--brand-ink);font-weight:600;word-break:break-word}
+  mark{background:#fde68a;color:#111;border-radius:3px;padding:0 1px}
+  @media (prefers-color-scheme:dark){mark{background:#7c5b12;color:#fff}}
+  :root[data-theme="dark"] mark{background:#7c5b12;color:#fff}
+
+  .empty-state{text-align:center;color:var(--muted);padding:48px 20px}
+  .empty-state b{display:block;font-size:1.05rem;color:var(--ink);margin-bottom:4px}
+
+  #toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);
+    background:var(--code-bg);color:#fff;padding:11px 18px;border-radius:11px;font-size:.9rem;
+    box-shadow:var(--shadow);opacity:0;pointer-events:none;transition:.22s;z-index:60;display:flex;gap:8px;align-items:center}
+  #toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+  #toast .tg{color:var(--tag);font-family:ui-monospace,monospace;font-weight:600}
+
+  
+  .howto li{opacity:0;transform:translateY(6px);animation:howtoIn .5s ease forwards}
+  .howto li:nth-child(1){animation-delay:.05s} .howto li:nth-child(2){animation-delay:.18s}
+  .howto li:nth-child(3){animation-delay:.31s} .howto li:nth-child(4){animation-delay:.44s}
+  .howto li:nth-child(5){animation-delay:.57s} .howto li:nth-child(6){animation-delay:.70s}
+  @keyframes howtoIn{to{opacity:1;transform:translateY(0)}}
+  
+  .pulse-tag{display:inline-block;font-family:ui-monospace,monospace;color:var(--brand-ink);font-weight:700;
+    animation:pulseTag 2.2s ease-in-out infinite}
+  @keyframes pulseTag{0%,100%{opacity:.75}50%{opacity:1;text-shadow:0 0 8px var(--brand)}}
+  @media (prefers-reduced-motion:reduce){.howto li{opacity:1;transform:none;animation:none}.pulse-tag{animation:none}}
+
+  .redrule{margin:12px 0 2px;border:1px solid var(--danger);border-left:4px solid var(--danger);
+    background:var(--danger-soft);border-radius:12px;padding:12px 15px}
+  .redrule .rt{color:var(--danger);font-weight:800;display:flex;align-items:center;gap:7px;margin:0 0 5px}
+  .redrule p{margin:3px 0;line-height:1.6}
+  .redrule code{background:var(--code-bg);color:var(--tag);padding:1px 6px;border-radius:6px;
+    font-family:ui-monospace,monospace}
+  .redrule .ok{color:var(--brand-ink);font-weight:700} .redrule .bad{color:var(--danger);font-weight:700}
+
+  .tagwarn{margin:14px 0 2px;border:2px solid var(--danger);border-radius:14px;
+    background:var(--danger-soft);padding:16px 18px;animation:tagwarnPulse 2s ease-in-out infinite}
+  .tagwarn .tw-h{display:flex;align-items:center;gap:9px;color:var(--danger);
+    font-weight:900;font-size:1.15rem;margin:0 0 10px;letter-spacing:.01em}
+  .tagwarn .tw-row{display:flex;align-items:center;gap:9px;flex-wrap:wrap;
+    font-size:1.05rem;font-weight:800;margin:7px 0;line-height:1.5}
+  .tagwarn .tw-ok{color:var(--brand-ink)} .tagwarn .tw-bad{color:var(--danger)}
+  .tagwarn .tw-note{margin:11px 0 0;padding-top:10px;border-top:1px dashed var(--danger);
+    color:var(--ink);font-size:.95rem;font-weight:600;line-height:1.5}
+  .tagwarn .tw-note b{color:var(--danger)}
+  
+  .tagwarn code{font-family:ui-monospace,monospace;font-size:1.05rem;font-weight:800;
+    padding:3px 10px;border-radius:8px}
+  .tagwarn code.good{background:var(--brand-soft);color:var(--brand-ink);border:2px solid var(--brand)}
+  .tagwarn code.bad{background:var(--danger-soft);color:var(--danger);border:2px solid var(--danger)}
+  @keyframes tagwarnPulse{0%,100%{box-shadow:0 0 0 0 transparent}
+    50%{box-shadow:0 0 0 4px color-mix(in srgb,var(--danger) 22%,transparent)}}
+  @media (prefers-reduced-motion:reduce){.tagwarn{animation:none}}
+
+  .tagfloat{position:fixed;right:16px;top:50%;transform:translateY(-50%);z-index:40;
+    display:flex;flex-direction:column;gap:11px;width:285px;
+    background:var(--card);border:1px solid var(--line);border-left:5px solid var(--brand);
+    border-radius:15px;padding:19px 18px 17px;box-shadow:var(--shadow)}
+  .tagfloat.closed{display:none}
+  .tf-line{display:flex;align-items:center;gap:9px;font-size:1.05rem;font-weight:800;line-height:1.4}
+  .tf-line .tf-ic{font-size:1.25rem;flex:0 0 auto}
+  .tf-line code{font-family:ui-monospace,monospace;font-weight:800;font-size:1.02rem;padding:3px 9px;border-radius:8px;flex:0 0 auto}
+  .tf-ok{color:var(--brand-ink)} .tf-ok code{background:var(--brand-soft);border:1.5px solid var(--brand)}
+  .tf-bad{color:var(--danger)} .tf-bad code{background:var(--danger-soft);border:1.5px solid var(--danger)}
+  .tf-txt{color:var(--muted);font-weight:700;font-size:.95rem}
+  .tf-note{margin:3px 0 0;font-size:.92rem;font-weight:700;color:var(--ink);line-height:1.5}
+  .tf-note b{color:var(--warn)}
+  .tf-footer{border-top:1px solid var(--line);margin-top:4px;padding-top:12px}
+  .tf-footx{width:100%;border:2px solid var(--warn);background:var(--warn-soft);color:var(--warn);
+    border-radius:11px;padding:11px 12px;cursor:pointer;font-family:inherit;font-weight:900;font-size:1rem}
+  .tf-footx:hover{background:var(--warn);color:#fff}
+  .tf-confirm{margin-top:10px}
+  .tf-confirm[hidden]{display:none}
+  .tf-check{display:flex;align-items:center;gap:11px;cursor:pointer;padding:10px 12px;border-radius:11px;
+    border:2px solid var(--line);background:var(--card);margin-bottom:9px;user-select:none}
+  .tf-check:hover{border-color:var(--brand)}
+  .tf-check input{position:absolute;opacity:0;width:0;height:0}
+  .tf-checkbox{flex:0 0 auto;width:30px;height:30px;border-radius:9px;border:2.5px solid var(--muted);
+    display:grid;place-items:center;transition:.12s}
+  .tf-checkbox::after{content:"✓";font-size:1.25rem;font-weight:900;color:#fff;opacity:0;transform:scale(.5);transition:.12s}
+  .tf-check input:checked + .tf-checkbox{background:var(--brand);border-color:var(--brand)}
+  .tf-check input:checked + .tf-checkbox::after{opacity:1;transform:scale(1)}
+  .tf-check input:focus-visible + .tf-checkbox{outline:2px solid var(--brand);outline-offset:2px}
+  .tf-checktxt{font-size:.95rem;font-weight:700;color:var(--ink);line-height:1.35}
+  .tf-check.shake{animation:tfShake .4s ease}
+  @keyframes tfShake{0%,100%{transform:translateX(0)}20%,60%{transform:translateX(-6px)}40%,80%{transform:translateX(6px)}}
+  .tf-warn{display:none;margin:0 0 9px;font-size:.85rem;font-weight:800;color:var(--danger)}
+  .tf-warn.show{display:block}
+  @media (prefers-reduced-motion:reduce){.tf-check.shake{animation:none}}
+  .tf-cbtns{display:flex;flex-direction:column;gap:8px}
+  .tf-yes{border:1px solid var(--brand);background:var(--brand);color:#fff;border-radius:10px;
+    padding:11px 12px;cursor:pointer;font-family:inherit;font-weight:900;font-size:.98rem}
+  .tf-yes:disabled{opacity:.45;cursor:not-allowed}
+  .tf-yes:not(:disabled):hover{filter:brightness(1.06)}
+  .tf-no{border:1px solid var(--line);background:var(--card);color:var(--muted);border-radius:10px;
+    padding:8px 12px;cursor:pointer;font-family:inherit;font-weight:700;font-size:.9rem}
+  .tf-no:hover{color:var(--ink);border-color:var(--brand)}
+  @media(max-width:1100px){.tagfloat{display:none}}
+
+  .gotovar{margin-top:10px;display:inline-flex;align-items:center;gap:8px;border:1px solid var(--brand);cursor:pointer;
+    background:var(--code-bg);color:#fff;font-family:inherit;font-weight:800;font-size:.92rem;
+    padding:10px 18px;border-radius:11px;animation:gotoBounce 1.6s ease-in-out infinite;
+    box-shadow:0 6px 18px -6px var(--brand)}
+  .gotovar:hover{background:var(--brand);color:#04121a} .gotovar:active{transform:scale(.96)}
+  @keyframes gotoBounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+  @media (prefers-reduced-motion:reduce){.gotovar{animation:none}}
+
+  .steps{counter-reset:step;list-style:none;margin:6px 0 0;padding:0}
+  .steps li{position:relative;padding:6px 0 6px 40px;line-height:1.6;border-bottom:1px dashed var(--line)}
+  .steps li:last-child{border-bottom:0}
+  .steps li::before{counter-increment:step;content:counter(step);position:absolute;left:0;top:6px;
+    width:26px;height:26px;border-radius:8px;background:var(--brand);color:#fff;font-weight:700;
+    display:grid;place-items:center;font-size:.82rem;font-variant-numeric:tabular-nums}
+  .steps b{color:var(--brand-ink)} .steps .warn-in{color:var(--warn);font-weight:600}
+  .steps code{background:var(--chip);color:var(--chip-ink);padding:1px 6px;border-radius:6px;
+    font-family:ui-monospace,monospace;font-size:.85rem}
+
+  .thumb{margin-top:12px;cursor:zoom-in;border:1px solid var(--line);border-radius:12px;overflow:hidden;
+    position:relative;display:inline-block;max-width:100%;transition:transform .18s,box-shadow .18s;
+    animation:thumbFloat 3.5s ease-in-out infinite}
+  .thumb:hover{transform:translateY(-3px) scale(1.01);box-shadow:var(--shadow);border-color:var(--brand)}
+  .thumb img{display:block;max-width:100%;height:auto}
+  .thumb .zoomtag{position:absolute;right:8px;bottom:8px;background:rgba(15,23,41,.82);color:#fff;
+    font-size:.75rem;padding:3px 9px;border-radius:7px;display:flex;gap:5px;align-items:center}
+  @keyframes thumbFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+  @media (prefers-reduced-motion:reduce){.thumb{animation:none}}
+  #lb{position:fixed;inset:0;background:rgba(4,8,18,.86);z-index:80;display:none;align-items:center;
+    justify-content:center;padding:24px;cursor:zoom-out;-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}
+  #lb.show{display:flex}
+  #lb img{max-width:100%;max-height:92vh;border-radius:12px;box-shadow:0 20px 60px rgba(0,0,0,.6)}
+  #lb .close{position:absolute;top:16px;right:20px;color:#fff;font-size:2rem;line-height:1;cursor:pointer;
+    background:none;border:0}
+
+  @media(max-width:640px){
+    .tbl,.tbl tbody,.tbl tr,.tbl td{display:block;width:100%}
+    .tbl thead{display:none}
+    .tbl tr{padding:8px 6px;border-bottom:1px solid var(--line)}
+    .tbl td{border:0;padding:3px 8px}
+    .tbl td.path::before{content:"path: ";color:var(--muted)}
+    .tbl td.ex::before{content:"ตัวอย่าง: ";color:var(--muted);font-family:inherit}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="headrow">
+      <button class="themebtn" id="themeBtn" type="button" aria-label="สลับธีม">🌗 ธีม</button>
+      <p class="eyebrow">Flex Card Reference</p>
+      <h1>คู่มือตัวแปรการ์ด Flex</h1>
+      <p class="sub">ตัวแปรทุกตัวที่ใส่ในการ์ด Flex ได้ — โปรไฟล์ลูกค้า + กติกาเว็บ (site-rules)
+        คลิกที่แท็กเพื่อคัดลอกพร้อมเครื่องหมาย <code>{{ }}</code> ไปวางในการ์ดได้ทันที</p>
+
+      <div class="tagwarn">
+        <p class="tw-h">⚠️ รูปแบบแท็กที่ใช้ในการ์ด Flex</p>
+        <p class="tw-row tw-ok">✅ ใช้ได้ — <code class="good">{{ ชื่อตัวแปร }}</code> จากตารางเท่านั้น
+          <button class="gotovar" id="gotoVar3" type="button" style="font-size:.85rem;padding:7px 13px">⬇ ไปยังตาราง</button>
+        </p>
+        <p class="tw-row tw-bad">🚫 ห้ามใช้ — dynamic tag <code class="bad">[[[ xxx ]]]</code> ในการ์ด Flex (ใช้ไม่ได้ที่นี่)</p>
+        <p class="tw-note">กรุณาคัดลอกชื่อตัวแปรจากตารางเท่านั้น — <b>ห้ามพิมพ์เองเด็ดขาด</b> เพื่อป้องกันชื่อตัวแปรผิด</p>
+      </div>
+    </div>
+  </header>
+
+  <div class="flow">
+    <div class="fstep">
+      <div class="fnum">1</div>
+      <p class="fttl">ออกแบบการ์ด</p>
+      <p class="fdesc">ออกแบบหน้าตาการ์ดที่ <a href="https://developers.line.biz/flex-simulator/" target="_blank" rel="noopener">LINE Flex Simulator ↗</a> (เครื่องมือทางการของ LINE)</p>
+      <button class="gotovar" id="gotoVar1" type="button" style="margin-top:8px;font-size:.85rem;padding:8px 14px">⬇ ใช้ค่าจากตัวแปร (var) — ดูตารางทั้งหมด</button>
+    </div>
+    <div class="farrow" aria-hidden="true">→</div>
+    <div class="fstep">
+      <div class="fnum">2</div>
+      <p class="fttl">ตรวจสอบให้ผ่าน</p>
+      <p class="fdesc"><b style="color:var(--danger)">ต้องทำบน <a href="https://developers.line.biz/flex-simulator/" target="_blank" rel="noopener" style="color:var(--danger);border-bottom:1px solid var(--danger)">LINE Flex Simulator ↗</a> เท่านั้น</b> — กด <b>View as JSON</b> → วาง JSON → <b>Apply</b> · ต้องไม่ error และแสดงผลถูกต้อง</p>
+      <button class="gotovar" id="gotoVar2" type="button" style="margin-top:8px;font-size:.85rem;padding:8px 14px">⬇ ใช้ค่าจากตัวแปร (var) — ดูตารางทั้งหมด</button>
+    </div>
+    <div class="farrow" aria-hidden="true">→</div>
+    <div class="fstep">
+      <div class="fnum">3</div>
+      <p class="fttl">สร้างใน OmniDesk Dashboard</p>
+      <p class="fdesc">นำ JSON ที่ผ่านแล้ว มาสร้าง Flex Message ในระบบ พร้อมวางตัวแปร (var) แทนค่าจริง</p>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="panel">
+      <h2><span class="ic b">i</span> ใช้ตัวแปรอย่างไร</h2>
+      <ul class="tight howto">
+        <li><b>เลือกตัวแปรจากตารางด้านล่าง</b> แล้วคลิกที่แท็กเพื่อคัดลอก จากนั้นนำไปวางในช่อง <b>text</b> หรือ <b>url ของ image</b> ในการ์ด</li>
+        <li>ตอนบอทตอบลูกค้า ระบบจะ <b>แทนค่าจริง</b> ของลูกค้าคนนั้นให้อัตโนมัติ เช่น <span class="pulse-tag">{{profile.phone}}</span> → เบอร์โทรจริง</li>
+        <li>ตัวแปรที่ลูกค้าไม่มีข้อมูล จะกลายเป็น <code>-</code> (ขีดเดียว) — การ์ดยังส่งได้ ไม่พังทั้งใบ</li>
+        <li><code>{{content}}</code> = ข้อความที่บอทกำลังจะตอบ — <b>ใช้ได้เฉพาะการ์ดชนิด profile</b></li>
+        <li><b>ออกแบบหน้าตาการ์ดให้เสร็จก่อน</b> ใน <a class="simlink" href="https://developers.line.biz/flex-simulator/" target="_blank" rel="noopener">LINE Flex Simulator ↗</a> แล้วค่อยนำแท็กมาวางแทนค่าคงที่</li>
+      </ul>
+      <div class="redrule">
+        <p class="rt">⛔ ใช้ค่าจากตัวแปร (var) เท่านั้น</p>
+        <p>ค่าที่เป็นข้อมูลของลูกค้า <b>ต้องมาจากตัวแปรในตารางนี้เท่านั้น</b> — ห้ามพิมพ์ค่าจริงลงไปเอง (เดี๋ยวทุกคนได้ค่าเดียวกันหมด)</p>
+        <p>แต่ <b>ข้อความทั่วไปพิมพ์ปนได้</b> เช่น ชื่อหัวข้อ / ป้ายกำกับ — วางคู่กับตัวแปรได้เลย:</p>
+        <p><span class="ok">✔ ถูก:</span> <code>☎ เบอร์โทร : {{profile.phone}}</code>&nbsp;&nbsp; <span class="bad">✘ ผิด:</span> <code>☎ เบอร์โทร : 0955550010</code></p>
+        <p>⚠️ <b>เช็คชื่อตัวแปรว่ามีจริง</b> ในตารางเสมอ — พิมพ์ผิดจะโชว์เป็นตัวอักษรดิบ <span class="pill">{{ชื่อผิด}}</span></p>
+        <button class="gotovar" id="gotoVar" type="button">⬇ ใช้ค่าจากตัวแปร (var) — ดูตารางทั้งหมด</button>
+      </div>
+    </div>
+    <div class="panel">
+      <h2><span class="ic w">!</span> ข้อจำกัด</h2>
+      <ul class="tight limit">
+        <li>รูปใน image ต้องเป็น <b>https://</b> เท่านั้น (http ธรรมดา LINE ตีกลับ)</li>
+        <li>url รูปยาว <b>ไม่เกิน 2000</b> ตัวอักษร · url เสีย/ว่าง → ระบบสลับเป็น<b>ภาพสำรอง</b>ให้อัตโนมัติ</li>
+        <li>ค่าว่าง = <code>-</code> แต่ <b>เลข 0 จะออกเป็น "0"</b> (ยอด 0 บาทคือข้อมูลจริง ไม่ใช่ว่าง)</li>
+        <li>รายการแบบ list (ฝาก/ถอน/สินค้า/เหรียญ) มีสูงสุด <b><span id="lr">10</span> รายการ</b> — <code>_1_</code> คือล่าสุด</li>
+        <li>ช่อง text <b>ห้ามว่าง</b> เด็ดขาด — LINE ตีกลับทั้งการ์ดถ้ามี text ว่าง</li>
+        <li>แท็กที่พิมพ์ผิด/ไม่มีในลิสต์นี้ จะโชว์เป็น<b>ตัวอักษรดิบ</b> <span class="pill">{{ชื่อผิด}}</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2><span class="ic b">#</span> รูปแบบชื่อแท็ก (namespace)</h2>
+    <p class="sub" style="margin:0 0 4px">แท็กจะขึ้นต้นด้วย <b>ชื่อแหล่งข้อมูล</b> เสมอ (ยกเว้นตัวแปรบริบท) — คลิกคัดลอกจากตารางได้ตัวเต็มที่ถูกต้องอยู่แล้ว</p>
+    <div class="ns">
+      <div class="nsbox"><span class="lbl">โปรไฟล์ลูกค้า</span><b>{{profile.ชื่อตัวแปร}}</b><br><span class="sub" style="font-size:.8rem">เช่น {{profile.phone}}</span></div>
+      <div class="nsbox"><span class="lbl">กติกาเว็บ</span><b>{{site_rules.ชื่อตัวแปร}}</b><br><span class="sub" style="font-size:.8rem">เช่น {{site_rules.dep_min}}</span></div>
+      <div class="nsbox"><span class="lbl">ตัวแปรบริบท (ของ hook)</span><b>{{ชื่อตัวแปร}}</b> <span style="color:var(--warn)">ไม่มี prefix</span><br><span class="sub" style="font-size:.8rem">เช่น {{hook_domain}}</span></div>
+    </div>
+    <p class="sub" style="margin:6px 0 0;font-size:.82rem">📌 ใช้แท็กแบบเต็มที่มี namespace เสมอ (เช่น <code>{{profile.phone}}</code>) — คลิกคัดลอกจากตารางได้ตัวที่ถูกต้อง</p>
+  </div>
+
+  <div class="panel example">
+    <h2><span class="ic b">{}</span> ตัวอย่างการใส่ตัวแปรจริง</h2>
+    <p class="sub" style="margin:0 0 2px">โครง Flex บางส่วน — สังเกตว่า <span class="mono" style="color:var(--brand-ink)">{{...}}</span> อยู่ในค่าของ <code>text</code> และ <code>url</code></p>
+    <pre class="code"><span class="c">// การ์ดโปรไฟล์ — text + รูปโปรโมชัน (สังเกต prefix profile. / site_rules.)</span>
+{
+  <span class="k">"type"</span>: <span class="s">"bubble"</span>,
+  <span class="k">"hero"</span>: { <span class="k">"type"</span>: <span class="s">"image"</span>,
+    <span class="k">"url"</span>: <span class="s">"<span class="t">{{profile.promo_img}}</span>"</span>,       <span class="c">// รูปแบนเนอร์โปร (เสีย→ภาพสำรอง)</span>
+    <span class="k">"size"</span>: <span class="s">"full"</span>, <span class="k">"aspectRatio"</span>: <span class="s">"20:13"</span> },
+  <span class="k">"body"</span>: { <span class="k">"type"</span>: <span class="s">"box"</span>, <span class="k">"layout"</span>: <span class="s">"vertical"</span>, <span class="k">"contents"</span>: [
+    { <span class="k">"type"</span>: <span class="s">"text"</span>, <span class="k">"text"</span>: <span class="s">"สวัสดีคุณ <span class="t">{{profile.bank_account_name}}</span>"</span>, <span class="k">"weight"</span>: <span class="s">"bold"</span> },
+    { <span class="k">"type"</span>: <span class="s">"text"</span>, <span class="k">"text"</span>: <span class="s">"ระดับ <span class="t">{{profile.tier_name}}</span> · ยอดเครดิต <span class="t">{{profile.balance_credit}}</span> บาท"</span> },
+    { <span class="k">"type"</span>: <span class="s">"text"</span>, <span class="k">"text"</span>: <span class="s">"☎ เบอร์โทร : <span class="t">{{profile.phone}}</span>"</span> },   <span class="c">// ข้อความทั่วไป (☎ เบอร์โทร :) + ตัวแปร ปนกันได้</span>
+    { <span class="k">"type"</span>: <span class="s">"text"</span>, <span class="k">"text"</span>: <span class="s">"ฝากขั้นต่ำ <span class="t">{{site_rules.dep_min}}</span> บาท · <span class="t">{{content}}</span>"</span>, <span class="k">"wrap"</span>: <span class="s">true</span> }
+  ] }
+}</pre>
+    <p class="sub" style="margin:8px 0 0">💡 <b>ข้อความทั่วไปพิมพ์ปนกับตัวแปรได้</b> เช่น <code>☎ เบอร์โทร : {{profile.phone}}</code> — ระบบแทนเฉพาะส่วน <span class="pulse-tag">{{profile.phone}}</span> ที่เหลือคงเดิม · <b style="color:var(--danger)">แต่ต้องเช็คก่อนว่าชื่อตัวแปรมีจริงในตาราง</b></p>
+  </div>
+
+  <div class="panel example">
+    <h2><span class="ic b">✓</span> ตรวจ JSON บน LINE Flex Simulator ก่อน (บังคับ)</h2>
+    <p class="sub" style="margin:0 0 6px"><b style="color:var(--danger)">ต้องออกแบบและทดสอบว่า JSON ใช้ได้จริงบน LINE Flex Simulator เท่านั้น</b> — ก่อนนำเข้าระบบ</p>
+    <ol class="steps">
+      <li>เปิด <a class="simlink" href="https://developers.line.biz/flex-simulator/" target="_blank" rel="noopener">LINE Flex Simulator ↗</a> แล้วกดปุ่ม <b>&lt;/&gt; View as JSON</b> (มุมขวาบน)</li>
+      <li><b>วาง JSON</b> ของการ์ดลงในกล่อง แล้วกด <b>Apply</b></li>
+      <li>ถ้า <span class="warn-in">ไม่ error</span> และ <b>แสดงผลถูกต้อง</b> บน Simulator = นำเข้าใช้กับระบบได้</li>
+      <li>ถ้า error หรือแสดงผลเพี้ยน → แก้ JSON ให้ <b>valid</b> ก่อน อย่าเพิ่งนำเข้าระบบ</li>
+    </ol>
+    <figure class="thumb" id="simFig" style="margin-bottom:0" role="button" tabindex="0" aria-label="ดูภาพ View as JSON บน Flex Simulator ขนาดเต็ม">
+      <img id="simImg" alt="LINE Flex Simulator — ปุ่ม View as JSON และกล่องวาง JSON">
+      <span class="zoomtag">🔍 กดเพื่อขยาย</span>
+    </figure>
+  </div>
+
+  <div class="panel example">
+    <h2><span class="ic b">▶</span> สร้าง Flex Message ในระบบ (หลังออกแบบเสร็จ)</h2>
+    <p class="sub" style="margin:0 0 4px"><b>เข้าสู่ระบบ (login)</b> ก่อน แล้วทำตามขั้นตอน:</p>
+    <ol class="steps">
+      <li>เมนู <b>จัดการทั่วไป</b> → <b>จัดการ Flex Message</b> → กด <b>สร้าง / เพิ่ม</b></li>
+      <li>ตั้ง <b>ชื่อ Flex</b> เป็น <b>ภาษาอังกฤษ</b> · <span class="warn-in">ห้ามเว้นว่าง</span></li>
+      <li>เลือกรูปแบบ <b>ปรับแต่ง (custom)</b></li>
+      <li><b>วาง JSON</b> ที่ออกแบบไว้ ลงในช่อง <b>เนื้อหา JSON</b></li>
+      <li><b>กลุ่มเว็บ</b> — เลือก <b>ทั้งหมด</b> (เห็นเฉพาะกลุ่มที่มีสิทธิ์)</li>
+      <li><b>แหล่งข้อมูล (src_path)</b> — เลือกทั้ง <b>โปรไฟล์ลูกค้า</b> + <b>กติกา/ตั้งค่าเว็บ</b></li>
+      <li>กด <b>บันทึก</b> · <span class="warn-in">ถ้าใส่ชื่อตัวแปรผิด ตอนเซฟระบบจะเตือนเรื่องค่า var</span></li>
+    </ol>
+    <figure class="thumb" id="thumbFig" style="margin-bottom:0" role="button" tabindex="0" aria-label="ดูภาพหน้าจอสร้าง flex ขนาดเต็ม">
+      <img id="thumbImg" alt="หน้าจอสร้าง Flex Message — เลือก custom, กลุ่มเว็บ, และ src_path">
+      <span class="zoomtag">🔍 กดเพื่อขยาย</span>
+    </figure>
+  </div>
+
+  <h2 id="varTable" style="font-size:1.3rem;margin:26px 0 2px;display:flex;align-items:center;gap:9px;scroll-margin-top:70px">
+    <span class="ic b" style="width:26px;height:26px">📋</span> ตัวแปร (var) guideline
+  </h2>
+  <p class="sub" style="margin:0 0 4px">รายการตัวแปรทั้งหมด <b>804 ตัว</b> — ตรงกับหน้า Template Guidelines (Variable Mapping) ในระบบ · คลิกแท็กเพื่อคัดลอกพร้อม namespace</p>
+
+  <div class="toolbar">
+    <div class="row1">
+      <div class="search">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+        <input id="q" type="search" placeholder="ค้นหาแท็ก / คำอธิบาย / path เช่น phone, ฝาก, cashback" autocomplete="off" spellcheck="false">
+        <button class="clr" id="clr" type="button" aria-label="ล้าง">×</button>
+      </div>
+      <span class="count" id="count"></span>
+      <div class="btns">
+        <button id="expandAll" type="button">กางทั้งหมด</button>
+        <button id="collapseAll" type="button">พับทั้งหมด</button>
+      </div>
+    </div>
+    <div class="chips" id="chips"></div>
+  </div>
+
+  <div id="list"></div>
+  <div class="empty-state" id="empty" style="display:none">
+    <b>ไม่พบตัวแปรที่ตรงกับคำค้น</b>
+    ลองคำสั้นลง หรือกดล้างตัวกรอง
+  </div>
+</div>
+
+<aside class="tagfloat" id="tagFloat" aria-label="คำเตือนรูปแบบแท็ก">
+  <div class="tf-line tf-ok"><span class="tf-ic">✅</span><code>{{ }}</code><span class="tf-txt">ใช้ตัวแปรจากตาราง</span></div>
+  <div class="tf-line tf-bad"><span class="tf-ic">🚫</span><code>[[[ ]]]</code><span class="tf-txt">ห้ามใช้ dynamic tag</span></div>
+  <p class="tf-note">กรุณาคัดลอกชื่อตัวแปรจากตารางเท่านั้น — <b>ห้ามพิมพ์เองเด็ดขาด</b> เพื่อป้องกันชื่อตัวแปรผิด</p>
+  <div class="tf-footer">
+    <button class="tf-footx" id="tfCloseFoot" type="button">✕ ปิดคำเตือน</button>
+    <div class="tf-confirm" id="tfConfirm" hidden>
+      <label class="tf-check" id="tfCheckWrap">
+        <input type="checkbox" id="tfCheck">
+        <span class="tf-checkbox" aria-hidden="true"></span>
+        <span class="tf-checktxt">รับทราบกติกาแท็กแล้ว</span>
+      </label>
+      <p class="tf-warn" id="tfWarn">กรุณายอมรับเงื่อนไขก่อนปิด</p>
+      <div class="tf-cbtns">
+        <button class="tf-yes" id="tfYes" type="button">ยืนยัน · ปิด</button>
+        <button class="tf-no" id="tfNo" type="button">ยกเลิก</button>
+      </div>
+    </div>
+  </div>
+</aside>
+
+<div id="toast"><span>คัดลอกแล้ว</span> <span class="tg" id="toastTag"></span></div>
+
+<div id="lb"><button class="close" aria-label="ปิด">×</button><img id="lbImg" alt="หน้าจอสร้าง Flex Message ขนาดเต็ม"></div>
+
+<script src="./fleximg.v3.min.js"></script>
+<script src="./flexdata.v2.min.js"></script>
+<script>
+(function(){
+  var D = window.FLEX_DATA || {rows:[],order:[],counts:{}};
+  var lr = document.getElementById('lr'); if(lr) lr.textContent = D.listRows || 10;
+
+  var GRP_LABEL = { profile:'โปรไฟล์ลูกค้า', rules:'กติกาเว็บ', context:'ตัวแปรบริบท' };
+  var list = document.getElementById('list');
+  var qEl = document.getElementById('q');
+  var clrEl = document.getElementById('clr');
+  var countEl = document.getElementById('count');
+  var chipsEl = document.getElementById('chips');
+  var emptyEl = document.getElementById('empty');
+
+  var activeGroup = 'all';   // all | profile | rules
+  var query = '';
+
+  var groups = [
+    {key:'all', label:'ทั้งหมด', n:D.counts.total||D.rows.length},
+    {key:'profile', label:'โปรไฟล์ลูกค้า', n:D.counts.profile||0},
+    {key:'rules', label:'กติกาเว็บ (site-rules)', n:D.counts.rules||0},
+    {key:'context', label:'ตัวแปรบริบท (ของ hook)', n:D.counts.context||0},
+  ];
+  chipsEl.innerHTML = groups.map(function(g){
+    return '<button class="chip" data-g="'+g.key+'" aria-pressed="'+(g.key==='all')+'">'+
+      g.label+'<span class="n">'+g.n+'</span></button>';
+  }).join('');
+  chipsEl.addEventListener('click', function(e){
+    var b = e.target.closest('.chip'); if(!b) return;
+    activeGroup = b.getAttribute('data-g');
+    [].forEach.call(chipsEl.children, function(c){ c.setAttribute('aria-pressed', c===b); });
+    render();
+  });
+
+  var cats = D.order.map(function(o){
+    return { grp:o.grp, cat:o.cat,
+      rows: D.rows.filter(function(r){ return r.grp===o.grp && r.cat===o.cat; }) };
+  });
+
+  function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(c){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+
+  function hi(text){
+    var s = esc(text);
+    if(!query) return s;
+    try{
+      var re = new RegExp('('+query.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')','ig');
+      return s.replace(re,'<mark>$1</mark>');
+    }catch(e){ return s; }
+  }
+
+  function matches(r){
+    if(activeGroup!=='all' && r.grp!==activeGroup) return false;
+    if(!query) return true;
+    var hay = (r.tag+' '+r.desc+' '+r.source+' '+(r.example||'')).toLowerCase();
+    return hay.indexOf(query.toLowerCase()) !== -1;
+  }
+
+  function exampleCell(v){
+    if(v===null || v===undefined || v==='-' || v==='') return '<span class="empty">— (ไม่มีข้อมูลตัวอย่าง)</span>';
+    return '<span class="val">'+hi(v)+'</span>';
+  }
+
+  function rowHtml(r){
+
+    return '<tr>'+
+      '<td class="tagcell"><button class="tagbtn" data-tag="'+esc(r.tag)+'" title="คลิกเพื่อคัดลอก '+esc(r.tag)+'">'+
+        '<span class="tg">'+hi(r.tag)+'</span><span class="cp">คัดลอก</span></button></td>'+
+      '<td class="desc">'+hi(r.desc)+'</td>'+
+      '<td class="path mono">'+hi(r.source)+'</td>'+
+      '<td class="ex">'+exampleCell(r.example)+'</td>'+
+    '</tr>';
+  }
+
+  function render(){
+    var total = 0, visibleCats = 0;
+    var html = cats.map(function(c){
+      var rows = c.rows.filter(matches);
+      total += rows.length;
+      if(!rows.length) return '';
+      visibleCats++;
+      var open = (query || activeGroup!=='all') ? ' open' : '';
+      return '<details class="cat"'+open+' data-grp="'+c.grp+'">'+
+        '<summary>'+
+          '<svg class="caret" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m9 6 6 6-6 6"/></svg>'+
+          '<span class="grptag '+c.grp+'">'+(GRP_LABEL[c.grp]||c.grp)+'</span>'+
+          '<span>'+esc(c.cat)+'</span>'+
+          '<span class="cn">'+rows.length+' ตัวแปร</span>'+
+        '</summary>'+
+        '<div class="body"><table class="tbl">'+
+          '<thead><tr><th>แท็ก (คลิกคัดลอก)</th><th>คำอธิบาย</th><th>path</th><th>ตัวอย่างค่า</th></tr></thead>'+
+          '<tbody>'+rows.map(rowHtml).join('')+'</tbody>'+
+        '</table></div>'+
+      '</details>';
+    }).join('');
+
+    list.innerHTML = html;
+    emptyEl.style.display = total ? 'none' : 'block';
+    countEl.textContent = 'แสดง ' + total + ' / ' + (D.counts.total||D.rows.length) + ' ตัวแปร';
+  }
+
+  var t;
+  qEl.addEventListener('input', function(){
+    clearTimeout(t);
+    clrEl.style.display = qEl.value ? 'block' : 'none';
+    t = setTimeout(function(){ query = qEl.value.trim(); render(); }, 90);
+  });
+  clrEl.addEventListener('click', function(){ qEl.value=''; query=''; clrEl.style.display='none'; render(); qEl.focus(); });
+
+  document.getElementById('expandAll').addEventListener('click', function(){
+    [].forEach.call(list.querySelectorAll('.cat'), function(d){ d.open=true; });
+  });
+  document.getElementById('collapseAll').addEventListener('click', function(){
+    [].forEach.call(list.querySelectorAll('.cat'), function(d){ d.open=false; });
+  });
+
+  var toast = document.getElementById('toast'), toastTag = document.getElementById('toastTag'), toastTimer;
+  function showToast(tag){
+    toastTag.textContent = tag;
+    toast.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function(){ toast.classList.remove('show'); }, 1600);
+  }
+  function copyText(text, cb){
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(text).then(cb, function(){ fallback(text,cb); });
+    } else fallback(text, cb);
+  }
+  function fallback(text, cb){
+    var ta=document.createElement('textarea'); ta.value=text; ta.style.position='fixed'; ta.style.opacity='0';
+    document.body.appendChild(ta); ta.select();
+    try{ document.execCommand('copy'); }catch(e){}
+    document.body.removeChild(ta); cb&&cb();
+  }
+  list.addEventListener('click', function(e){
+    var b = e.target.closest('.tagbtn'); if(!b) return;
+    var tag = b.getAttribute('data-tag');   // มี {{ }} ครบอยู่แล้ว
+    copyText(tag, function(){
+      showToast(tag);
+      b.classList.add('copied');
+      var cp = b.querySelector('.cp'); var prev = cp ? cp.textContent : '';
+      if(cp) cp.textContent='✓';
+      setTimeout(function(){ b.classList.remove('copied'); if(cp) cp.textContent=prev; }, 1000);
+    });
+  });
+
+  var root = document.documentElement;
+  document.getElementById('themeBtn').addEventListener('click', function(){
+    var cur = root.getAttribute('data-theme');
+    var next = cur==='dark' ? 'light' : (cur==='light' ? 'dark' :
+      (window.matchMedia('(prefers-color-scheme:dark)').matches ? 'light':'dark'));
+    root.setAttribute('data-theme', next);
+  });
+
+  ['gotoVar', 'gotoVar1', 'gotoVar2', 'gotoVar3'].forEach(function(id){
+    var btn = document.getElementById(id);
+    if(!btn) return;
+    btn.addEventListener('click', function(){
+      var target = document.getElementById('varTable');
+      if(target) target.scrollIntoView({ behavior:'smooth', block:'start' });
+      setTimeout(function(){ try{ qEl.focus({preventScroll:true}); }catch(e){ qEl.focus(); } }, 400);
+    });
+  });
+
+  var lb = document.getElementById('lb'), lbImg = document.getElementById('lbImg');
+  function openLb(){ lb.classList.add('show'); document.body.style.overflow='hidden'; }
+  function closeLb(){ lb.classList.remove('show'); document.body.style.overflow=''; }
+  lb.addEventListener('click', closeLb);
+  document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeLb(); });
+
+  function wireThumb(figId, imgId, dataUri){
+    var fig = document.getElementById(figId), im = document.getElementById(imgId);
+    if(dataUri && im){
+      im.src = dataUri;
+      var open = function(){ lbImg.src = dataUri; openLb(); };
+      fig.addEventListener('click', open);
+      fig.addEventListener('keydown', function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); open(); } });
+    } else if(fig){ fig.style.display='none'; }
+  }
+  wireThumb('simFig', 'simImg', window.FLEX_SIM_IMG);
+  wireThumb('thumbFig', 'thumbImg', window.FLEX_CREATE_IMG);
+
+  render();
+})();
+</script>
+<script>
+(function(){
+  var fl = document.getElementById('tagFloat'); if(!fl) return;
+  var foot = document.getElementById('tfCloseFoot');
+  var cf = document.getElementById('tfConfirm');
+  var chk = document.getElementById('tfCheck');
+  var chkWrap = document.getElementById('tfCheckWrap');
+  var yes = document.getElementById('tfYes');
+  var no  = document.getElementById('tfNo');
+  if(foot) foot.addEventListener('click', function(){
+    if(cf) cf.hidden = false;
+    if(foot) foot.style.display = 'none';
+  });
+  var warn = document.getElementById('tfWarn');
+  if(no) no.addEventListener('click', function(){
+    if(cf) cf.hidden = true;
+    if(foot) foot.style.display = '';
+    if(chk){ chk.checked = false; }
+    if(warn) warn.classList.remove('show');
+  });
+  if(chk) chk.addEventListener('change', function(){ if(chk.checked && warn) warn.classList.remove('show'); });
+  if(yes) yes.addEventListener('click', function(){
+    if(chk && chk.checked){ fl.classList.add('closed'); return; }
+    if(warn) warn.classList.add('show');
+    if(chkWrap){ chkWrap.classList.remove('shake'); void chkWrap.offsetWidth; chkWrap.classList.add('shake'); }
+  });
+})();
+</script>
+</body>
+</html>

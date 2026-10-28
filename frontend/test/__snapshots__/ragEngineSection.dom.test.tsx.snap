@@ -1,0 +1,3 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`[RAGENGINE] the doc_retrieval switch — moved, not changed > 🔴 PIN markup of the switch block is the pre-move markup (snapshot taken on the old code) 1`] = `"<div class="md:col-span-2"><label class="block text-sm font-medium text-slate-500 mb-1">#</label><select class="w-full bg-primary-500/10 border rounded-lg px-4 py-2.5 text-slate-900 placeholder-slate-400 focus:ring-2 focus:border-transparent outline-none disabled:opacity-60 disabled:cursor-not-allowed transition-all border-primary-500/30 focus:ring-primary-500 bg-white" name="doc_retrieval"><option value="false">#</option><option value="true">#</option></select><p class="mt-1 text-xs text-slate-500/80">#</p></div>"`;

@@ -1,0 +1,952 @@
+/*
+ * ==== [FIX-20260729-TWBUILD] START — new file
+ * 🔒 AUTO track — to_dev_auto branch only
+ *
+ * Tailwind now ships inside the bundle instead of being pulled from
+ * cdn.tailwindcss.com at runtime.
+ *
+ * ── Why ──────────────────────────────────────────────────────────────────────
+ * index.html loaded the CDN build, which is the JIT compiler: every visitor
+ * downloaded it and their browser compiled the whole stylesheet on every page
+ * load. The browser warns about this itself ("cdn.tailwindcss.com should not be
+ * used in production"). It also blocks first paint, which is what made
+ * /ticket-support feel slow even though every API call answers in ~0.09s.
+ *
+ * ── Tailwind v4 notes ────────────────────────────────────────────────────────
+ * v4 has no tailwind.config.js — theme values are declared here with @theme, and
+ * the JS object that used to live in index.html is translated below. Names must
+ * keep the same shape (`--color-primary-500` -> `bg-primary-500`) or existing
+ * class names across the app silently stop resolving.
+ *
+ * `@custom-variant dark` is required because the app toggles dark mode by putting
+ * `.theme-dark` on <html> (see index.html), not with the `.dark` class v4 assumes.
+ *
+ * ⚠️ ถ้าเพิ่มสี/ขนาดใหม่ ให้เพิ่มที่นี่ที่เดียว — อย่ากลับไปใส่ใน index.html อีก
+ * revert: delete this file, drop its import from index.tsx, remove the
+ *         tailwindcss() plugin in vite.config.ts, and restore the CDN
+ *         <script> + tailwind.config block in index.html
+ * ==== [FIX-20260729-TWBUILD] END
+ */
+@import "tailwindcss";
+
+/* The app switches themes via html.theme-dark, so `dark:` must follow that. */
+@custom-variant dark (&:where(.theme-dark, .theme-dark *));
+
+@theme {
+  /* Below `wide` the 3-column ticket layout is too cramped (360+350+380 ≈ 1090px
+     min) so the right panel collapses to a FAB-toggled drawer. Same value the
+     CDN config used. */
+  --breakpoint-wide: 1380px;
+
+  /* Inter for latin, Kanit for Thai glyphs */
+  --font-sans: "Inter", "Kanit", sans-serif;
+
+  /* LINE-like light surfaces (kept as `dark-*` because the whole codebase already
+     references bg-dark-900 / border-dark-700 etc.) */
+  --color-dark-900: #D5DBE3;
+  --color-dark-800: #EDF1F6;
+  --color-dark-700: #DCE3EC;
+  --color-dark-600: #E2E8F0;
+
+  /* LINE green */
+  --color-primary-400: #1bd96a;
+  --color-primary-500: #06c755;
+  --color-primary-600: #00b950;
+  --color-primary-700: #009a44;
+}
+
+/* ==== [FEAT-20260729-BULKGLOW] START — pulsing glow for a ready action button
+   🔒 AUTO track — to_dev_auto branch only
+
+   Tailwind's `animate-pulse` fades the whole element, which dims the label of
+   the very button the user is about to click. This animates only the halo, so
+   the button stays fully legible while still drawing the eye.
+
+   Respects prefers-reduced-motion: the glow stays, it just stops moving.
+
+   A second, wider halo in the LINE green (--color-primary-500 #06c755) sits
+   behind the blue one, tying the button to the app's accent colour instead of
+   reading as a plain blue browser default. Pitched mid-strength — visible as
+   green, not a wash that swallows the blue.
+   revert: delete this block and the `animate-glow-pulse` class in Users.tsx. */
+@keyframes glow-pulse {
+  0%, 100% {
+    box-shadow: 0 0 10px rgba(14, 165, 233, 0.45),
+                0 0 20px rgba(6, 199, 85, 0.42);
+  }
+  50% {
+    box-shadow: 0 0 22px rgba(14, 165, 233, 0.95),
+                0 0 38px rgba(6, 199, 85, 0.70);
+  }
+}
+
+.animate-glow-pulse {
+  animation: glow-pulse 1.8s ease-in-out infinite;
+}
+
+/* [FEAT-20260729-BULKSTATUS] amber variant for the bulk status button. Same
+   timing as the blue one so the two buttons pulse together rather than beating
+   against each other. Single colour — the green aura belongs to the primary
+   action, and repeating it here would blur the distinction.
+   revert: delete this keyframe, .animate-glow-pulse-amber, and its
+           reduced-motion rule below. */
+@keyframes glow-pulse-amber {
+  0%, 100% { box-shadow: 0 0 10px rgba(245, 158, 11, 0.45); }
+  50%      { box-shadow: 0 0 24px rgba(245, 158, 11, 0.95); }
+}
+
+.animate-glow-pulse-amber {
+  animation: glow-pulse-amber 1.8s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-glow-pulse {
+    animation: none;
+    box-shadow: 0 0 16px rgba(14, 165, 233, 0.75),
+                0 0 30px rgba(6, 199, 85, 0.56);
+  }
+  .animate-glow-pulse-amber {
+    animation: none;
+    box-shadow: 0 0 16px rgba(245, 158, 11, 0.75);
+  }
+}
+/* ==== [FEAT-20260729-BULKGLOW] END ==== */
+
+/* ==== [FIX-20260731-TCBORDER] START — เส้นขอบดำในการ์ดของหน้า ticket/contacts
+   🔒 งานสาย AUTO — to_dev_auto / to_prod_auto
+
+   อาการ: การ์ดใน panel ขวาของหน้า ticket มีเส้นขอบ "สีดำ" ทึบ ผิดจากดีไซน์
+   ที่เหลือซึ่งใช้เส้นเทาอ่อน
+
+   ต้นเหตุ (ตรวจจาก CSS ที่ compile ออกมาจริง ไม่ได้เดา):
+   โค้ดเขียน `border border-border` แต่ **Tailwind ไม่รู้จักคลาส `border-border`**
+   เพราะ `--color-border` ไม่เคยถูกประกาศใน @theme → คลาสนั้นไม่ถูก compile
+   ออกมาเป็น CSS เลยสักบรรทัด (ยืนยัน: grep ใน dist ได้ 0 ครั้ง)
+   เหลือแค่ `.border{border-width:1px}` ซึ่ง **ไม่ได้กำหนดสี** เบราว์เซอร์จึงใช้
+   `currentColor` = สีข้อความของ element นั้น ซึ่งเกือบดำ
+
+   ทำไมประกาศ --color-border ใน @theme ไม่พอ: มันจะทำให้ `border-border` ใช้ได้
+   ทั้งระบบ = ทุกหน้าที่บังเอิญเขียนคลาสนี้เปลี่ยนตามหมด ผู้ใช้สั่งชัดว่า
+   "ห้ามกระทบหน้าอื่น เอาออกหน้าเดียว" จึงตั้ง `border-color` ตรงๆ ใต้ scope `.tc`
+   ซึ่งครอบเฉพาะหน้า Ticket Chat กับ Contacts (ยืนยันแล้วว่า `border-border`
+   ถูกใช้แค่ 3 ไฟล์ และทั้งหมดอยู่ใต้ .tc ไม่มีหน้าอื่นใช้เลย)
+
+   เจาะจงเฉพาะ element ที่ "ประกาศคลาส border-border" เท่านั้น ไม่เหวี่ยงทั้ง .tc
+   เพื่อไม่ให้ไปทับเส้นอื่นที่ตั้งสีไว้เองแล้ว (เช่น border-gray-200 ของคอลัมน์ซ้าย)
+
+   #E5E9F0 = เทาอ่อนชุดเดียวกับ --color-dark-700 (#DCE3EC) ที่ระบบใช้อยู่
+   revert: ลบบล็อกนี้ทั้งก้อน เส้นจะกลับไปเป็นสีดำเหมือนเดิม */
+.tc .border-border {
+  border-color: #E5E9F0;
+}
+/* ==== [FIX-20260731-TCBORDER] END ==== */
+
+/* ==== [FIX-20260731-LIGHTSURFACE] START — พื้นผิวขาวจั๊วในธีม light
+   🔒 งานสาย AUTO — to_dev_auto / to_prod_auto
+
+   ผู้ใช้: "light ธีมสีขาวตอนนี้มันยังสว่างอยู่ เลิกใช้สีขาวจั๊ว
+            ให้ใช้ oklch(86.9% 0.022 252.894) แทน" · "แก้ 3 จุดนั้นด้วยสีเดียวกัน"
+   3 จุด = header ของห้องแชท · selector (dropdown) · bubble ข้อความ
+
+   ต้นเหตุ (ตรวจจาก CSS ที่ compile ออกมาจริง):
+   คลาส `tc-msg-in` / `tc-select-trigger` / `tc-select-menu` **ไม่เคยมีนิยาม
+   ใน CSS เลยสักบรรทัด** — มีแต่ชื่อคลาสในไฟล์ tsx ไว้เกาะ ไม่มีใครกำหนดสีให้
+   จึงได้พื้นโปร่ง/ขาวตามค่าเริ่มต้นของเบราว์เซอร์
+   ส่วน header ใช้ `bg-white/90` ซึ่งเป็นสีขาวตรงๆ ของ Tailwind
+
+   ทำไมประกาศใน .tc: ผู้ใช้สั่ง "ทำแค่ light" และงานก่อนหน้าก็จำกัดขอบเขต
+   ไว้ที่ scope นี้แล้ว (ดู FIX-20260731-TCBORDER) — คลาสทั้งสามถูกใช้เฉพาะ
+   หน้า Ticket Chat กับ Contacts ซึ่งอยู่ใต้ .tc ทั้งคู่
+
+   ⚠️ ธีม dark ไม่ถูกแตะ — กฎนี้ถูกยกเลิกด้วย .theme-dark ด้านล่าง
+   ให้ dark กลับไปใช้ค่าเดิมของมัน (โปร่ง = ให้พื้นหลังของ dark คุมเอง)
+
+   #CAD5E2 = oklch(86.9% 0.022 252.894) ที่ผู้ใช้ระบุมา (แปลงเป็น sRGB)
+   revert: ลบบล็อกนี้ทั้งก้อน ทั้ง 3 จุดจะกลับไปขาวเหมือนเดิม */
+/* [FIX-20260731-LIGHTSURFACE] ปรับรอบสอง: #CAD5E2 เข้มไป ผู้ใช้สั่ง "ลดความเข้ม
+   ลง 50%" → ผสมกับสีขาวครึ่งหนึ่ง (CA+FF)/2, (D5+FF)/2, (E2+FF)/2 = #E5EAF1
+   ยังเป็นโทนเดียวกัน แค่อ่อนลง ไม่ได้เปลี่ยนเฉดสี
+   revert (กลับไปเข้มเท่าเดิม): เปลี่ยน #E5EAF1 กลับเป็น #CAD5E2 ทั้ง 2 จุด */
+/* [FIX-20260731-LIGHTSURFACE] รอบสาม: ผู้ใช้สั่ง "พื้นหลัง bubble เอาสีขาว
+   เหมือนเดิม" → ถอด .tc-msg-in ออกจากกฎนี้ เหลือแค่ selector 2 ตัว
+   bubble จึงกลับไปใช้สีขาวตามค่าเริ่มต้นเหมือนก่อนหน้า
+   revert (ให้ bubble มีสีอีกครั้ง): เพิ่ม `.tc .tc-msg-in,` กลับเข้ามาข้างบน */
+.tc .tc-select-trigger,
+.tc .tc-select-menu {
+  background-color: #E5EAF1;
+}
+
+/* header ของห้องแชท — เดิมเป็น bg-white/90 (ขาวตรงๆ) */
+.tc .tc-chat-header {
+  background-color: #E5EAF1;
+}
+
+/* ธีม dark ต้องไม่โดนด้วย — คืนค่าให้พื้นหลังของ dark คุมเอง */
+.theme-dark .tc .tc-select-trigger,
+.theme-dark .tc .tc-select-menu,
+.theme-dark .tc .tc-chat-header {
+  background-color: transparent;
+}
+/* ==== [FIX-20260731-LIGHTSURFACE] END ==== */
+
+/* ==== [FIX-20260731-THEMECOLORS] START — สีที่โค้ดอ้างถึงแต่ไม่เคยถูกประกาศ
+   🔒 งานสาย AUTO — to_dev_auto / to_prod_auto · งาน UI ตามไฟล์ต้นแบบ
+
+   ปัญหา: panel ขวาใช้ `text-primary` / `bg-primary-light` / `text-warning` /
+   `bg-warning` มาตลอด แต่ **ไม่มีตัวไหนถูกประกาศไว้เลย** Tailwind v4 จึงไม่
+   compile คลาสเหล่านี้ออกมาสักบรรทัด (ยืนยันด้วย grep ใน dist ได้ 0 ครั้ง)
+   → หัวข้อการ์ดไม่มีสี กลายเป็นเทา-ดำ ต่างจากต้นแบบที่เป็นน้ำเงิน
+     และการ์ด "รอทำรายการ" ที่ควรเป็นสีส้ม
+
+   ⚠️ ทำไมไม่ประกาศใน @theme: คลาสพวกนี้ถูกใช้ใน **43 ไฟล์ทั้งระบบ**
+   (Login/WebhookList/DemoChat/SystemConfig ...) ถ้าประกาศตรงนั้น ทุกหน้าจะ
+   เปลี่ยนสีพร้อมกันทันที · ผู้ใช้สั่งชัด "อย่าให้กระทบหน้าอื่น ทำเฉพาะหน้า
+   ticket support" จึงประกาศเป็น utility ใต้ scope `.tc` แทน — มีผลเฉพาะ
+   หน้า Ticket Chat กับ Contacts เท่านั้น หน้าอื่นยังเหมือนเดิมทุกประการ
+
+   ค่าสีคัดจาก tailwind config ในไฟล์ต้นแบบโดยตรง (ไม่ได้กะเอง):
+     primary #1d4ed8 (blue-700) · primary-light #eff6ff (blue-50)
+     warning #ea580c (orange-600)
+   revert: ลบบล็อกนี้ — คลาสกลับไปไม่มีสีเหมือนเดิม */
+.tc .text-primary { color: #1d4ed8; }
+.tc .bg-primary-light { background-color: #eff6ff; }
+.tc .text-warning { color: #ea580c; }
+.tc .bg-warning { background-color: #ea580c; }
+.tc .border-warning { border-color: #ea580c; }
+/* ==== [FIX-20260731-THEMECOLORS] END ==== */
+
+/* ==== [FIX-20260731-TOPBARDARK] START — แถบบนใช้สีเข้มแม้ในธีม light
+   🔒 งานสาย AUTO — to_dev_auto / to_prod_auto
+
+   ผู้ใช้สั่ง: "bg header menu ของ ticketonly ถ้า light > ใช้สีของ darktheme
+   และ bg megamenu ถ้า light > ใช้สีของ darktheme"
+   → แถบบนสุด (ซึ่งครอบทั้ง header ของ ticketOnly และ megamenu ไว้ด้วยกัน
+     — megamenu เรนเดอร์อยู่ข้างใน <header> ตัวเดียวกัน จึงแก้ที่เดียวได้ทั้งคู่)
+
+   ทำไมต้อง !important: index.html มีกฎ `html:not(.theme-dark) .bg-dark-800`
+   บังคับเป็น #EDF1F6 ด้วย !important อยู่แล้ว ต้องใช้น้ำหนักเท่ากันเพื่อทับ
+   #0f1a33 = ค่าเดียวกับที่ธีม dark ใช้กับ .bg-dark-800 (index.html:101)
+   ไม่ได้กะสีเอง — ยกมาจากธีม dark ตรงๆ ตามที่สั่ง
+
+   ⚠️ ขอบเขต: เจาะจงเฉพาะ element ที่มีคลาส `app-topbar` (แถบบนสุดตัวเดียว)
+   **avatar / toolbar / ปุ่ม setting ไม่ถูกแตะ** — พวกนั้นมีสีพื้นของตัวเอง
+   และไม่ได้อาศัยพื้นหลังของ header ตามที่ผู้ใช้กำหนดว่า "สีเดิม ตามธีม"
+   ธีม dark ไม่ต้องทำอะไร เพราะมันเป็นสีนี้อยู่แล้ว
+   revert: ลบบล็อกนี้ + คลาส `app-topbar` ใน App.tsx */
+html:not(.theme-dark) .app-topbar {
+  background-color: #0f1a33 !important;
+}
+/* ==== [FIX-20260731-TOPBARDARK] END ==== */
+
+/* ==== [FIX-20260731-TOPBARTEXT] START — ตัวหนังสือ/ไอคอนบนแถบเข้ม (ธีม light)
+   🔒 งานสาย AUTO — to_dev_auto / to_prod_auto
+
+   สืบเนื่องจาก [FIX-20260731-TOPBARDARK] ที่ทำให้แถบบนเป็นสีเข้มในธีม light
+   → ตัวหนังสือที่ออกแบบมาให้อยู่บนพื้นอ่อนเลยจมหายไปกับพื้น
+
+   ผู้ใช้สั่ง: "สีชื่อเว็บ + สี icon setting + ชื่อ login ใช้สีขาว หาก light theme"
+   และ "พื้นหลังธีมสวิชเชอร์ ใช้สีเดียวกับ dark เลย"
+
+   ⚠️ รอบแรกเขียนกฎเหวี่ยงทั้ง .app-topbar แล้ว **popover ของปุ่ม setting พัง**
+   (มันเรนเดอร์อยู่ข้างใน <header> ตัวเดียวกัน ตัวหนังสือเลยขาวบนพื้นขาว
+   อ่านไม่ออกทั้งแผง) · ลอง :not() กับ revert-layer แล้วยังไม่หาย
+   → เปลี่ยนมา **เจาะจงเฉพาะ 3 อย่างที่สั่ง** ด้วยคลาสเฉพาะตัว
+   ไม่แตะอย่างอื่นในแถบเลย popover จึงปลอดภัยโดยสมบูรณ์
+
+   ธีม dark ไม่ถูกแตะ (กฎขึ้นต้นด้วย html:not(.theme-dark))
+   สีสวิชเชอร์ยกมาจากธีม dark ตรงๆ (index.html:723-729) ไม่ได้กะเอง
+   revert: ลบบล็อกนี้ + คลาส app-topbar-text / app-topbar-icon ใน App.tsx */
+html:not(.theme-dark) .app-topbar-text {
+  color: #ffffff !important;
+}
+html:not(.theme-dark) .app-topbar-icon {
+  color: #ffffff !important;
+}
+/* ธีมสวิชเชอร์ — ใช้ค่าเดียวกับธีม dark */
+html:not(.theme-dark) .app-topbar .theme-switch {
+  border-color: rgba(255,255,255,0.10);
+  background: rgba(255,255,255,0.08);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.05);
+}
+html:not(.theme-dark) .app-topbar .theme-switch:hover {
+  background: rgba(255,255,255,0.12);
+  border-color: rgba(255,255,255,0.18);
+}
+/* ==== [FIX-20260731-TOPBARTEXT] END ==== */
+
+/* ==== [FIX-20260731-BRIGHTGREEN] START ============================
+   ผู้ใช้: "เขียวสว่าง สดใส ไม่ใช่เขียวหม่น"
+
+   ต้นเหตุ: ธีม dark มีกฎกลางที่ index.html แปลง .bg-green-100 เป็น
+   rgba(34,197,94,0.20) — เขียว 20% บนพื้นกรมท่า ผลลัพธ์เลยออกมาหม่น
+   เหมือนเขียวขี้ม้า ไม่ใช่เขียวสดตามที่ต้องการ (สีแดงก็เจอปัญหาเดียวกัน)
+
+   ⚠️ กฎกลางนั้นใช้ทั้งเว็บ **ห้ามแก้** เพราะจะกระทบทุกหน้า
+   → เขียนกฎใหม่ **จำกัดใน .tc เท่านั้น** (ticket support + contacts)
+   ให้ชนะกฎกลางด้วย specificity ที่สูงกว่า (html.theme-dark .tc .x)
+   หน้าอื่นทั้งหมดยังได้สีเดิมเป๊ะ ไม่กระทบอะไรเลย
+
+   ค่าที่ใช้ = เขียว/แดงสด opacity สูงขึ้น + ตัวหนังสือสว่างขึ้น
+   revert: ลบบล็อกนี้ทั้งก้อน (สีจะกลับไปหม่นเหมือนเดิม) */
+html.theme-dark .tc .bg-green-100 { background-color: rgba(34,197,94,0.30) !important; }
+html.theme-dark .tc .bg-red-100   { background-color: rgba(248,113,113,0.28) !important; }
+
+/* วงกลมลูกศรในการ์ด "รอทำรายการ" — ผู้ใช้สั่ง "เอาเขียวแบบภาพขวา" คือสีพาสเทล
+   สดใสแบบธีม light ไม่ใช่เขียวทึบๆ ที่ธีม dark ทำให้ · บังคับใช้สีเดียวกัน
+   ทั้งสองธีม (ค่าเดียวกับ Tailwind green-100/red-100 ของธีม light เป๊ะ)
+   เจาะจงเฉพาะ .tc-pending-arrow จึงไม่กระทบวงกลม/ป้ายเขียว-แดงตัวอื่นในหน้า */
+.tc .tc-pending-arrow-dep { background-color: #dcfce7 !important; color: #16a34a !important; }
+.tc .tc-pending-arrow-wd  { background-color: #fee2e2 !important; color: #dc2626 !important; }
+
+/* ผู้ใช้สั่ง "dark ใช้สีเหมือน light เลย เหมือนเลย" (ยึดไฟล์ต้นแบบ html)
+   ⚠️ ต้องเขียนกฎที่ขึ้นต้นด้วย html.theme-dark ซ้ำอีกชุด — ถ้าเขียนแค่ `.tc .x`
+   เฉยๆ กฎกลางของธีม dark (html.theme-dark .bg-green-100 ใน index.html) จะชนะ
+   เพราะ specificity สูงกว่า (มี html.theme-dark นำหน้า) วงกลมเลยกลับไปทึบ
+   → ประกาศค่าพาสเทลชุดเดียวกับธีม light ซ้ำใต้ html.theme-dark ให้ชนะกฎกลาง
+   ค่าที่ใช้ = green-100 #dcfce7 / green-600 #16a34a / red-100 #fee2e2 /
+              red-600 #dc2626 ตรงตามไฟล์ต้นแบบเป๊ะ */
+html.theme-dark .tc .tc-pending-arrow-dep { background-color: #dcfce7 !important; color: #16a34a !important; }
+html.theme-dark .tc .tc-pending-arrow-wd  { background-color: #fee2e2 !important; color: #dc2626 !important; }
+/* ลูกศร/ตัวเลขในการ์ด "รอทำรายการ" — สดขึ้นให้อ่านง่ายบนพื้นเข้ม */
+html.theme-dark .tc .text-green-600 { color: #4ade80 !important; }
+html.theme-dark .tc .text-red-500   { color: #f87171 !important; }
+/* ป้าย "ฝาก: เปิด / ถอน: เปิด" ในการ์ดการเงิน — เขียวสดชุดเดียวกัน */
+html.theme-dark .tc .text-green-700   { color: #86efac !important; }
+html.theme-dark .tc .border-green-200 { border-color: rgba(74,222,128,0.55) !important; }
+html.theme-dark .tc .text-red-700     { color: #fca5a5 !important; }
+html.theme-dark .tc .border-red-200   { border-color: rgba(248,113,113,0.55) !important; }
+/* ==== [FIX-20260731-BRIGHTGREEN] END ==== */
+
+/* ==== [FIX-20260731-PENDINGHEAD] START ============================
+   ผู้ใช้: "รอทำรายการ ฟ้อนสีส้มทั้ง dark + light"
+
+   .tc .text-warning = #ea580c (ส้มเข้ม) อ่านชัดดีบนพื้นขาวของธีม light
+   แต่บนพื้นกรมท่าของธีม dark มันทึบเกินไป → ใช้ส้มสว่างขึ้นเฉพาะธีม dark
+   ให้ความ "ส้ม" เท่ากันในสายตาทั้งสองธีม
+
+   จำกัดใน .tc เหมือนกฎอื่นในไฟล์นี้ — หน้าอื่นไม่กระทบ
+   revert: ลบบล็อกนี้ (ธีม dark จะกลับไปใช้ #ea580c ตัวเดียวกับ light) */
+html.theme-dark .tc .text-warning { color: #fb923c !important; }
+/* ==== [FIX-20260731-PENDINGHEAD] END ==== */
+
+/* ==== [FIX-20260731-TIERBADGE] START ==============================
+   ผู้ใช้: "ป้าย tier เอาให้เหมือนภาพที่สอง" — คือป้ายม่วงแบบ **นวลๆ กลมกลืน**
+   (เหมือนป้าย "VIP Tier 1" ในแถบหัว) ไม่ใช่แบบตัวหนังสือม่วงสดจนเรืองแสง
+
+   ป้ายนี้ใช้ bg-purple-100 / text-purple-700 / border-purple-200 ซึ่งธีม dark
+   ทำพื้นให้จางแล้ว แต่ "ตัวหนังสือกับเส้นขอบ" ยังเป็นค่าของธีม light อยู่
+   สีเลยแรงเกินและตัดกับพื้นจนดูเรืองแสง → ปรับให้นวลลงเฉพาะธีม dark
+
+   จำกัดใน .tc .panel-badge-purple เท่านั้น — ป้ายม่วงตัวอื่นในเว็บไม่กระทบ
+   revert: ลบบล็อกนี้ */
+html.theme-dark .tc .panel-badge-purple {
+  color: #d8b4fe !important;
+  border-color: rgba(168,85,247,0.38) !important;
+  border-radius: 9999px !important;
+}
+/* ธีม light ก็ให้เป็นทรงแคปซูลเหมือนภาพตัวอย่างเช่นกัน */
+.tc .panel-badge-purple { border-radius: 9999px !important; }
+/* ==== [FIX-20260731-TIERBADGE] END ==== */
+
+/* ==== [FIX-20260731-PROMOBADGE] START ============================
+   ผู้ใช้: "dark ใช้ font สีฟ้าอ่อน" (ป้ายโปรโมชั่นในหัวการ์ด "โปรโมชั่น")
+
+   ป้ายใช้ text-blue-700 = #1d4ed8 น้ำเงินเข้ม เหมาะกับพื้นขาวของธีม light
+   แต่บนพื้นกรมท่าของธีม dark มันเข้มจนแทบกลืน อ่านไม่ออก
+   → เปลี่ยนเป็นฟ้าอ่อน (#93c5fd) + เส้นขอบจางลง เฉพาะธีม dark
+
+   ธีม light ไม่ถูกแตะเลย · จำกัดใน .tc เหมือนกฎอื่นในไฟล์นี้
+   revert: ลบบล็อกนี้ + คลาส panel-badge-promo ใน TicketChat.tsx */
+html.theme-dark .tc .panel-badge-promo {
+  color: #93c5fd !important;
+  border-color: rgba(147,197,253,0.38) !important;
+}
+/* ==== [FIX-20260731-PROMOBADGE] END ==== */
+
+/* ==== [FIX-20260731-MEGATEXT] START ===============================
+   ผู้ใช้: "mega menu (แบบไม่ ticket only) light theme สีฟอนต์ สีขาว" + "icon ด้วยนะ"
+
+   งานก่อนหน้า (FIX-20260731-TOPBARDARK) ทำให้ topbar ของธีม light เป็นสีเข้ม
+   แต่แถบเมนู mega menu ที่วางอยู่บนนั้นยังใช้ text-slate-600 (เทาเข้ม)
+   ตัวหนังสือกับไอคอนเลยจมหายไปกับพื้น
+
+   ⚠️ จุดที่ต้องระวัง: แผง dropdown ที่กางลงมาเป็น "พื้นขาว" ถ้าทาขาวทั้ง subtree
+   ตัวหนังสือในแผงจะขาวบนขาว = อ่านไม่ออกทั้งแผง (เคยพลาดแบบนี้กับ popover
+   ของปุ่ม setting มาแล้ว) → กฎนี้จึงใช้ `> *` เจาะเฉพาะ **ลูกโดยตรง** ของแถบ
+   ซึ่งคือปุ่ม/ลิงก์บนแถบเท่านั้น แผงที่กางออกมาอยู่ลึกกว่านั้น ไม่โดน
+
+   ธีม dark ไม่ถูกแตะ (กฎขึ้นต้นด้วย html:not(.theme-dark))
+   revert: ลบบล็อกนี้ + คลาส app-megabar ใน MegaMenu.tsx */
+html:not(.theme-dark) .app-megabar > a,
+html:not(.theme-dark) .app-megabar > div > button {
+  color: #ffffff;
+}
+html:not(.theme-dark) .app-megabar > a svg,
+html:not(.theme-dark) .app-megabar > div > button svg {
+  color: #ffffff;
+}
+/* hover/active บนแถบ — ใช้ฝ้าขาวจางแทนพื้นฟ้าอ่อนที่ออกแบบมาสำหรับพื้นขาว */
+html:not(.theme-dark) .app-megabar > a:hover,
+html:not(.theme-dark) .app-megabar > div > button:hover {
+  color: #ffffff;
+  background-color: rgba(255,255,255,0.10);
+}
+/* ==== [FIX-20260731-MEGATEXT] END ==== */
+
+/* ==== [FEAT-20260801-CHATSEARCH] ไฮไลต์ข้อความที่กระโดดมา
+   ผู้ใช้ต้องรู้ทันทีว่า "อันไหนคือข้อความที่ค้นเจอ" ไม่งั้นกระโดดมาแล้วงงว่าอันไหน
+   ⚠️ ธีม dark ใช้เหลืองสว่างขึ้น — เฉดเดียวกันบนพื้นเข้มจะจมจนมองไม่เห็น
+      (บทเรียนเดียวกับ .tc .text-warning / .text-green-700 ที่ทำไว้ก่อนหน้า)
+   ⚠️ ใช้ box-shadow ไม่ใช่ border — border จะดันความกว้างบับเบิลให้ขยับ
+   revert: ลบบล็อกนี้ + คลาส tc-jump-hit ใน ChatRoomView */
+.tc .tc-jump-hit {
+  border-radius: 12px;
+  box-shadow: 0 0 0 2px #f59e0b, 0 0 0 6px rgba(245, 158, 11, 0.18);
+  transition: box-shadow 0.3s ease;
+}
+html.theme-dark .tc .tc-jump-hit {
+  box-shadow: 0 0 0 2px #fbbf24, 0 0 0 6px rgba(251, 191, 36, 0.22);
+}
+
+/* [FEAT-20260819-INCHATTOAST] a freshly arrived bubble glows blue for 4s so the
+   eye lands on WHICH message is new, not just that one arrived.
+   `> *:last-child` targets the BUBBLE itself: the wrapper it sits in also holds
+   the timestamp line, and glowing that too would draw a box around empty space.
+   No border-radius is set here — the shadow follows whatever radius the bubble
+   already has, so every bubble kind (text/image/video/flex) stays its own shape.
+   ห่อเฉพาะ bubble ไม่รวมบรรทัดเวลา · ไม่ทับความโค้งเดิม
+   revert: delete this block + the tc-msg-glow class in ChatRoomView. */
+.tc .tc-msg-glow > *:last-child {
+  box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.65), 0 0 22px 7px rgba(56, 189, 248, 0.38);
+  transition: box-shadow 0.35s ease;
+}
+html.theme-dark .tc .tc-msg-glow > *:last-child {
+  box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.7), 0 0 22px 7px rgba(56, 189, 248, 0.3);
+}
+
+/* [FEAT-20260819-LINEGLOW] the LINE mark tells you, at a glance, whether the site
+   knows this customer.
+
+   FIRST TRY was a green halo on the ones WITH a profile; the owner replaced it
+   (2026-08-19) because a glow on a busy list is noise — the eye should notice the
+   ODD ONE OUT instead. So the mark keeps its normal LINE green for a customer
+   with real account data, and is WASHED OUT for one without.
+
+   Desaturated rather than hidden: the row still reads as a LINE conversation, it
+   just does not claim to be a known customer.
+   มีโปรไฟล์ = เขียวปกติ · ไม่มี = เขียวจืด (ไม่ใช่เรืองแสง)
+   revert: delete this block and the class in the three call sites. */
+.tc-line-dim {
+  filter: saturate(0.25) opacity(0.55);
+}
+
+/* [FEAT-20260819-CARDWINDOW] the reveal. Cards that were just uncovered by
+   scrolling rise a little and fade in; every card already on screen is untouched,
+   because this page re-renders on every inbound message and a list that
+   re-animates itself constantly is worse than one that never animates.
+   `both` keeps the final frame, so a card cannot be left mid-fade if the browser
+   drops the animation. เฉพาะใบใหม่ · ใบเดิมนิ่งสนิท.
+   revert: delete this block and the class in the card render. */
+@keyframes tcCardReveal {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.tc-card-reveal {
+  animation: tcCardReveal 0.32s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+/* Someone who asked the system not to animate gets the cards, just not the motion. */
+@media (prefers-reduced-motion: reduce) {
+  .tc-card-reveal { animation: none; }
+}
+
+/* [FIX-20260802-SEEKBAR] ราง (track) ของ slider Gemini มองไม่เห็นในธีม light
+   สาเหตุจริง: ใช้แค่ `appearance-none + bg-* utility` — ราง track เป็น pseudo-element
+   (::-webkit-slider-runnable-track / ::-moz-range-track) ที่ไม่เคยถูกสไตล์
+   → หลาย browser render รางเป็น transparent เห็นแต่หัวจับเขียวลอย
+   แก้: กำหนด track + thumb ครบทุก vendor ในคลาสเดียว เห็นชัดทั้ง light/dark ทั้ง create/edit
+   revert: ลบบล็อกนี้ + คืน className utility เดิมให้ 3 slider ใน HookFormModal.tsx */
+.range-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 0.5rem;
+  border-radius: 9999px;
+  background: #94a3b8; /* slate-400 — ตัดกับพื้นกล่องเทาอ่อน */
+  cursor: pointer;
+  outline: none;
+}
+.range-slider:disabled { opacity: 0.6; cursor: not-allowed; }
+.range-slider::-webkit-slider-runnable-track {
+  height: 0.5rem;
+  border-radius: 9999px;
+  background: #94a3b8;
+}
+.range-slider::-moz-range-track {
+  height: 0.5rem;
+  border-radius: 9999px;
+  background: #94a3b8;
+}
+.range-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 1rem;
+  width: 1rem;
+  margin-top: -0.25rem; /* จัดหัวจับ 16px ให้อยู่กึ่งกลางราง 8px */
+  border-radius: 9999px;
+  background: var(--color-primary-500, #06c755);
+  border: 2px solid #ffffff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+  transition: transform 0.15s ease;
+}
+.range-slider::-webkit-slider-thumb:hover { transform: scale(1.15); }
+.range-slider::-moz-range-thumb {
+  height: 1rem;
+  width: 1rem;
+  border-radius: 9999px;
+  background: var(--color-primary-500, #06c755);
+  border: 2px solid #ffffff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+}
+html.theme-dark .range-slider,
+html.theme-dark .range-slider::-webkit-slider-runnable-track,
+html.theme-dark .range-slider::-moz-range-track {
+  background: #64748b; /* slate-500 — เข้มขึ้นนิดให้ตัดกับพื้นเข้ม */
+}
+
+/* [FEAT-20260805-FLEXTAGRULE] shake for the tag-rule confirm checkboxes */
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-6px); }
+  40%, 80% { transform: translateX(6px); }
+}
+
+/* [FIX-20260830-CLOSEFOCUS] the close-case options that still need an answer.
+   ⚠️ REUSES the `shake` keyframe above — same ±6px, already shipped and tuned;
+      a second keyframe doing the same thing is how two "shakes" drift apart.
+   Runs 3 times, not forever: it must catch the eye and then stop, or it becomes
+   noise the admin learns to ignore. The red border/state is what PERSISTS.
+   ⚠️ `prefers-reduced-motion` off — the border and the message already carry
+      the meaning, so nobody loses information when the motion is suppressed. */
+.tc-close-missing { animation: shake 0.4s ease-in-out 3; }
+@media (prefers-reduced-motion: reduce) { .tc-close-missing { animation: none; } }
+
+/* [FIX-20260824-FLEXNEWLINE] ขึ้นบรรทัดใหม่ในการ์ด Flex ให้เห็นจริง
+   ============================================================================
+   อาการ: ข้อความในการ์ดที่มี `\n` แสดงเป็นบรรทัดเดียวรวด ทั้งในหน้าแชทและใน
+   พรีวิวของหน้าสร้าง/แก้ไข flex (คนละหน้าจอ แต่ผ่าน `FlexBubble` ตัวเดียวกัน)
+
+   วัดจริงด้วยการรัน `flex-render` ตรง ๆ ไม่ได้เดา:
+     · newline **อยู่ใน HTML จริง** — ไลบรารีปล่อย `<p>AAA\nBBB</p>` ออกมา
+     · **ไม่เคยสร้าง `<br>`** ไม่ว่า `wrap` จะเป็นอะไร
+     · `wrap` แค่เลือก "คลาส" แล้ว stylesheet ของไลบรารีตัดสินที่เหลือ:
+         .MdTxt p          { white-space: nowrap }   ← ไม่มี wrap / wrap:false
+         .MdTxt.ExWrap p   { white-space: normal }   ← wrap:true
+   `normal` ยุบ newline เป็นช่องว่าง ⇒ ตัวอักษรมาถึงแล้วแต่ CSS โยนทิ้ง
+   (ที่เก็บใน DB · ตัวแก้ไข · ชั้นแทนค่า tag ตรวจแล้วรักษา newline ไว้ครบทุกชั้น)
+
+   ⇒ แก้ที่ประกาศเดียว: `pre-line` เฉพาะกรณี wrap เท่านั้น
+   ซึ่งตรงกับที่ LINE ทำเอง — newline นับเมื่อเปิด wrap และไม่นับเมื่อปิด
+   พรีวิวจึงเลิกโกหก
+
+   ⚠️ จงใจไม่แตะกรณีที่ไม่ wrap — LINE ตัดบรรทัดเดียวเสมอไม่ว่าข้อความมีอะไร
+      ถ้าไปทำให้กรณีนั้นขึ้นบรรทัดด้วย พรีวิวจะโกหกกลับด้าน
+      ⚠️ การ์ดของเจ้าของยังต้องใส่ `"wrap": true` ใน JSON ของตัวเองด้วย —
+         นั่นคือ *ข้อมูล* ไม่ใช่โค้ด กฎนี้ไม่ได้ไปเติมให้
+
+   ⚠️ นำหน้าด้วย `html` เพื่อให้ specificity สูงกว่ากฎของไลบรารี (0,3,2 > 0,3,1)
+      **ไม่พึ่งลำดับการ import** — `index.css` โหลดที่ entry แต่ `flex-render/css`
+      โหลดใน lazy chunk ของ FlexBubble ลำดับในบันเดิลจึงไม่การันตี
+
+   ⚠️ รัศมี: `FlexBubble` เป็นตัว render การ์ดทุกใบในแดชบอร์ด (สลิป/notice/
+      โปรไฟล์/broadcast) ⇒ กระทบการแสดงผล newline ในทุกการ์ด **แต่เฉพาะบน
+      หน้าจอแอดมิน** ส่งอะไรออกไปไม่ได้ ลูกค้าไม่เห็นผลจากบรรทัดนี้เลย
+
+   revert: ลบบล็อกนี้ · พรีวิวกลับไปยุบ newline เหมือนเดิม */
+html .flex-preview .MdTxt.ExWrap p {
+  white-space: pre-line;
+}
+
+/* ===========================================================================
+   [FEAT-20260825-BCASTBIG] The broadcast create/edit modal reads bigger.
+   ---------------------------------------------------------------------------
+   เจ้าของ 25/08: *"modal ใหญ่ + ขยาย font ภายใน modal create/edit ขึ้นอีก
+   มันเล็กไป รวมทั้ง select ด้วยมันเล็ก"* · *"ขยายปุ่มด้วย"*
+
+   🔴 ONE SCOPED BLOCK INSTEAD OF EDITING ~120 CLASS STRINGS. Every label,
+      hint, select and button inside that form carries its own `text-sm` /
+      `text-xs`; bumping each by hand is 120 chances to miss one and 120 lines
+      of diff to review. Scoping the scale to `.bcast-form-lg` keeps the change
+      in one reversible place and cannot leak to any other screen.
+      แก้ทีละคลาส = พลาดง่ายและ diff ยาว ⇒ คุมที่เดียวแล้วครอบทั้งฟอร์ม
+
+   ⚠️ SPECIFICITY IS WHY IT WORKS: `.bcast-form-lg .text-sm` is (0,2,0) and
+      Tailwind's `.text-sm` is (0,1,0), so this wins without `!important`.
+      Adding `!important` here would make a genuine per-element override
+      impossible later. ไม่ใช้ !important เพราะจะแก้เฉพาะจุดไม่ได้อีกเลย
+
+   ⚠️ IT DOES NOT TOUCH LAYOUT WIDTHS — only type size and control padding.
+      Growing a grid column here would move things the snapshots pin.
+
+   revert: delete this block and the `bcast-form-lg` class on the `<form>` in
+   `BroadcastFormModal.tsx`. Nothing else references it.
+   =========================================================================== */
+.bcast-form-lg .text-xs { font-size: 0.875rem; line-height: 1.35rem; }
+.bcast-form-lg .text-sm { font-size: 1.0625rem; line-height: 1.6rem; }
+.bcast-form-lg .text-base { font-size: 1.1875rem; line-height: 1.75rem; }
+.bcast-form-lg h4 { font-size: 1.1875rem; line-height: 1.75rem; }
+
+/* Controls: bigger text AND a bigger hit area — a taller select is the half
+   the owner actually notices. คุมทั้งขนาดตัวอักษรและความสูงของช่อง */
+.bcast-form-lg input,
+.bcast-form-lg select,
+.bcast-form-lg textarea,
+.bcast-form-lg button {
+  font-size: 1.0625rem;
+  line-height: 1.6rem;
+}
+.bcast-form-lg input:not([type='checkbox']):not([type='radio']),
+.bcast-form-lg select,
+.bcast-form-lg textarea {
+  padding-top: 0.7rem;
+  padding-bottom: 0.7rem;
+}
+.bcast-form-lg button { padding-top: 0.6rem; padding-bottom: 0.6rem; }
+
+/* [FEAT-20260825-SENDINGBADGE] เรืองแสงวิ่ง ๆ บนแถวที่กำลังส่งอยู่
+   ═══════════════════════════════════════════════════════════════════════
+   บอกด้วยตาว่า "งานนี้กำลังทำงานอยู่จริง ไม่ได้ค้าง" โดยไม่ต้องมี realtime
+   (เจ้าของ 25/08: *"ไม่ต้อง realtime ให้ refresh เอา"*) — ป้ายจะหายเองเมื่อ
+   auto-fetch รอบถัดไปเห็นสถานะเปลี่ยนเป็น sent/failed
+
+   ⚠️ สีอ่อนทั้งคู่ ตั้งใจไม่ใช้สีจัด — เจ้าของสั่ง *"ระวังสีแสบตา light / dark"*
+      ใช้ `currentColor` ไม่ได้เพราะเงาต้องอ่อนกว่าตัวอักษรมาก จึงระบุ sky ตรง ๆ
+      ที่ความทึบต่ำ ซึ่งอ่านออกทั้งพื้นสว่างและพื้นมืด
+   ⚠️ `prefers-reduced-motion` ปิดอนิเมชันให้ผู้ใช้ที่ตั้งค่าไว้ — ยังเห็นเงานิ่ง ๆ
+      อยู่ ไม่ได้หายไปทั้งหมด ⇒ ข้อมูลไม่หาย แค่ไม่กระพริบ
+   revert: ลบบล็อกนี้ + คลาส `bcast-sending-glow` ใน Broadcasts.tsx */
+@keyframes bcastSendingGlow {
+  0%, 100% { box-shadow: 0 0 0 0 rgb(14 165 233 / 0.35); }
+  50%      { box-shadow: 0 0 0 4px rgb(14 165 233 / 0); }
+}
+.bcast-sending-glow {
+  animation: bcastSendingGlow 1.8s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .bcast-sending-glow {
+    animation: none;
+    box-shadow: 0 0 0 3px rgb(14 165 233 / 0.18);
+  }
+}
+
+/* [UI-20260826-FLEXHUGRIGHT] ดันการ์ด flex ของบอทให้ชิดขวาจริง ๆ
+   ══════════════════════════════════════════════════════════════════════════
+   เจ้าของแจ้งซ้ำ 4 รอบว่า "flex ไม่ชิดขวา" · แก้ที่ฝั่ง React มา 3 รอบไม่ได้ผล
+   เพราะช่องว่างเกิด **ข้างใน HTML ที่ไลบรารี `flex-render` ปล่อยออกมา**
+   ซึ่ง React แตะไม่ถึง (มันมาทาง `dangerouslySetInnerHTML`)
+
+   สิ่งที่วัดได้จริง (รัน render() แล้วอ่าน HTML + เปิด CSS ของไลบรารี):
+     · HTML  : <div class="flex-preview"><div class="LyMe">…
+     · CSS   : node_modules/flex-render/dist/index.css
+                 .LyMe { max-width: 300px }
+                 .T1   { width: auto }
+   ⇒ `.flex-preview` เป็น block/flex-item ที่ **กางเต็มกล่อง** (สูงสุด 380px ตามที่
+     เรากำหนด) ส่วน `.LyMe` หยุดที่ 380px ไม่ได้ มันหยุดที่ **300px** แล้วนั่งชิดซ้าย
+     ⇒ เหลือช่องว่างขวา 380 − 300 = **80px** ตรงกับที่วัดจากภาพที่เจ้าของส่งมา
+
+   ⇒ ทำ `.flex-preview` เป็น flex container แล้วดันลูก (`.LyMe`) ไปชิดขวา
+     นี่คือชั้นที่ตื้นที่สุดที่ยังเอื้อมถึงจากฝั่งเรา
+
+   ⚠️ มี `html` นำหน้าเพื่อให้ specificity ชนะ CSS ของไลบรารี — รูปแบบเดียวกับ
+      กฎ `html .flex-preview .MdTxt.ExWrap p` ที่มีอยู่ก่อนแล้วในไฟล์นี้
+   ⚠️ ผูกกับคลาส `.tc-flex-right` เท่านั้น ⇒ การ์ดฝั่งลูกค้า และที่แสดง flex
+      ที่อื่น (พรีวิวตอนออกแบบการ์ด) **ไม่ถูกแตะเลย**
+   revert: ลบบล็อกนี้ + คลาส `tc-flex-right` ใน components/chat/FlexSlipCard.tsx */
+html .tc-flex-right .flex-preview {
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* ── โครงที่สอง: การ์ดแบบ carousel ─────────────────────────────────────────
+   🔴 นี่คือ "ใบเดียวที่ยังเป็นอยู่" ที่เจ้าของถามถึง
+      การ์ดแจ้งสถานะ (`DEPWITHWARN`) มี `content_json.type === "carousel"`
+      ไม่ใช่ `bubble` เดี่ยว ⇒ ไลบรารีปล่อยโครงคนละแบบ:
+        .flex-preview > .LySlider > .lyInner > .lyItem.LyMe
+      และกฎของไลบรารีคือ
+        .LySlider .lyInner { display: flex; width: 100% }   ← กางเต็มเสมอ
+        .LySlider .lyItem  { width: 80%; max-width: 300px; margin-left: 7px }
+   ⇒ `justify-content` ที่ `.flex-preview` ดัน `.LySlider` ไม่ได้ เพราะ `.lyInner`
+     บังคับ `width:100%` อยู่ข้างใน แล้ว `.lyItem` ก็เกาะซ้ายของ `.lyInner` อีกที
+   ⇒ ต้องดันที่ `.lyInner` โดยตรง · ใช้ `justify-content: flex-end` ตรงนั้น
+
+   ⚠️ ไม่แตะ `width:100%` ของ `.lyInner` — carousel หลายใบต้องเลื่อนแนวนอนได้เหมือนเดิม
+      การใส่ `justify-content` ไม่กระทบการเลื่อน (`overflow-x: scroll` ยังทำงานปกติ)
+   ⚠️ `.lyItem` มี `margin-left: 7px` ของไลบรารีอยู่ ⇒ ใบสุดท้ายจะเว้นขอบขวา 0
+      ตามที่ต้องการ ไม่ต้องแก้ margin
+   revert: ลบบล็อกนี้บล็อกเดียว กฎของ bubble เดี่ยวด้านบนยังทำงานต่อได้ */
+html .tc-flex-right .flex-preview .LySlider .lyInner {
+  justify-content: flex-end;
+}
+
+
+/* [FEAT-2708-BCASTWHITE] (งาน 5.2) input ในฟอร์ม broadcast = ขาวล้วน เฉพาะ light
+   ===========================================================================
+   เจ้าของ 27/08 พร้อม screenshot: ช่องกรอกในฟอร์มเป็นเทา — ต้นเหตุคือ rule global
+   ใน `index.html:72-78` (`#E2E8F0 !important` ทาทุก input ทั้งแอปตอน light)
+   ⇒ Tailwind class แพ้เสมอ และ `.bg-white` ก็ถูก `index.html:40-43` ทับอีกชั้น
+   ทางเดียวที่ได้ขาวแท้: rule ที่ specificity สูงกว่า (0,2,1 > 0,1,1) ใน layer
+   `!important` เดียวกัน และ scope ไว้ที่ฟอร์มนี้ (`.bcast-form-lg` — คลาสที่
+   `<form id="broadcast-form">` ถืออยู่แล้ว) จะได้ไม่รั่วไปหน้าอื่น
+   · checkbox/radio ถูกเว้น — พื้นหลังติ๊กไม่ใช่โจทย์
+   · dark ไม่โดนแตะ: ทุก selector ผูก `html:not(.theme-dark)`
+   · `.bcast-field` = trigger ที่หน้าตาเหมือน input แต่เป็น <button>
+     (MultiCheckSelect ผ่าน inputClass · SearchableSelect ใน FlexCardPicker) —
+     element rule ไม่ครอบ button จึงต้องมี marker class · ห้ามใช้ rule จับ
+     button ทั้งฟอร์ม เพราะจะทาปุ่ม wizard/ยืนยันไปด้วย
+   revert: ลบบล็อกนี้ + คำว่า bcast-field ใน inputClass (BroadcastFormModal) +
+           className="bcast-field" ใน FlexCardPicker — จบ ไม่มีอะไรค้าง */
+html:not(.theme-dark) .bcast-form-lg input:not([type='checkbox']):not([type='radio']),
+html:not(.theme-dark) .bcast-form-lg select,
+html:not(.theme-dark) .bcast-form-lg textarea,
+html:not(.theme-dark) .bcast-form-lg .bcast-field,
+html:not(.theme-dark) .bcast-form-lg .bcast-field > button {
+  background-color: #ffffff !important;
+}
+
+
+/* [FEAT-2708-GAUGEBG] เด้งนุ่มของเกจโควตาตอน ≥90% — เจ้าของขอ "เบากว่านี้"
+   (animate-bounce เต็มแรงกระโดด 25% สูงไป) · ±2px ก็เตือนสายตาพอ
+   revert: ลบบล็อกนี้ + คลาส gauge-danger-bounce ใน HeaderQuotaGauge */
+@keyframes gauge-nudge {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-2px); }
+}
+.gauge-danger-bounce { animation: gauge-nudge 1.1s ease-in-out infinite; }
+
+/* [UI-20260828-SCROLLHINT] ป้าย "เลื่อนลงดูต่อ" เด้งเบา ๆ — เจ้าของ 28/08 ขอ "เด้งนิดๆ"
+   ⚠️ ใช้ keyframe `gauge-nudge` ตัวเดิม ไม่เขียนใหม่ — ±2px เหมือนกันเป๊ะ และเคย
+      ถูกเจ้าของเคาะมาแล้วว่า `animate-bounce` เต็มแรงสูงเกินไป
+   🔴 ต้องใส่ที่ **ชั้นใน** เท่านั้น · ชั้นนอกจัดกึ่งกลางด้วย `-translate-x-1/2`
+      ⇒ animation ที่ขยับ `transform` จะทับการจัดกึ่งกลางทิ้ง แล้วป้ายจะกระเด็น
+        ไปติดขอบซ้ายทันที (คนละแกน แต่เป็น property เดียวกัน)
+   revert: ลบสองบรรทัดนี้ + คลาสใน ScrollHint.tsx */
+.scroll-hint-nudge { animation: gauge-nudge 1.6s ease-in-out infinite; }
+@media (prefers-reduced-motion: reduce) { .scroll-hint-nudge { animation: none; } }
+
+/* ===========================================================================
+   [FEAT-20260830-CHATFONT] ขนาดตัวอักษรของช่องแชทกลาง — คุมด้วยตัวคูณตัวเดียว
+
+   เจ้าของสั่ง 30/08/2026: ปรับขนาดได้ 6 ขั้น (คูณ 1.0–2.0) เฉพาะ **ช่องกลาง**
+   ของหน้า ticket · tray ทั้ง 3 (emoji · ตอบด่วน · สติกเกอร์) ต้องโตตามด้วย
+
+   วิธี: `TicketChat.tsx` ทา `--tc-chat-scale` ลงบน `.tc-col-center` แล้วทุกกฎ
+   ข้างล่างคูณค่านั้น. ตัวแปรถ่ายทอดลงลูกทั้งหมด และ **tray ทั้งสามอยู่ใน DOM
+   ของ `.tc-col-center` จริง** (ตรวจแล้ว: ไม่มี createPortal ใน ChatInputBox)
+   ⇒ ตัวแปรไปถึงครบโดยไม่ต้องทำอะไรเพิ่ม
+
+   ⚠️ ทำไมไม่ตั้ง `font-size` บนตัว `.tc-col-center` เฉย ๆ
+      ข้อความส่วนใหญ่ในแชทเป็น px ตายตัว (`text-[14px]` ฟองข้อความ) ซึ่งไม่ขยับ
+      ตาม ancestor เลย ส่วนคลาส rem (`text-xs`) จะไปคูณกับ `ui.fontScale` ของ
+      ฟันเฟืองที่ทาไว้บน <html> ⇒ สองค่าคูณกันแล้วเพี้ยนทั้งคู่ ซึ่งเจ้าของห้าม
+      ไว้ชัดว่า "ค่าเดิมฟันเฟืองไม่ยุ่ง". การระบุทีละคลาสจึงเป็นทางเดียวที่แยก
+      สองค่านี้ออกจากกันได้จริง
+
+   ⚠️ SPECIFICITY: `.tc-col-center .text-xs` เป็น (0,2,0) ชนะ `.text-xs` (0,1,0)
+      ของ Tailwind โดย **ไม่ต้องใช้ `!important`** — ตามเหตุผลเดียวกับบล็อก
+      `.bcast-form-lg` ข้างบน (ใส่ !important แล้วจะแก้เฉพาะจุดไม่ได้อีกเลย)
+
+   ⚠️ ตั้งเฉพาะ `font-size`/ขนาด — **ห้ามใส่ `color`** เพราะกฎ dark mode
+      (`html.theme-dark .tc ...`) คุมสีอยู่ ถ้าใส่สีตรงนี้จะไปตีกัน
+
+   ⚠️ ไม่แตะความกว้าง/จำนวนคอลัมน์ของ grid — ที่คูณคือ "ขนาดของสิ่งที่อยู่ข้างใน"
+      ไม่ใช่โครงหน้า ⇒ panel ซ้าย/ขวา header menu ไม่ได้รับผลใด ๆ เพราะอยู่นอก
+      selector นี้ทั้งหมด
+
+   revert: ลบบล็อกนี้ + การทา `--tc-chat-scale` ใน TicketChat.tsx
+   =========================================================================== */
+.tc-col-center {
+  /* ไม่มีค่า = 1 ⇒ หน้าตาเดิมเป๊ะ แม้ JS ยังไม่ได้ทาตัวแปร */
+  --tc-chat-scale: 1;
+}
+
+/* ตัวอักษร: คลาสชื่อ (rem) */
+.tc-col-center .text-\[10px\] { font-size: calc(10px * var(--tc-chat-scale)); }
+.tc-col-center .text-\[11px\] { font-size: calc(11px * var(--tc-chat-scale)); }
+.tc-col-center .text-\[12px\] { font-size: calc(12px * var(--tc-chat-scale)); }
+.tc-col-center .text-\[13px\] { font-size: calc(13px * var(--tc-chat-scale)); }
+.tc-col-center .text-\[14px\] { font-size: calc(14px * var(--tc-chat-scale)); }
+.tc-col-center .text-\[17px\] { font-size: calc(17px * var(--tc-chat-scale)); }
+.tc-col-center .text-\[9px\]  { font-size: calc(9px  * var(--tc-chat-scale)); }
+
+/* ตัวอักษร: คลาสค่าคงที่ (px) — ต้องระบุทีละค่าเพราะ px ไม่ขยับตาม ancestor */
+.tc-col-center .text-xs   { font-size: calc(0.75rem  * var(--tc-chat-scale)); line-height: calc(1rem    * var(--tc-chat-scale)); }
+.tc-col-center .text-sm   { font-size: calc(0.875rem * var(--tc-chat-scale)); line-height: calc(1.25rem * var(--tc-chat-scale)); }
+.tc-col-center .text-base { font-size: calc(1rem     * var(--tc-chat-scale)); line-height: calc(1.5rem  * var(--tc-chat-scale)); }
+.tc-col-center .text-lg   { font-size: calc(1.125rem * var(--tc-chat-scale)); line-height: calc(1.75rem * var(--tc-chat-scale)); }
+.tc-col-center .text-xl   { font-size: calc(1.25rem  * var(--tc-chat-scale)); line-height: calc(1.75rem * var(--tc-chat-scale)); }
+
+/* ไอคอน lucide: `size={n}` กลายเป็น attribute width/height เป็น px ⇒ CSS ไปไม่ถึง
+   ต้องบังคับด้วยกฎนี้ ไม่งั้นที่ 2 เท่าจะได้ตัวหนังสือใหญ่คู่กับไอคอนจิ๋วเท่าเดิม */
+.tc-col-center svg {
+  width: calc(1em * var(--tc-chat-scale));
+  height: calc(1em * var(--tc-chat-scale));
+}
+
+/* สติกเกอร์: `w-12 h-12` เป็น rem ที่อิงจาก <html> ⇒ ไม่โตตาม ancestor
+   ถ้าไม่คูณตรงนี้ จะได้ป้าย "แพ็ค" ใหญ่คู่กับรูปเท่าเดิม ซึ่งเจ้าของเห็นแน่ */
+.tc-col-center .w-12 { width:  calc(3rem * var(--tc-chat-scale)); }
+.tc-col-center .h-12 { height: calc(3rem * var(--tc-chat-scale)); }
+
+/* ความสูงของแผง tray: ค่าเดิมเป็น rem คงที่ ⇒ ยิ่งตัวอักษรใหญ่ยิ่งเห็นน้อยลง
+   คูณตามเพื่อให้จำนวนแถวที่มองเห็นเท่าเดิม (จำกัดไม่ให้เกินครึ่งจอ) */
+.tc-col-center .max-h-40 { max-height: min(50vh, calc(10rem * var(--tc-chat-scale))); }
+.tc-col-center .max-h-48 { max-height: min(50vh, calc(12rem * var(--tc-chat-scale))); }
+
+/* ==== [FIX-20260830-TRAYCAPSCALE] a default-mode tray still ate the column ====
+
+   Owner, 30/08, screenshot labelled *"บัค (โหมดไม่เต็มจอ)"*: plain DEFAULT tray
+   mode, sticker tray open, the message stream gone and the textarea crushed to a
+   sliver with its placeholder clipped in half.
+
+   ── the real cause, which is NOT "the cap is unbounded" ────────────────────
+   The two rules above already clamp with `min(50vh, ...)`, so the sticker tray's
+   ceiling is `min(50vh, calc(12rem * 2.0))` = `min(50vh, 384px)` — bounded. The
+   defect is the arithmetic AROUND that number, not the number itself:
+
+     composer root ceiling   max-h-[55vh]   (CHAT_COMPOSER_MAX_H)
+     sticker tray ceiling    up to 50vh     (the rule above)
+     => the tray alone may claim 50 of the composer's 55vh, leaving ~5vh to
+        share between grip (16px) + toolbar (~40px) + textarea row + counter.
+
+   At a 900px viewport that is ~45px for four rows whose natural height is ~200px,
+   so the textarea row is the one that loses — exactly the clipped sliver in the
+   screenshot. The sticker override makes it worst-case because `12rem * 2.0`
+   (384px) exceeds 50vh only on short viewports, so on a normal screen the tray
+   takes the full 50vh every time.
+
+   ── why THIS fix and not the alternatives ──────────────────────────────────
+   · "exempt the cap from the multiplication" — rejected. The multiplication is
+     deliberate and the owner's: at a large font scale a fixed-rem cap shows
+     fewer and fewer rows. Removing it would regress [FEAT-20260830-TRAYFIXEDSCALE]
+     and the emoji tray, which must keep tracking the user's scale.
+   · "bound the ancestor instead" — already done, and it is what fails: the
+     ancestor cap is 55vh and the tray is allowed 50 of it. Lowering the ancestor
+     would shrink the composer for everyone, tray or no tray.
+   · chosen: cap the tray against the space the composer can actually spare, in a
+     unit the scale cannot touch. The composer may be 55vh; the fixed rows it must
+     always show are ~200px at scale 1 and grow with the scale, so the tray's
+     share is expressed as `55vh` minus a rem allowance that scales with the text.
+     `vh` does not participate in `--tc-chat-scale`, and the subtrahend is in
+     `rem` (root-relative), so neither half of this expression can be inflated by
+     a tray's own `--tc-chat-scale` override — which is the precise trap the
+     sticker tray fell into.
+
+   The cap is applied via a dedicated class rather than by editing `.max-h-40` /
+   `.max-h-48`, because those two Tailwind names are shared with anything else in
+   the column that happens to use them; this rule must bind the composer trays
+   only. `min()` keeps whichever of the two ceilings is smaller, so the existing
+   scale-tracking behaviour still applies below this new floor-of-the-ceiling.
+   revert: drop this rule + the `tc-tray-cap` class on the three tray panels. */
+.tc-col-center .tc-tray-cap {
+  /* 9rem ≈ grip 16 + toolbar 40 + one textarea line + counter, with headroom;
+     in rem so it grows with the user's font size, never with a tray override */
+  max-height: calc(55vh - 9rem);
+}
+
+/* ==== [FEAT-20260830-TRAYCLOSEBAR] a subtree that ignores every chat scale ====
+   Owner, 30/08: the single tray close button in the composer toolbar must be a
+   FIXED size — *"สเกล font ปกติ ไม่สนใจ 6 scale"* — unaffected both by the
+   user's font-scale preference and by the trays' own pinned overrides
+   ([FEAT-20260830-TRAYFIXEDSCALE] paints the multiplier on the sticker panel,
+   which is why the old in-panel close button looked huge).
+
+   ⚠️ this re-declares the multiplier rather than writing pixel values, exactly
+   like the tray overrides do — so every sizing rule above stays the single place
+   where sizes are written, and this subtree simply multiplies by 1.
+
+   ⚠️ NO `!important`, deliberately — `chatFontScale.value.test.ts` pins that
+   this whole block stays out of the escalation war that `.bcast-form-lg` lost,
+   and it is not needed here: the competing declaration is `--tc-chat-scale` set
+   on `.tc-col-center` (by JS, inline), which reaches this button only by
+   INHERITANCE, and any rule matching the element itself beats an inherited
+   value. The trays' own overrides cannot reach it either — the button lives in
+   the toolbar, outside every panel's subtree. The `*` half is what carries the
+   pin down to the `<svg>` icon inside the button, which is where
+   `.tc-col-center svg` would otherwise multiply.
+
+   revert: delete this rule + the `tc-fixed-scale-1` class in TicketChat.tsx */
+.tc-col-center .tc-fixed-scale-1,
+.tc-col-center .tc-fixed-scale-1 * { --tc-chat-scale: 1; }
+
+/* [FIX-20260909-LOADINGLOOK] "balls" — ลูกจุดวิ่งเป็นขบวนแล้วโดนขอบกล่องตัด
+   เจ้าของ 09/09 ส่งภาพ react-loading มาให้: *"เอาเป็น loading ball"* — คือแบบที่
+   จุดเลื่อนไปทางขวาเป็นแถวและถูก clip ที่ขอบ ไม่ใช่เด้งขึ้นลงอยู่กับที่
+   (`animate-bounce` เดิมคือคนละท่ากันคนละอัน)
+   🔴 หน่วยเป็น % ของ "ความกว้างจุดเอง" ทั้งหมด ⇒ keyframe เดียวใช้ได้ทั้งขนาด
+      md (12px) และ sm (6px) โดยไม่ต้องมี custom property หรือ keyframe ที่สอง
+   ⚠️ ไม่มี opacity ในนี้ตั้งใจ — ที่ทำให้จุดโผล่/หายคือ `overflow-hidden` ของกล่อง
+      เหมือนภาพต้นแบบ (ลูกขวาสุดโดนตัดครึ่ง) การ fade เพิ่มจะกลายเป็นอีกท่าหนึ่ง
+   revert: ลบบล็อกนี้ + ใช้ `animate-bounce` กลับใน TranslateLoadingDots.tsx */
+@keyframes tcBallsRun {
+  from { transform: translateX(-100%); }
+  to   { transform: translateX(600%); }
+}
+.tc-balls-run { animation: tcBallsRun 1.4s linear infinite; }
+/* หยุดวิ่ง = ต้องยังอ่านออกว่าเป็นแถวจุด ไม่ใช่จุดสี่ลูกทับกันเป็นจุดเดียว */
+@media (prefers-reduced-motion: reduce) {
+  .tc-balls-run { animation: none; }
+  .tc-balls-run:nth-child(2) { transform: translateX(130%); }
+  .tc-balls-run:nth-child(3) { transform: translateX(260%); }
+  .tc-balls-run:nth-child(4) { transform: translateX(390%); }
+}
+
+/* [FIX-20260910-TRANSLATEGLOW] ขอบเรืองแสงฟ้าของปุ่ม "แปลภาษา"
+   เจ้าของ 10/09: *"ปุ่มแปลภาษา glow border สีฟ้า animated ด้วย ไม่ต้อง bg นะสีเดิม"*
+   🔴 เป็น **ขอบ** ล้วน ๆ — ใช้ `box-shadow` + `outline` ไม่แตะ `background` เลยสักกฎเดียว
+      ปุ่มนี้มีพื้นหลังสามสถานะอยู่แล้ว (ว่าง / เปิดอยู่ / hover) ถ้ามาทาสีทับ
+      สถานะ "เปิดอยู่" จะหายไปทันที
+   ⚠️ ไม่ใช้ `border` เพราะการเพิ่มเส้นขอบจริงจะดันขนาดปุ่ม 2px ทำให้แถวเครื่องมือขยับ
+      `box-shadow` วาดทับโดยไม่กินพื้นที่ layout
+   ⚠️ **เรืองตลอดเวลา รวมตอนปุ่มจาง** — เจ้าของสั่งตรง ๆ 10/09:
+      *"ตอนที่เบลอปุ่มแปลภาษา ก็ต้อง glow สรุป glow ตลอดเวลา"*
+      รอบแรกผมตัด glow ตอน disabled/muted ทิ้งด้วยเหตุผลว่า "เชิญให้กดสิ่งที่กดไม่ได้"
+      — เจ้าของตัดสินว่าไม่ใช่ ปุ่มจางบอกอยู่แล้วว่ากดไม่ได้ (opacity-40 + cursor)
+      ส่วน glow มีหน้าที่บอกว่า "ปุ่มนี้อยู่ตรงนี้" ซึ่งจริงทุกสถานะ
+   revert: ลบบล็อกนี้ + คลาส `tc-translate-glow` ใน ComposerToolbar.tsx */
+@keyframes tcTranslateGlow {
+  0%, 100% { box-shadow: 0 0 0 1.5px rgba(56, 189, 248, .55), 0 0 6px 0 rgba(56, 189, 248, .35); }
+  50%      { box-shadow: 0 0 0 1.5px rgba(99, 102, 241, .75), 0 0 12px 2px rgba(56, 189, 248, .60); }
+}
+.tc-translate-glow { animation: tcTranslateGlow 2.2s ease-in-out infinite; }
+
+/* [FIX-20260910-GLOWMUTED] ตอนปุ่มจาง ต้องเห็น glow ชัดกว่าเดิม
+   เจ้าของ 10/09: *"ตอนที่เบลอให้ glow เข้มกว่านี้ มันมองไม่ออก"*
+   🔴 สาเหตุที่มองไม่ออก ไม่ใช่ว่าสีอ่อนไป แต่เป็นเพราะ `opacity` ของ element
+      **คูณลง box-shadow ด้วย** ⇒ ที่ opacity-40 ค่า alpha .55 เหลือจริง ~.22
+      เพิ่มความหนาอย่างเดียวไม่พอ ต้องชดเชยการคูณนั้นกลับมา
+   ⇒ สถานะจางใช้ keyframe ของตัวเอง alpha ~1.0 · 40% ของ 1.0 ≈ ค่าที่สถานะปกติ
+     เห็นอยู่ทุกวันนี้ ⇒ "จางเท่ากันในสายตา" ไม่ใช่ "สว่างกว่าตอนกดได้"
+   ⚠️ สถานะปกติไม่ถูกแตะ — เจ้าของเคาะความเข้มนั้นไปแล้ว */
+@keyframes tcTranslateGlowMuted {
+  0%, 100% { box-shadow: 0 0 0 2px rgba(56, 189, 248, 1), 0 0 10px 1px rgba(56, 189, 248, .9); }
+  50%      { box-shadow: 0 0 0 2px rgba(99, 102, 241, 1), 0 0 18px 4px rgba(56, 189, 248, 1); }
+}
+.tc-translate-glow.opacity-40,
+.tc-translate-glow:disabled { animation-name: tcTranslateGlowMuted; }
+@media (prefers-reduced-motion: reduce) {
+  .tc-translate-glow { animation: none; box-shadow: 0 0 0 1.5px rgba(56, 189, 248, .55); }
+  .tc-translate-glow.opacity-40,
+  .tc-translate-glow:disabled { box-shadow: 0 0 0 2px rgba(56, 189, 248, 1); }
+}
+
+/* ==== [FEAT-20261018-EXTAPICARDS] START — การ์ดในแท็บ External API ของฟอร์ม OA = สีขาว (ธีม light)
+   เจ้าของสั่ง 18/10/2026: "การ์ดสีเทา ทำสีขาว หมด เฉพาะ light แล้วแบ่งการ์ดที่ว่างสวยๆ".
+   การ์ดยังมีคลาส bg-dark-900 อยู่ ⇒ ธีม dark ได้สีเดิมจากกฎ html.theme-dark ใน index.html ไม่ถูกแตะ
+   ทำไมต้อง !important + คลาสซ้ำ: index.html บังคับ `html:not(.theme-dark) .bg-dark-900` ด้วย
+   !important อยู่แล้ว · คลาสซ้ำเพิ่มน้ำหนักให้ชนะโดยไม่ขึ้นกับลำดับไฟล์ CSS
+   ใช้ที่: form/ExtApiFoldCard.tsx · HookFormModal (กล่อง External API + Customer Link) · HookPaymentFlexBlock
+   revert: ลบบล็อกนี้ + คลาส extapi-card */
+html:not(.theme-dark) .extapi-card.extapi-card {
+  background-color: #ffffff !important;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.06);
+}
+/* ==== [FEAT-20261018-EXTAPICARDS] END ==== */

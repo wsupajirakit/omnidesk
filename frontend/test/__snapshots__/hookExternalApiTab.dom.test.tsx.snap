@@ -1,0 +1,33 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`[EXTAPICARDS] BEFORE — shop-api: the controls and what a Custom Tool bind saves > ⭐ Customer Link OFF: every control in the tab, frozen 1`] = `
+[
+  "input:checkbox|เปิดใช้ tool|false",
+  "input:checkbox|เปิดใช้|false",
+  "input:checkbox|เปิดใช้งาน|false",
+  "input:checkbox|ใช้ tool แยก|false",
+  "input:password|external_password|",
+  "input:text|external_api_url|",
+  "input:text|external_user|",
+  "select:select-one|?|",
+  "select:select-one|?|",
+  "select:select-one|?|",
+]
+`;
+
+exports[`[EXTAPICARDS] BEFORE — shop-api: the controls and what a Custom Tool bind saves > ⭐ Customer Link ON: every control in the tab, frozen 1`] = `
+[
+  "input:checkbox|เปิดใช้ tool|false",
+  "input:checkbox|เปิดใช้|false",
+  "input:checkbox|เปิดใช้งาน|true",
+  "input:checkbox|ใช้ tool แยก|false",
+  "input:password|external_password|",
+  "input:text|customer_link_landing_url|",
+  "input:text|customer_link_web_code|sim_alpha",
+  "input:text|external_api_url|",
+  "input:text|external_user|",
+  "select:select-one|?|",
+  "select:select-one|?|",
+  "select:select-one|?|",
+]
+`;

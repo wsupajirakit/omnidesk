@@ -1,0 +1,993 @@
+{
+  "web_codes": [
+    "DEMO01"
+  ],
+  "shop": {
+    "cashback": {
+      "cashback": {
+        "agent_id": "00000000-0000-4000-8000-000000000001",
+        "cashback_type": "spend_total",
+        "created_at": 1741761772,
+        "id": "00000000-0000-4000-8000-000000000016",
+        "interval": 1,
+        "is_cashback_open": true,
+        "is_previous_process": false,
+        "percent": 0,
+        "percent_home_living": 10,
+        "percent_online_activity": 10,
+        "percent_electronics": 10,
+        "percent_gift_card": 10,
+        "percent_collectibles": 10,
+        "percent_fashion": 10,
+        "percent_outdoor_activity": 10,
+        "start_at": 1779344800,
+        "act_home_living": 99999,
+        "act_online_activity": 99999,
+        "act_electronics": 99999,
+        "act_gift_card": 99999,
+        "act_collectibles": 99999,
+        "act_fashion": 99999,
+        "act_outdoor_activity": 99999,
+        "activity_volume": 99999,
+        "updated_at": 1785681531
+      }
+    },
+    "referral": {
+      "referral": {
+        "agent_id": "00000000-0000-4000-8000-000000000001",
+        "created_at": 1741926404,
+        "id": "00000000-0000-4000-8000-000000000017",
+        "is_referral_open": true,
+        "percent": 20,
+        "percent_home_living": 20,
+        "percent_online_activity": 20,
+        "percent_electronics": 20,
+        "percent_gift_card": 20,
+        "percent_collectibles": 20,
+        "percent_fashion": 20,
+        "percent_outdoor_activity": 20,
+        "act_home_living": 99999,
+        "act_online_activity": 99999,
+        "act_electronics": 99999,
+        "act_gift_card": 99999,
+        "act_collectibles": 99999,
+        "act_fashion": 99999,
+        "act_outdoor_activity": 99999,
+        "activity_volume": 99999,
+        "updated_at": 1785570470
+      }
+    },
+    "wallet": {
+      "wallet_setting": {
+        "agent_id": "00000000-0000-4000-8000-000000000001",
+        "clear_act": 10,
+        "created_at": 1741515806,
+        "deposit_amount_approve": 0,
+        "deposit_amount_min": 100,
+        "deposit_amount_mode": "ALL",
+        "deposit_coin_rate": 10,
+        "deposit_min_delay": 5,
+        "deposit_sort": "[\"gateway\",\"promptpay\",\"auto\",\"truemoney\",\"manual\"]",
+        "deposit_text": "",
+        "deposit_activity_volume": 0,
+        "id": "01JNX6WMSSR99G7JNAT31P4A0D",
+        "is_open_credit_add": true,
+        "is_open_deposit": true,
+        "is_open_register_truemoney": true,
+        "is_qr_open": true,
+        "is_withdraw_all": false,
+        "is_withdraw_bank_verify": false,
+        "is_withdraw_new_user": false,
+        "is_withdraw_open": true,
+        "show_bank_member_deposit_mode": "ALL",
+        "updated_at": 1785523043,
+        "withdraw_amount_approve": 5000,
+        "withdraw_amount_min": 50,
+        "withdraw_limit_per_day": 10,
+        "withdraw_max_per_bill": 10000,
+        "withdraw_transfer_group_amount": 45000,
+        "withdraw_transfer_group_open": false,
+        "withdraw_truemoney_mode": "WITHDRAW_APPROVE"
+      }
+    },
+    "products": {
+      "deposit_coin_rate": 10,
+      "products": [
+        {
+          "default_config": {
+            "spend_amount": 10,
+            "spend_asset": "coin",
+            "layout_slot": 4,
+            "limit_per_day": 300,
+            "rate_config": [
+              {
+                "amount": 0,
+                "color_theme": "#ffffff",
+                "image_path": "",
+                "index_channel": 1,
+                "length_channel": 0,
+                "name": "",
+                "rate": 0,
+                "rate_text_color": "#ffffff",
+                "reward_type": "credit",
+                "act_home_living": 0,
+                "act_online_activity": 0,
+                "act_electronics": 0,
+                "act_gift_card": 0,
+                "act_collectibles": 0,
+                "act_fashion": 0,
+                "act_outdoor_activity": 0
+              },
+              {
+                "amount": 0,
+                "color_theme": "#ffffff",
+                "image_path": "",
+                "index_channel": 2,
+                "length_channel": 0,
+                "name": "",
+                "rate": 10.5,
+                "rate_text_color": "#ffffff",
+                "reward_type": "credit",
+                "act_home_living": 0,
+                "act_online_activity": 0,
+                "act_electronics": 0,
+                "act_gift_card": 0,
+                "act_collectibles": 0,
+                "act_fashion": 0,
+                "act_outdoor_activity": 0
+              },
+              {
+                "amount": 0,
+                "color_theme": "#ffffff",
+                "image_path": "",
+                "index_channel": 3,
+                "length_channel": 0,
+                "name": "",
+                "rate": 0,
+                "rate_text_color": "#ffffff",
+                "reward_type": "credit",
+                "act_home_living": 0,
+                "act_online_activity": 0,
+                "act_electronics": 0,
+                "act_gift_card": 0,
+                "act_collectibles": 0,
+                "act_fashion": 0,
+                "act_outdoor_activity": 0
+              },
+              {
+                "amount": 0,
+                "color_theme": "#ffffff",
+                "image_path": "",
+                "index_channel": 4,
+                "length_channel": 0,
+                "name": "",
+                "rate": 0.001,
+                "rate_text_color": "#ffffff",
+                "reward_type": "credit",
+                "act_home_living": 0,
+                "act_online_activity": 0,
+                "act_electronics": 0,
+                "act_gift_card": 0,
+                "act_collectibles": 0,
+                "act_fashion": 0,
+                "act_outdoor_activity": 0
+              }
+            ],
+            "theme_config": {
+              "img_bg": "",
+              "img_bg_reward": "https://www.example-crm.dev/",
+              "img_button": "",
+              "img_button_auto": "https://www.example-crm.dev/",
+              "img_icon_point_round": "https://www.example-crm.dev/",
+              "img_point": "https://www.example-crm.dev/",
+              "img_quota": "https://www.example-crm.dev/",
+              "img_point_round": "https://www.example-crm.dev/",
+              "mark_bg_1": "#BF953F",
+              "mark_bg_2": "#FCF6BA",
+              "point_color": "#ffffff",
+              "quota_color": "#ffffff",
+              "reward_color": "",
+              "round_color": "",
+              "text_color": "",
+              "point_round_border_1": "#BF953F",
+              "point_round_border_2": "#FCF6BA",
+              "point_round_border_3": "#B38728"
+            }
+          },
+          "id": "POINT_ROUND",
+          "img_path": "",
+          "is_active": true,
+          "name": "point round #2"
+        },
+        {
+          "default_config": null,
+          "id": "RAND_BOX",
+          "img_path": "",
+          "is_active": false,
+          "name": "Random Box"
+        },
+        {
+          "default_config": null,
+          "id": "RAND_COLLECTIBLES",
+          "img_path": "",
+          "is_active": false,
+          "name": "Random Collectibles"
+        },
+        {
+          "default_config": null,
+          "id": "RAND_REWARD",
+          "img_path": "",
+          "is_active": false,
+          "name": "Random Reward"
+        },
+        {
+          "default_config": null,
+          "id": "RAND_COUPON",
+          "img_path": "",
+          "is_active": false,
+          "name": "Random Coupon"
+        },
+        {
+          "default_config": null,
+          "id": "OMNI_POINT_ROUND",
+          "img_path": "",
+          "is_active": false,
+          "name": "Lucky Point Round"
+        }
+      ]
+    },
+    "tier": null,
+    "promotions": {
+      "category": "",
+      "page": {
+        "from": 0,
+        "size": 10,
+        "total": 1
+      },
+      "promotions": [
+        {
+          "asset_code": "credit",
+          "coupon_code": "",
+          "created_at": 1754550848,
+          "deposit_amount": 50,
+          "desc": "ใช้กับกิจกรรมแฟชั่น",
+          "end_date": 1788109200000,
+          "id": "00000000-0000-4000-8000-000000000002",
+          "img_path": "https://images.example-crm.dev/SETTING-1754550821.png",
+          "is_cal_cashback": false,
+          "is_view": true,
+          "max_per_user": 10,
+          "max_user": 100,
+          "mtk_code": "",
+          "name": "เติม 50 รับส่วนลด 50",
+          "promotion_clear": 10,
+          "promotion_config_info": {
+            "act_home_living": 99999,
+            "act_online_activity": 99999,
+            "act_electronics": 99999,
+            "act_gift_card": 99999,
+            "act_collectibles": 99999,
+            "act_fashion": 1,
+            "act_outdoor_activity": 99999,
+            "withdraw_max_amount": 100,
+            "withdraw_min_amount": 0,
+            "withdraw_min_balance": 200
+          },
+          "promotion_info": {
+            "amount_bonus": 50,
+            "balance_amount": 0,
+            "deposit_per_day": 0,
+            "max_bonus": 0,
+            "percent_bonus": 0
+          },
+          "promotion_mode": "fix-deposit",
+          "promotion_type": "forever",
+          "promotion_type_clear": "fix_value",
+          "start_date": 1785430800000,
+          "status": "open",
+          "tier_accepts": [],
+          "activity_volume_open_info": {
+            "act_home_living_open": false,
+            "act_online_activity_open": false,
+            "act_electronics_open": false,
+            "act_gift_card_open": false,
+            "act_collectibles_open": false,
+            "act_fashion_open": true,
+            "act_outdoor_activity_open": false
+          },
+          "updated_at": 1785522958,
+          "use_true_money": false,
+          "withdraw_all_open": true,
+          "withdraw_mode": "wait-approve"
+        }
+      ]
+    },
+    "bank_account": {
+      "accounts": [
+        {
+          "account_mode": "SMS",
+          "account_name": "acc-name-01",
+          "account_number": "no-01-000000",
+          "account_type": "deposit",
+          "balance": 0,
+          "bank_code": "SCB",
+          "can_check_member": false,
+          "created_at": 1750081293410,
+          "is_view": false,
+          "lasted_at": 1787299375626,
+          "provider_code": "dragon",
+          "ref_id": "prov-fake-01",
+          "remark": "",
+          "report_daily": {
+            "deposit": {
+              "avg": 0,
+              "count": 0,
+              "sum": 0
+            },
+            "withdraw": {
+              "avg": 0,
+              "count": 0,
+              "sum": 0
+            }
+          },
+          "status": "disable",
+          "total_deposit": 0,
+          "total_withdraw": 0,
+          "updated_at": 1787299379024
+        },
+        {
+          "account_mode": "SMS",
+          "account_name": "acc-name-02",
+          "account_number": "no-02-000000",
+          "account_type": "deposit",
+          "balance": 289.69,
+          "bank_code": "SCB",
+          "can_check_member": false,
+          "created_at": 1750088631673,
+          "is_view": false,
+          "lasted_at": 1762067227879,
+          "provider_code": "dragon",
+          "ref_id": "prov-fake-02",
+          "remark": "",
+          "report_daily": {
+            "deposit": {
+              "avg": 0,
+              "count": 0,
+              "sum": 0
+            },
+            "withdraw": {
+              "avg": 0,
+              "count": 0,
+              "sum": 0
+            }
+          },
+          "status": "disable",
+          "total_deposit": 778,
+          "total_withdraw": 0,
+          "updated_at": 1779534500079
+        },
+        {
+          "account_mode": "SMS",
+          "account_name": "acc-name-03",
+          "account_number": "no-03-000000",
+          "account_type": "deposit",
+          "balance": 1087.02,
+          "bank_code": "KTB",
+          "can_check_member": false,
+          "created_at": 1751166733411,
+          "is_view": false,
+          "lasted_at": 1785479220347,
+          "provider_code": "luckypay368",
+          "ref_id": "prov-fake-03",
+          "remark": "",
+          "report_daily": {
+            "deposit": {
+              "avg": 0,
+              "count": 0,
+              "sum": 0
+            },
+            "withdraw": {
+              "avg": 0,
+              "count": 0,
+              "sum": 0
+            }
+          },
+          "status": "disable",
+          "total_deposit": 21,
+          "total_withdraw": 0,
+          "updated_at": 1785479233425
+        },
+        {
+          "account_mode": "WEB",
+          "account_name": "acc-name-04",
+          "account_number": "no-04-000000",
+          "account_type": "deposit-withdraw",
+          "balance": 0.5,
+          "bank_code": "POMPAY",
+          "can_check_member": false,
+          "created_at": 1752750541531,
+          "is_view": false,
+          "lasted_at": 1787044994306,
+          "provider_code": "pompay",
+          "ref_id": "prov-fake-04",
+          "remark": "internal error text (redacted)",
+          "report_daily": {
+            "deposit": {
+              "avg": 0,
+              "count": 0,
+              "sum": 0
+            },
+            "withdraw": {
+              "avg": 0,
+              "count": 0,
+              "sum": 0
+            }
+          },
+          "status": "disable",
+          "total_deposit": 1200,
+          "total_withdraw": 1354,
+          "updated_at": 1787044994
+        },
+        {
+          "account_mode": "APP",
+          "account_name": "acc-name-05",
+          "account_number": "no-05-000000",
+          "account_type": "withdraw",
+          "balance": 830,
+          "bank_code": "BBL",
+          "can_check_member": false,
+          "created_at": 1762065265304,
+          "is_view": false,
+          "lasted_at": 1772626606149,
+          "provider_code": "bbld",
+          "ref_id": "prov-fake-05",
+          "remark": "",
+          "report_daily": {
+            "deposit": {
+              "avg": 0,
+              "count": 0,
+              "sum": 0
+            },
+            "withdraw": {
+              "avg": 0,
+              "count": 0,
+              "sum": 0
+            }
+          },
+          "status": "disable",
+          "total_deposit": 0,
+          "total_withdraw": 115,
+          "updated_at": 1772626607
+        },
+        {
+          "account_mode": "WEB",
+          "account_name": "acc-name-06",
+          "account_number": "no-06-000000",
+          "account_type": "deposit",
+          "balance": 0,
+          "bank_code": "KK",
+          "can_check_member": false,
+          "created_at": 1767769770264,
+          "is_view": false,
+          "lasted_at": 0,
+          "provider_code": "manual",
+          "ref_id": "prov-fake-06",
+          "remark": "",
+          "report_daily": {
+            "deposit": {
+              "avg": 0,
+              "count": 0,
+              "sum": 0
+            },
+            "withdraw": {
+              "avg": 0,
+              "count": 0,
+              "sum": 0
+            }
+          },
+          "status": "disable",
+          "total_deposit": 0,
+          "total_withdraw": 0,
+          "updated_at": 1787299363180
+        },
+        {
+          "account_mode": "WEB",
+          "account_name": "acc-name-07",
+          "account_number": "no-07-000000",
+          "account_type": "deposit",
+          "balance": 1200,
+          "bank_code": "BBL",
+          "can_check_member": false,
+          "created_at": 1767767581492,
+          "is_view": false,
+          "lasted_at": 0,
+          "provider_code": "manual",
+          "ref_id": "prov-fake-07",
+          "remark": "",
+          "report_daily": {
+            "deposit": {
+              "avg": 0,
+              "count": 0,
+              "sum": 0
+            },
+            "withdraw": {
+              "avg": 0,
+              "count": 0,
+              "sum": 0
+            }
+          },
+          "status": "disable",
+          "total_deposit": 0,
+          "total_withdraw": 0,
+          "updated_at": 1779534494872
+        },
+        {
+          "account_mode": "WEB",
+          "account_name": "acc-name-08",
+          "account_number": "no-08-000000",
+          "account_type": "deposit",
+          "balance": 0,
+          "bank_code": "KBANK",
+          "can_check_member": false,
+          "created_at": 1767777748623,
+          "is_view": false,
+          "lasted_at": 0,
+          "provider_code": "manual",
+          "ref_id": "prov-fake-08",
+          "remark": "",
+          "report_daily": {
+            "deposit": {
+              "avg": 0,
+              "count": 0,
+              "sum": 0
+            },
+            "withdraw": {
+              "avg": 0,
+              "count": 0,
+              "sum": 0
+            }
+          },
+          "status": "disable",
+          "total_deposit": 0,
+          "total_withdraw": 0,
+          "updated_at": 1787299357455
+        },
+        {
+          "account_mode": "WEB",
+          "account_name": "acc-name-09",
+          "account_number": "no-09-000000",
+          "account_type": "deposit",
+          "balance": 0,
+          "bank_code": "KBANK",
+          "can_check_member": false,
+          "created_at": 1767768167233,
+          "is_view": false,
+          "lasted_at": 0,
+          "provider_code": "manual",
+          "ref_id": "prov-fake-09",
+          "remark": "",
+          "report_daily": {
+            "deposit": {
+              "avg": 0,
+              "count": 0,
+              "sum": 0
+            },
+            "withdraw": {
+              "avg": 0,
+              "count": 0,
+              "sum": 0
+            }
+          },
+          "status": "disable",
+          "total_deposit": 0,
+          "total_withdraw": 0,
+          "updated_at": 1787299403386
+        },
+        {
+          "account_mode": "WEB",
+          "account_name": "acc-name-10",
+          "account_number": "no-10-000000",
+          "account_type": "deposit",
+          "balance": 0,
+          "bank_code": "BAY",
+          "can_check_member": false,
+          "created_at": 1767768533233,
+          "is_view": false,
+          "lasted_at": 0,
+          "provider_code": "manual",
+          "ref_id": "prov-fake-10",
+          "remark": "",
+          "report_daily": {
+            "deposit": {
+              "avg": 0,
+              "count": 0,
+              "sum": 0
+            },
+            "withdraw": {
+              "avg": 0,
+              "count": 0,
+              "sum": 0
+            }
+          },
+          "status": "disable",
+          "total_deposit": 0,
+          "total_withdraw": 0,
+          "updated_at": 1787299367138
+        },
+        {
+          "account_mode": "WEB",
+          "account_name": "acc-name-11",
+          "account_number": "no-11-000000",
+          "account_type": "deposit-withdraw",
+          "balance": 851.61,
+          "bank_code": "AZPAY",
+          "can_check_member": false,
+          "created_at": 1779534254942,
+          "is_view": false,
+          "lasted_at": 1784125864674,
+          "provider_code": "azpay",
+          "ref_id": "prov-fake-11",
+          "remark": "internal error text (redacted)",
+          "report_daily": {
+            "deposit": {
+              "avg": 0,
+              "count": 0,
+              "sum": 0
+            },
+            "withdraw": {
+              "avg": 0,
+              "count": 0,
+              "sum": 0
+            }
+          },
+          "status": "maintenance",
+          "total_deposit": 200,
+          "total_withdraw": 0,
+          "updated_at": 1784125865637
+        },
+        {
+          "account_mode": "WEB",
+          "account_name": "acc-name-12",
+          "account_number": "no-12-000000",
+          "account_type": "deposit",
+          "balance": 0,
+          "bank_code": "KTB",
+          "can_check_member": false,
+          "created_at": 1785480876193,
+          "is_view": true,
+          "lasted_at": 1785481278328,
+          "provider_code": "swiftcheck",
+          "ref_id": "prov-fake-12",
+          "remark": "",
+          "report_daily": {
+            "deposit": {
+              "avg": 0,
+              "count": 0,
+              "sum": 0
+            },
+            "withdraw": {
+              "avg": 0,
+              "count": 0,
+              "sum": 0
+            }
+          },
+          "status": "enable",
+          "total_deposit": 49,
+          "total_withdraw": 0,
+          "updated_at": 1787299742204
+        },
+        {
+          "account_mode": "WEB",
+          "account_name": "acc-name-13",
+          "account_number": "no-13-000000",
+          "account_type": "deposit",
+          "balance": 0,
+          "bank_code": "GSB",
+          "can_check_member": false,
+          "created_at": 1783064035740,
+          "is_view": false,
+          "lasted_at": 0,
+          "provider_code": "swiftcheck",
+          "ref_id": "prov-fake-13",
+          "remark": "",
+          "report_daily": {
+            "deposit": {
+              "avg": 0,
+              "count": 0,
+              "sum": 0
+            },
+            "withdraw": {
+              "avg": 0,
+              "count": 0,
+              "sum": 0
+            }
+          },
+          "status": "disable",
+          "total_deposit": 123,
+          "total_withdraw": 0,
+          "updated_at": 1783155299036
+        },
+        {
+          "account_mode": "WEB",
+          "account_name": "acc-name-14",
+          "account_number": "no-14-000000",
+          "account_type": "deposit",
+          "balance": 0,
+          "bank_code": "SCB",
+          "can_check_member": false,
+          "created_at": 1783063507110,
+          "is_view": false,
+          "lasted_at": 0,
+          "provider_code": "swiftcheck",
+          "ref_id": "prov-fake-14",
+          "remark": "",
+          "report_daily": {
+            "deposit": {
+              "avg": 0,
+              "count": 0,
+              "sum": 0
+            },
+            "withdraw": {
+              "avg": 0,
+              "count": 0,
+              "sum": 0
+            }
+          },
+          "status": "disable",
+          "total_deposit": 0,
+          "total_withdraw": 0,
+          "updated_at": 1783155279438
+        },
+        {
+          "account_mode": "WEB",
+          "account_name": "acc-name-15",
+          "account_number": "no-15-000000",
+          "account_type": "deposit",
+          "balance": 0,
+          "bank_code": "KBANK",
+          "can_check_member": false,
+          "created_at": 1783066091761,
+          "is_view": false,
+          "lasted_at": 0,
+          "provider_code": "swiftcheck",
+          "ref_id": "prov-fake-15",
+          "remark": "",
+          "report_daily": {
+            "deposit": {
+              "avg": 0,
+              "count": 0,
+              "sum": 0
+            },
+            "withdraw": {
+              "avg": 0,
+              "count": 0,
+              "sum": 0
+            }
+          },
+          "status": "disable",
+          "total_deposit": 312,
+          "total_withdraw": 0,
+          "updated_at": 1783175622061
+        },
+        {
+          "account_mode": "WEB",
+          "account_name": "acc-name-16",
+          "account_number": "no-16-000000",
+          "account_type": "withdraw",
+          "balance": 95.5,
+          "bank_code": "COPAY",
+          "can_check_member": false,
+          "created_at": 1784964984055,
+          "is_view": false,
+          "lasted_at": 1787299340880,
+          "provider_code": "copay",
+          "ref_id": "prov-fake-16",
+          "remark": "internal error text (redacted)",
+          "report_daily": {
+            "deposit": {
+              "avg": 0,
+              "count": 0,
+              "sum": 0
+            },
+            "withdraw": {
+              "avg": 0,
+              "count": 0,
+              "sum": 0
+            }
+          },
+          "status": "disable",
+          "total_deposit": 0,
+          "total_withdraw": 100,
+          "updated_at": 1787299344207
+        },
+        {
+          "account_mode": "WEB",
+          "account_name": "acc-name-17",
+          "account_number": "no-17-000000",
+          "account_type": "deposit",
+          "balance": 327.43,
+          "bank_code": "WALLETPAY",
+          "can_check_member": false,
+          "created_at": 1784708981505,
+          "is_view": false,
+          "lasted_at": 1786691668102,
+          "provider_code": "walletpay",
+          "ref_id": "prov-fake-17",
+          "remark": "internal error text (redacted)",
+          "report_daily": {
+            "deposit": {
+              "avg": 0,
+              "count": 0,
+              "sum": 0
+            },
+            "withdraw": {
+              "avg": 0,
+              "count": 0,
+              "sum": 0
+            }
+          },
+          "status": "maintenance",
+          "total_deposit": 4300,
+          "total_withdraw": 0,
+          "updated_at": 1787135091979
+        },
+        {
+          "account_mode": "WEB",
+          "account_name": "acc-name-18",
+          "account_number": "no-18-000000",
+          "account_type": "deposit",
+          "balance": 95.5,
+          "bank_code": "COPAY",
+          "can_check_member": false,
+          "created_at": 1784964908975,
+          "is_view": false,
+          "lasted_at": 1785098300486,
+          "provider_code": "copay",
+          "ref_id": "prov-fake-18",
+          "remark": "internal error text (redacted)",
+          "report_daily": {
+            "deposit": {
+              "avg": 0,
+              "count": 0,
+              "sum": 0
+            },
+            "withdraw": {
+              "avg": 0,
+              "count": 0,
+              "sum": 0
+            }
+          },
+          "status": "maintenance",
+          "total_deposit": 250,
+          "total_withdraw": 0,
+          "updated_at": 1786356824620
+        },
+        {
+          "account_mode": "WEB",
+          "account_name": "acc-name-19",
+          "account_number": "no-19-000000",
+          "account_type": "withdraw",
+          "balance": 281.07,
+          "bank_code": "WALLETPAY",
+          "can_check_member": false,
+          "created_at": 1784709841789,
+          "is_view": false,
+          "lasted_at": 1787302509474,
+          "provider_code": "walletpay",
+          "ref_id": "prov-fake-19",
+          "remark": "",
+          "report_daily": {
+            "deposit": {
+              "avg": 0,
+              "count": 0,
+              "sum": 0
+            },
+            "withdraw": {
+              "avg": 0,
+              "count": 0,
+              "sum": 0
+            }
+          },
+          "status": "disable",
+          "total_deposit": 0,
+          "total_withdraw": 700,
+          "updated_at": 1787302509717
+        },
+        {
+          "account_mode": "WEB",
+          "account_name": "acc-name-20",
+          "account_number": "no-20-000000",
+          "account_type": "deposit",
+          "balance": 0,
+          "bank_code": "KBANK",
+          "can_check_member": false,
+          "created_at": 1786358161903,
+          "is_view": false,
+          "lasted_at": 1786447213102,
+          "provider_code": "swiftcheck",
+          "ref_id": "prov-fake-20",
+          "remark": "",
+          "report_daily": {
+            "deposit": {
+              "avg": 0,
+              "count": 0,
+              "sum": 0
+            },
+            "withdraw": {
+              "avg": 0,
+              "count": 0,
+              "sum": 0
+            }
+          },
+          "status": "disable",
+          "total_deposit": 200,
+          "total_withdraw": 0,
+          "updated_at": 1787299256917
+        },
+        {
+          "account_mode": "WEB",
+          "account_name": "acc-name-21",
+          "account_number": "no-21-000000",
+          "account_type": "deposit-withdraw",
+          "balance": 0,
+          "bank_code": "P2P",
+          "can_check_member": false,
+          "created_at": 1780568607056,
+          "is_view": false,
+          "lasted_at": 0,
+          "provider_code": "one2coin",
+          "ref_id": "prov-fake-21",
+          "remark": "",
+          "report_daily": {
+            "deposit": {
+              "avg": 0,
+              "count": 0,
+              "sum": 0
+            },
+            "withdraw": {
+              "avg": 0,
+              "count": 0,
+              "sum": 0
+            }
+          },
+          "status": "disable",
+          "total_deposit": 0,
+          "total_withdraw": 0,
+          "updated_at": 1787299353565
+        },
+        {
+          "account_mode": "WEB",
+          "account_name": "acc-name-22",
+          "account_number": "no-22-000000",
+          "account_type": "deposit",
+          "balance": 0,
+          "bank_code": "VIREXA",
+          "can_check_member": false,
+          "created_at": 1787208853099,
+          "is_view": false,
+          "lasted_at": 1787306097151,
+          "provider_code": "virexa",
+          "ref_id": "prov-fake-22",
+          "remark": "",
+          "report_daily": {
+            "deposit": {
+              "avg": 0,
+              "count": 0,
+              "sum": 0
+            },
+            "withdraw": {
+              "avg": 0,
+              "count": 0,
+              "sum": 0
+            }
+          },
+          "status": "enable",
+          "total_deposit": 0,
+          "total_withdraw": 0,
+          "updated_at": 1787306098386
+        }
+      ],
+      "agent_id": "00000000-0000-4000-8000-000000000001"
+    }
+  }
+}

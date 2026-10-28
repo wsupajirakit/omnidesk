@@ -1,0 +1,52 @@
+# dependencies
+node_modules/
+
+# build output
+dist/
+coverage/
+*.tsbuildinfo
+.vite/
+.dist-parity/
+
+# environment & secrets — only the *.example files are tracked
+.env
+.env.*
+!.env.example
+**/.env
+**/.env.*
+!**/.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+*.jks
+*.keystore
+*.crt
+*.cer
+id_rsa*
+**/.secret
+*.ovpn
+
+# databases, dumps, uploads
+*.bson
+*.sql
+*.dump
+dump.rdb
+db_backup/
+backend/public/uploads/
+
+# logs & local state
+*.log
+*.local.json
+.*-call-count.json
+backend/z-test/.artifacts/
+
+# docs: README.md is the only markdown file in this repository
+*.md
+!README.md
+
+# OS / editor
+.DS_Store
+.idea/
+.vscode/*
+!.vscode/extensions.json

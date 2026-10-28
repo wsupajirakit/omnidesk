@@ -1,0 +1,68 @@
+{
+  "isDuplicate": false,
+  "matchedAccount": {
+    "bank": {
+      "nameTh": "ธนาคารกสิกรไทย",
+      "nameEn": "Kasikorn Bank",
+      "code": "004",
+      "shortCode": "KBANK"
+    },
+    "nameTh": "บจก. ฟาสต์โฟน365",
+    "nameEn": "GLOBEX CO., LTD.",
+    "type": "JURISTIC",
+    "bankNumber": "1878365034"
+  },
+  "amountInSlip": 100,
+  "rawSlip": {
+    "payload": "0041000600000101030040220016221190025DTF042405102TH91048AE7",
+    "transRef": "016221190025DTF00100",
+    "date": "2026-08-09T19:00:25+07:00",
+    "countryCode": "TH",
+    "amount": {
+      "amount": 100,
+      "local": {
+        "amount": 100,
+        "currency": "764"
+      }
+    },
+    "fee": 0,
+    "ref1": "",
+    "ref2": "",
+    "ref3": "",
+    "sender": {
+      "bank": {
+        "id": "004",
+        "name": "ธนาคารกสิกรไทย",
+        "short": "KBANK"
+      },
+      "account": {
+        "name": {
+          "th": "น.ส. ปราณี บ",
+          "en": "MS. Pranee B"
+        },
+        "bank": {
+          "type": "BANKAC",
+          "account": "xxx-x-x5271-x"
+        }
+      }
+    },
+    "receiver": {
+      "bank": {
+        "id": "004",
+        "name": "ธนาคารกสิกรไทย",
+        "short": "KBANK"
+      },
+      "account": {
+        "name": {
+          "th": "บจก. ฟ",
+          "en": "GLOBEX C"
+        },
+        "bank": {
+          "type": "BANKAC",
+          "account": "xxx-x-x6503-x"
+        }
+      },
+      "merchantId": ""
+    }
+  }
+}

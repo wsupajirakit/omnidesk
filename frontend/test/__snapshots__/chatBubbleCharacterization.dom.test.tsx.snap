@@ -1,0 +1,7 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`[AITRANSLATE · BEFORE] an untranslated bubble, exactly as it renders today > ⭐⭐⭐ the inbound bubble markup is byte-identical to this snapshot > inbound bubble 1`] = `"<div class="px-4 py-2.5 rounded-2xl inline-block text-[14px] leading-relaxed whitespace-pre-wrap break-words [overflow-wrap:anywhere] shadow-sm tc-msg-in rounded-tl-sm">ผมอยากถอนเงิน</div>"`;
+
+exports[`[AITRANSLATE · BEFORE] an untranslated bubble, exactly as it renders today > ⭐⭐⭐ the outbound bubble markup is byte-identical to this snapshot > outbound bubble 1`] = `"<div class="px-4 py-2.5 rounded-2xl inline-block text-[14px] leading-relaxed whitespace-pre-wrap break-words [overflow-wrap:anywhere] shadow-sm tc-msg-out rounded-tr-sm">รอสักครู่นะคะ</div>"`;
+
+exports[`[AITRANSLATE · BEFORE] an untranslated bubble, exactly as it renders today > ⭐⭐⭐ the whole inbound row is byte-identical (timestamp aside) > inbound row 1`] = `"<div id="msg-msg-plain-1" class="flex gap-2 items-start  "><div class="w-8 h-8 rounded-full bg-slate-300 shrink-0 mt-1"></div><div class="max-w-[75%] w-fit flex flex-col  "><div class="text-[10px] text-slate-400 mb-1 px-1">«TIME»</div><div class="px-4 py-2.5 rounded-2xl inline-block text-[14px] leading-relaxed whitespace-pre-wrap break-words [overflow-wrap:anywhere] shadow-sm tc-msg-in rounded-tl-sm">ผมอยากถอนเงิน</div></div></div>"`;

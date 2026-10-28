@@ -1,0 +1,421 @@
+{
+  "_provenance": {
+    "generator": "omnidesk-api/z-test/tmp/export-loan-v1-envelopes.ts",
+    "stamping": "MembersService.stampedProfile + CustomerProviderService(loan_v1)",
+    "sources": [
+      "z-test/fixtures/loan-v1-endpoints.ts (live, masked)",
+      "z-test/fixtures/loan-v1-profile.ts (prod blob)"
+    ],
+    "sentinel": "live.data.product.device_imei = IMEI-SENTINEL-0001",
+    "generated_at": "2026-10-13"
+  },
+  "live": {
+    "success": true,
+    "data": {
+      "success": true,
+      "status_code": 200,
+      "message": "Customer profile retrieved successfully",
+      "timestamp": "2026-09-07 00:49:47",
+      "data": {
+        "customer": {
+          "customer_id": 20,
+          "customer_number": "CUST-000001",
+          "customer_name": "ทดสอบ ระบบ",
+          "customer_tel": "0640000000"
+        },
+        "contract": {
+          "contract_number": "CT0226-SRI001-0020-01",
+          "contract_status": "Active",
+          "contract_total_amount": 23460,
+          "down_payment": 3225,
+          "principal_amount": 9675
+        },
+        "product": {
+          "device_model": "iPad Gen11 A16 WIFI 128 GB ชมพู",
+          "is_locked": false,
+          "device_type": "General",
+          "warranty_expire_date": null,
+          "device_imei": "IMEI-SENTINEL-0001"
+        },
+        "installment": {
+          "total_terms": 12,
+          "current_term": 7,
+          "installment_amount": 1955,
+          "payment_status": "Pending",
+          "due_date": "2026-09-05",
+          "overdue_days": 2,
+          "fine_amount": 0,
+          "unlock_fee": 0,
+          "total_due_amount": 1955,
+          "remaining_balance": 21505,
+          "last_payment_date": "2026-02-27 06:47:00",
+          "last_payment_amount": 1955
+        }
+      }
+    },
+    "profile_data_updated_at": null,
+    "has_member_data": true,
+    "show_walletpay_card": false,
+    "show_register_action": false,
+    "view": {
+      "sections": [
+        {
+          "id": "loan_customer",
+          "type": "kv",
+          "label": "ข้อมูลลูกค้า",
+          "rows": [
+            {
+              "key": "loanCustName",
+              "label": "ชื่อลูกค้า",
+              "value": "ทดสอบ ระบบ"
+            },
+            {
+              "key": "loanCustTel",
+              "label": "เบอร์โทร",
+              "value": "0640000000"
+            },
+            {
+              "key": "loanCustNumber",
+              "label": "รหัสลูกค้า",
+              "value": "CUST-000001"
+            }
+          ]
+        },
+        {
+          "id": "loan_contract",
+          "type": "kv",
+          "label": "สัญญา",
+          "rows": [
+            {
+              "key": "loanContractNo",
+              "label": "เลขที่สัญญา",
+              "value": "CT0226-SRI001-0020-01"
+            },
+            {
+              "key": "loanContractStatus",
+              "label": "สถานะสัญญา",
+              "value": "Active"
+            },
+            {
+              "key": "loanContractTotal",
+              "label": "ยอดจัดทั้งสัญญา",
+              "value": 23460
+            },
+            {
+              "key": "loanDownPayment",
+              "label": "เงินดาวน์",
+              "value": 3225
+            },
+            {
+              "key": "loanPrincipal",
+              "label": "เงินต้น",
+              "value": 9675
+            }
+          ]
+        },
+        {
+          "id": "loan_product",
+          "type": "kv",
+          "label": "เครื่อง",
+          "rows": [
+            {
+              "key": "loanDeviceModel",
+              "label": "รุ่น",
+              "value": "iPad Gen11 A16 WIFI 128 GB ชมพู"
+            },
+            {
+              "key": "loanDeviceType",
+              "label": "ประเภท",
+              "value": "General"
+            },
+            {
+              "key": "loanLocked",
+              "label": "ล็อกเครื่อง",
+              "value": "ไม่ล็อก"
+            }
+          ]
+        },
+        {
+          "id": "loan_term",
+          "type": "kv",
+          "label": "งวดปัจจุบัน",
+          "rows": [
+            {
+              "key": "loanCurrentTerm",
+              "label": "งวดที่",
+              "value": 7
+            },
+            {
+              "key": "loanTotalTerms",
+              "label": "จากทั้งหมด",
+              "value": 12
+            },
+            {
+              "key": "loanInstallmentAmount",
+              "label": "ค่างวด",
+              "value": 1955
+            },
+            {
+              "key": "loanDueDate",
+              "label": "ครบกำหนด",
+              "value": "2026-09-05"
+            },
+            {
+              "key": "loanPaymentStatus",
+              "label": "สถานะชำระ",
+              "value": "Pending"
+            },
+            {
+              "key": "loanLastPaymentDate",
+              "label": "ชำระล่าสุด",
+              "value": "2026-02-27 06:47:00"
+            }
+          ]
+        },
+        {
+          "id": "loan_overdue",
+          "type": "kv",
+          "label": "ค้างชำระ",
+          "rows": [
+            {
+              "key": "loanOverdueDays",
+              "label": "เกินกำหนด (วัน)",
+              "value": 2
+            },
+            {
+              "key": "loanTotalDue",
+              "label": "ต้องชำระงวดนี้",
+              "value": 1955
+            },
+            {
+              "key": "loanFine",
+              "label": "ค่าปรับ",
+              "value": 0
+            },
+            {
+              "key": "loanUnlockFee",
+              "label": "ค่าปลดล็อก",
+              "value": 0
+            },
+            {
+              "key": "loanRemainingBalance",
+              "label": "คงเหลือทั้งสัญญา",
+              "value": 21505
+            }
+          ]
+        }
+      ]
+    },
+    "customer_provider": "loan_v1"
+  },
+  "prod": {
+    "success": true,
+    "data": {
+      "success": true,
+      "status_code": "200",
+      "message": "Customer profile retrieved successfully",
+      "timestamp": "2026-04-07 21:35:02",
+      "data": {
+        "customer": {
+          "customer_id": "20",
+          "customer_number": "SRI001-00003",
+          "customer_name": "ทดสอบ ระบบ",
+          "customer_tel": "0640000000"
+        },
+        "contract": {
+          "contract_number": "CT0226-SRI001-0020-01",
+          "contract_status": "Active",
+          "contract_total_amount": "23460",
+          "down_payment": "3225",
+          "principal_amount": "9675"
+        },
+        "product": {
+          "device_model": "iPad Gen11 A16 WIFI 128 GB ชมพู",
+          "is_locked": false,
+          "device_type": "General",
+          "warranty_expire_date": null
+        },
+        "installment": {
+          "total_terms": "12",
+          "current_term": "2",
+          "installment_amount": "1955",
+          "payment_status": "Pending",
+          "due_date": "2026-04-05",
+          "overdue_days": "2",
+          "fine_amount": "0",
+          "unlock_fee": "0",
+          "total_due_amount": "1955",
+          "remaining_balance": "21505",
+          "last_payment_date": "2026-02-27 06:47:00",
+          "last_payment_amount": "1955"
+        }
+      }
+    },
+    "profile_data_updated_at": null,
+    "has_member_data": true,
+    "show_walletpay_card": false,
+    "show_register_action": false,
+    "view": {
+      "sections": [
+        {
+          "id": "loan_customer",
+          "type": "kv",
+          "label": "ข้อมูลลูกค้า",
+          "rows": [
+            {
+              "key": "loanCustName",
+              "label": "ชื่อลูกค้า",
+              "value": "ทดสอบ ระบบ"
+            },
+            {
+              "key": "loanCustTel",
+              "label": "เบอร์โทร",
+              "value": "0640000000"
+            },
+            {
+              "key": "loanCustNumber",
+              "label": "รหัสลูกค้า",
+              "value": "SRI001-00003"
+            }
+          ]
+        },
+        {
+          "id": "loan_contract",
+          "type": "kv",
+          "label": "สัญญา",
+          "rows": [
+            {
+              "key": "loanContractNo",
+              "label": "เลขที่สัญญา",
+              "value": "CT0226-SRI001-0020-01"
+            },
+            {
+              "key": "loanContractStatus",
+              "label": "สถานะสัญญา",
+              "value": "Active"
+            },
+            {
+              "key": "loanContractTotal",
+              "label": "ยอดจัดทั้งสัญญา",
+              "value": "23460"
+            },
+            {
+              "key": "loanDownPayment",
+              "label": "เงินดาวน์",
+              "value": "3225"
+            },
+            {
+              "key": "loanPrincipal",
+              "label": "เงินต้น",
+              "value": "9675"
+            }
+          ]
+        },
+        {
+          "id": "loan_product",
+          "type": "kv",
+          "label": "เครื่อง",
+          "rows": [
+            {
+              "key": "loanDeviceModel",
+              "label": "รุ่น",
+              "value": "iPad Gen11 A16 WIFI 128 GB ชมพู"
+            },
+            {
+              "key": "loanDeviceType",
+              "label": "ประเภท",
+              "value": "General"
+            },
+            {
+              "key": "loanLocked",
+              "label": "ล็อกเครื่อง",
+              "value": "ไม่ล็อก"
+            }
+          ]
+        },
+        {
+          "id": "loan_term",
+          "type": "kv",
+          "label": "งวดปัจจุบัน",
+          "rows": [
+            {
+              "key": "loanCurrentTerm",
+              "label": "งวดที่",
+              "value": "2"
+            },
+            {
+              "key": "loanTotalTerms",
+              "label": "จากทั้งหมด",
+              "value": "12"
+            },
+            {
+              "key": "loanInstallmentAmount",
+              "label": "ค่างวด",
+              "value": "1955"
+            },
+            {
+              "key": "loanDueDate",
+              "label": "ครบกำหนด",
+              "value": "2026-04-05"
+            },
+            {
+              "key": "loanPaymentStatus",
+              "label": "สถานะชำระ",
+              "value": "Pending"
+            },
+            {
+              "key": "loanLastPaymentDate",
+              "label": "ชำระล่าสุด",
+              "value": "2026-02-27 06:47:00"
+            }
+          ]
+        },
+        {
+          "id": "loan_overdue",
+          "type": "kv",
+          "label": "ค้างชำระ",
+          "rows": [
+            {
+              "key": "loanOverdueDays",
+              "label": "เกินกำหนด (วัน)",
+              "value": "2"
+            },
+            {
+              "key": "loanTotalDue",
+              "label": "ต้องชำระงวดนี้",
+              "value": "1955"
+            },
+            {
+              "key": "loanFine",
+              "label": "ค่าปรับ",
+              "value": "0"
+            },
+            {
+              "key": "loanUnlockFee",
+              "label": "ค่าปลดล็อก",
+              "value": "0"
+            },
+            {
+              "key": "loanRemainingBalance",
+              "label": "คงเหลือทั้งสัญญา",
+              "value": "21505"
+            }
+          ]
+        }
+      ]
+    },
+    "customer_provider": "loan_v1"
+  },
+  "unlinked": {
+    "success": true,
+    "data": null,
+    "profile_data_updated_at": null,
+    "has_member_data": false,
+    "show_walletpay_card": false,
+    "show_register_action": false,
+    "view": {
+      "sections": []
+    },
+    "customer_provider": "loan_v1"
+  }
+}

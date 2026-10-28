@@ -1,0 +1,255 @@
+{
+  "success": true,
+  "data": {
+    "tool_mint": {
+      "companies": [
+        {
+          "id": "demo",
+          "label": "demo",
+          "tool_name": "loan_demo",
+          "ready": true,
+          "missing": [],
+          "invalid": [],
+          "base_url": "https://demo.example.test"
+        },
+        {
+          "id": "acme",
+          "label": "Acme",
+          "tool_name": "loan_acme",
+          "ready": false,
+          "missing": [
+            "LOAN_TOOL_ACME_USERNAME",
+            "LOAN_TOOL_ACME_PASSWORD"
+          ],
+          "invalid": [],
+          "base_url": "https://acme.example.test"
+        },
+        {
+          "id": "examplepartner",
+          "label": "Globex",
+          "tool_name": "loan_examplepartner",
+          "ready": false,
+          "missing": [
+            "LOAN_TOOL_GLOBEX_BASE_URL",
+            "LOAN_TOOL_GLOBEX_USERNAME",
+            "LOAN_TOOL_GLOBEX_PASSWORD"
+          ],
+          "invalid": [],
+          "base_url": ""
+        }
+      ],
+      "template": {
+        "auth_type": "jwt_login",
+        "timeout_ms": 4000,
+        "endpoints": [
+          {
+            "key": "LOGIN",
+            "method": "POST",
+            "path": "api/v1/auth/login",
+            "purpose": "auth",
+            "require_jwt": false,
+            "request_type": "json",
+            "payload": {
+              "username": "{{username}}",
+              "password": "{{password}}"
+            },
+            "is_login": true,
+            "is_profile": false,
+            "token_path": "data.access_token",
+            "result_rules": []
+          },
+          {
+            "key": "CUSTOMER_PROFILE",
+            "method": "GET",
+            "path": "api/v1/customer/{{line_user_id}}",
+            "purpose": "data",
+            "require_jwt": true,
+            "request_type": "json",
+            "payload": {},
+            "is_login": false,
+            "is_profile": true,
+            "token_path": "",
+            "profile_map": {
+              "name": "data.customer.customer_name",
+              "phone": "data.customer.customer_tel",
+              "code": "data.contract.contract_number",
+              "tier": ""
+            },
+            "result_rules": [
+              {
+                "path": "",
+                "op": "eq",
+                "value": "",
+                "http_codes": "404",
+                "action": "fail",
+                "failure_type": "business",
+                "error_code": "LOAN_NOT_LINKED",
+                "message_path": ""
+              },
+              {
+                "path": "success",
+                "op": "eq",
+                "value": "false",
+                "http_codes": "",
+                "action": "fail",
+                "failure_type": "business",
+                "error_code": "LOAN_PROFILE_FAIL",
+                "message_path": "message"
+              },
+              {
+                "path": "success",
+                "op": "eq",
+                "value": "true",
+                "http_codes": "",
+                "action": "success",
+                "failure_type": "",
+                "error_code": "",
+                "message_path": ""
+              }
+            ]
+          },
+          {
+            "key": "INSTALLMENT_CURRENT",
+            "method": "POST",
+            "path": "api/line/v1/installment_current.php",
+            "purpose": "data",
+            "require_jwt": true,
+            "request_type": "form-data",
+            "payload": {
+              "userid": "{{lineuserid}}"
+            },
+            "is_profile": false,
+            "token_path": "",
+            "result_rules": [
+              {
+                "path": "status",
+                "op": "eq",
+                "value": "false",
+                "http_codes": "",
+                "action": "fail",
+                "failure_type": "business",
+                "error_code": "LOAN_NOT_FOUND",
+                "message_path": "message"
+              },
+              {
+                "path": "status",
+                "op": "eq",
+                "value": "true",
+                "http_codes": "",
+                "action": "success",
+                "failure_type": "",
+                "error_code": "",
+                "message_path": ""
+              }
+            ]
+          },
+          {
+            "key": "PAYMENT_HISTORY",
+            "method": "POST",
+            "path": "api/line/v1/payment_history.php",
+            "purpose": "data",
+            "require_jwt": true,
+            "request_type": "form-data",
+            "payload": {
+              "userid": "{{lineuserid}}"
+            },
+            "is_profile": false,
+            "token_path": "",
+            "result_rules": [
+              {
+                "path": "status",
+                "op": "eq",
+                "value": "false",
+                "http_codes": "",
+                "action": "fail",
+                "failure_type": "business",
+                "error_code": "LOAN_NOT_FOUND",
+                "message_path": "message"
+              },
+              {
+                "path": "status",
+                "op": "eq",
+                "value": "true",
+                "http_codes": "",
+                "action": "success",
+                "failure_type": "",
+                "error_code": "",
+                "message_path": ""
+              }
+            ]
+          },
+          {
+            "key": "CONTRACT_INFO",
+            "method": "POST",
+            "path": "api/line/v1/contract.php",
+            "purpose": "data",
+            "require_jwt": true,
+            "request_type": "form-data",
+            "payload": {
+              "userid": "{{lineuserid}}"
+            },
+            "is_profile": false,
+            "token_path": "",
+            "result_rules": [
+              {
+                "path": "status",
+                "op": "eq",
+                "value": "false",
+                "http_codes": "",
+                "action": "fail",
+                "failure_type": "business",
+                "error_code": "LOAN_NOT_FOUND",
+                "message_path": "message"
+              },
+              {
+                "path": "status",
+                "op": "eq",
+                "value": "true",
+                "http_codes": "",
+                "action": "success",
+                "failure_type": "",
+                "error_code": "",
+                "message_path": ""
+              }
+            ]
+          },
+          {
+            "key": "ALL_INSTALLMENTS",
+            "method": "POST",
+            "path": "api/line/v1/installment.php",
+            "purpose": "data",
+            "require_jwt": true,
+            "request_type": "form-data",
+            "payload": {
+              "userid": "{{lineuserid}}"
+            },
+            "is_profile": false,
+            "token_path": "",
+            "result_rules": [
+              {
+                "path": "status",
+                "op": "eq",
+                "value": "false",
+                "http_codes": "",
+                "action": "fail",
+                "failure_type": "business",
+                "error_code": "LOAN_NOT_FOUND",
+                "message_path": "message"
+              },
+              {
+                "path": "status",
+                "op": "eq",
+                "value": "true",
+                "http_codes": "",
+                "action": "success",
+                "failure_type": "",
+                "error_code": "",
+                "message_path": ""
+              }
+            ]
+          }
+        ]
+      }
+    }
+  }
+}

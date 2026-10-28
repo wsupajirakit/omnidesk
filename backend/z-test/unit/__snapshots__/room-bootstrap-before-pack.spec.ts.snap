@@ -1,0 +1,602 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`[TEST-20260813-ROOMBOOT-B-RB2] BEFORE pack — full-flow characterisation S01 new-user text — room null, AI answers (WH-E1) 1`] = `
+{
+  "chatRowKinds": [
+    "customer:text",
+    "bot:text",
+  ],
+  "logKinds": [
+    "incoming_line_webhook",
+    "generate_response",
+    "line_reply",
+  ],
+  "replies": [
+    "ตอบแล้วค่ะ",
+  ],
+  "roomEnsure": [
+    [
+      "Uroomboot0000000000000000000001",
+      {},
+      null,
+      "a0d000000000000000000013",
+      "line",
+    ],
+  ],
+  "steps": [
+    "room.ensure",
+    "room.findOne",
+    "member.read",
+    "line.profile",
+    "external.fetch",
+    "member.write",
+    "chat.log",
+    "ai.generate",
+    "chat.log",
+    "line.reply",
+  ],
+}
+`;
+
+exports[`[TEST-20260813-ROOMBOOT-B-RB2] BEFORE pack — full-flow characterisation S02 returning-user text — room exists, assist off (WH-E1) 1`] = `
+{
+  "chatRowKinds": [
+    "customer:text",
+    "bot:text",
+  ],
+  "logKinds": [
+    "incoming_line_webhook",
+    "generate_response",
+    "line_reply",
+  ],
+  "replies": [
+    "ตอบลูกค้าเก่า",
+  ],
+  "roomEnsure": [
+    [
+      "Uroomboot0000000000000000000001",
+      {},
+      null,
+      "a0d000000000000000000013",
+      "line",
+    ],
+  ],
+  "steps": [
+    "room.ensure",
+    "room.findOne",
+    "member.read",
+    "line.profile",
+    "external.fetch",
+    "member.write",
+    "chat.log",
+    "ai.generate",
+    "chat.log",
+    "line.reply",
+  ],
+}
+`;
+
+exports[`[TEST-20260813-ROOMBOOT-B-RB2] BEFORE pack — full-flow characterisation S03 image with image_answer_text (WH-E2/G13) 1`] = `
+{
+  "chatRowKinds": [
+    "customer:image",
+    "bot:text",
+  ],
+  "logKinds": [
+    "incoming_line_webhook",
+    "image_answer_reply",
+  ],
+  "replies": [
+    "รับรูปแล้วค่ะ",
+  ],
+  "roomEnsure": [
+    [
+      "Uroomboot0000000000000000000001",
+      {},
+      null,
+      "a0d000000000000000000013",
+      "line",
+    ],
+  ],
+  "steps": [
+    "room.ensure",
+    "room.findOne",
+    "member.read",
+    "line.profile",
+    "external.fetch",
+    "member.write",
+    "chat.log",
+    "line.reply",
+    "chat.log",
+  ],
+}
+`;
+
+exports[`[TEST-20260813-ROOMBOOT-B-RB2] BEFORE pack — full-flow characterisation S04 unlinked-slip refusal WITH [[[assist]]] (WH-G8 arm A) 1`] = `
+{
+  "chatRowKinds": [
+    "customer:image",
+    "bot:text",
+  ],
+  "logKinds": [
+    "incoming_line_webhook",
+    "slip_refused_no_profile",
+  ],
+  "replies": [
+    "กรุณาผูกบัญชีก่อนนะคะ [[[assist]]]",
+  ],
+  "roomEnsure": [
+    [
+      "Uroomboot0000000000000000000001",
+      {},
+      null,
+      "a0d000000000000000000013",
+      "line",
+    ],
+  ],
+  "steps": [
+    "room.ensure",
+    "room.findOne",
+    "member.read",
+    "line.profile",
+    "external.fetch",
+    "chat.log",
+    "chat.log",
+    "line.reply",
+    "room.findOne",
+    "room.upsert",
+    "member.write",
+    "member.read",
+  ],
+}
+`;
+
+exports[`[TEST-20260813-ROOMBOOT-B-RB2] BEFORE pack — full-flow characterisation S05 unlinked-slip refusal WITHOUT marker (WH-G8 arm B — image recorded, no ticket) 1`] = `
+{
+  "chatRowKinds": [
+    "customer:image",
+    "bot:text",
+  ],
+  "logKinds": [
+    "incoming_line_webhook",
+    "slip_refused_no_profile",
+  ],
+  "replies": [
+    "กรุณาผูกบัญชีก่อนนะคะ",
+  ],
+  "roomEnsure": [
+    [
+      "Uroomboot0000000000000000000001",
+      {},
+      null,
+      "a0d000000000000000000013",
+      "line",
+    ],
+  ],
+  "steps": [
+    "room.ensure",
+    "room.findOne",
+    "member.read",
+    "line.profile",
+    "external.fetch",
+    "chat.log",
+    "chat.log",
+    "line.reply",
+  ],
+}
+`;
+
+exports[`[TEST-20260813-ROOMBOOT-B-RB2] BEFORE pack — full-flow characterisation S06 sticker — logged then silent (WH-E3/G9) 1`] = `
+{
+  "chatRowKinds": [
+    "customer:sticker",
+  ],
+  "logKinds": [
+    "incoming_line_webhook",
+  ],
+  "replies": [],
+  "roomEnsure": [
+    [
+      "Uroomboot0000000000000000000001",
+      {},
+      null,
+      "a0d000000000000000000013",
+      "line",
+    ],
+  ],
+  "steps": [
+    "room.ensure",
+    "room.findOne",
+    "member.read",
+    "line.profile",
+    "external.fetch",
+    "member.write",
+    "chat.log",
+  ],
+}
+`;
+
+exports[`[TEST-20260813-ROOMBOOT-B-RB2] BEFORE pack — full-flow characterisation S07 pay: postback with runner armed — consumed BEFORE logging, no room today (WH-E5/G6) 1`] = `
+{
+  "chatRowKinds": [],
+  "logKinds": [
+    "incoming_line_webhook",
+  ],
+  "replies": [],
+  "roomEnsure": [
+    [
+      "Uroomboot0000000000000000000001",
+      {},
+      null,
+      "a0d000000000000000000013",
+      "line",
+    ],
+  ],
+  "steps": [
+    "room.ensure",
+    "pay.resolveTool",
+    "pay.resume",
+  ],
+}
+`;
+
+exports[`[TEST-20260813-ROOMBOOT-B-RB2] BEFORE pack — full-flow characterisation S08 plain postback — NOT logged since 31/08, dies at no-text (WH-E4/G15) 1`] = `
+{
+  "chatRowKinds": [],
+  "logKinds": [
+    "incoming_line_webhook",
+  ],
+  "replies": [],
+  "roomEnsure": [
+    [
+      "Uroomboot0000000000000000000001",
+      {},
+      null,
+      "a0d000000000000000000013",
+      "line",
+    ],
+  ],
+  "steps": [
+    "room.ensure",
+    "room.findOne",
+    "member.read",
+    "line.profile",
+    "external.fetch",
+    "member.write",
+  ],
+}
+`;
+
+exports[`[TEST-20260813-ROOMBOOT-B-RB2] BEFORE pack — full-flow characterisation S09 follow — member sync + logged [follow], no greeting (WH-E6) 1`] = `
+{
+  "chatRowKinds": [
+    "customer:follow",
+  ],
+  "logKinds": [
+    "incoming_line_webhook",
+  ],
+  "replies": [],
+  "roomEnsure": [
+    [
+      "Uroomboot0000000000000000000001",
+      {},
+      null,
+      "a0d000000000000000000013",
+      "line",
+    ],
+  ],
+  "steps": [
+    "room.ensure",
+    "room.findOne",
+    "member.read",
+    "line.profile",
+    "external.fetch",
+    "member.write",
+    "chat.log",
+  ],
+}
+`;
+
+exports[`[TEST-20260813-ROOMBOOT-B-RB2] BEFORE pack — full-flow characterisation S10 unfollow — logged [unfollow], no reply possible (WH-E7) 1`] = `
+{
+  "chatRowKinds": [
+    "customer:unfollow",
+  ],
+  "logKinds": [
+    "incoming_line_webhook",
+  ],
+  "replies": [],
+  "roomEnsure": [
+    [
+      "Uroomboot0000000000000000000001",
+      {},
+      null,
+      "a0d000000000000000000013",
+      "line",
+    ],
+  ],
+  "steps": [
+    "room.ensure",
+    "room.findOne",
+    "member.read",
+    "line.profile",
+    "external.fetch",
+    "member.write",
+    "chat.log",
+  ],
+}
+`;
+
+exports[`[TEST-20260813-ROOMBOOT-B-RB2] BEFORE pack — full-flow characterisation S11 assist hold — room assisted, bot bypassed (WH-G10/A2) 1`] = `
+{
+  "chatRowKinds": [
+    "customer:text",
+  ],
+  "logKinds": [
+    "incoming_line_webhook",
+  ],
+  "replies": [],
+  "roomEnsure": [
+    [
+      "Uroomboot0000000000000000000001",
+      {},
+      null,
+      "a0d000000000000000000013",
+      "line",
+    ],
+  ],
+  "steps": [
+    "room.ensure",
+    "room.findOne",
+    "member.read",
+    "line.profile",
+    "external.fetch",
+    "member.write",
+    "chat.log",
+  ],
+}
+`;
+
+exports[`[TEST-20260813-ROOMBOOT-B-RB2] BEFORE pack — full-flow characterisation S12 rate-limited text — canned reply, still logged (WH-G11) 1`] = `
+{
+  "chatRowKinds": [
+    "customer:text",
+    "bot:text",
+  ],
+  "logKinds": [
+    "incoming_line_webhook",
+    "rate_limit_reply",
+  ],
+  "replies": [
+    "กรุณารอสักครู่และลองใหม่อีกครั้ง",
+  ],
+  "roomEnsure": [
+    [
+      "Uroomboot0000000000000000000001",
+      {},
+      null,
+      "a0d000000000000000000013",
+      "line",
+    ],
+  ],
+  "steps": [
+    "room.ensure",
+    "room.findOne",
+    "member.read",
+    "line.profile",
+    "external.fetch",
+    "member.write",
+    "chat.log",
+    "line.reply",
+    "chat.log",
+  ],
+}
+`;
+
+exports[`[TEST-20260813-ROOMBOOT-B-RB2] BEFORE pack — full-flow characterisation S13 customer-register keyword — link card, handled (WH-G12) 1`] = `
+{
+  "chatRowKinds": [
+    "customer:text",
+    "bot:text",
+  ],
+  "logKinds": [
+    "incoming_line_webhook",
+    "custreg_send_link",
+  ],
+  "replies": [
+    "[flex] ลงทะเบียนสมาชิก",
+  ],
+  "roomEnsure": [
+    [
+      "Uroomboot0000000000000000000001",
+      {},
+      null,
+      "a0d000000000000000000013",
+      "line",
+    ],
+  ],
+  "steps": [
+    "room.ensure",
+    "room.findOne",
+    "member.read",
+    "line.profile",
+    "external.fetch",
+    "member.write",
+    "chat.log",
+    "member.read",
+    "mint",
+    "line.flex",
+    "chat.log",
+  ],
+}
+`;
+
+exports[`[TEST-20260813-ROOMBOOT-B-RB2] BEFORE pack — full-flow characterisation S14 non-text with NOTHING configured — logged, silent return (WH-G13 tail) 1`] = `
+{
+  "chatRowKinds": [
+    "customer:image",
+  ],
+  "logKinds": [
+    "incoming_line_webhook",
+  ],
+  "replies": [],
+  "roomEnsure": [
+    [
+      "Uroomboot0000000000000000000001",
+      {},
+      null,
+      "a0d000000000000000000013",
+      "line",
+    ],
+  ],
+  "steps": [
+    "room.ensure",
+    "room.findOne",
+    "member.read",
+    "line.profile",
+    "external.fetch",
+    "member.write",
+    "chat.log",
+  ],
+}
+`;
+
+exports[`[TEST-20260813-ROOMBOOT-B-RB2] BEFORE pack — full-flow characterisation S15 status-off, reply arm (WH-G14) 1`] = `
+{
+  "chatRowKinds": [
+    "customer:text",
+    "bot:text",
+  ],
+  "logKinds": [
+    "incoming_line_webhook",
+    "out_of_hours_reply",
+  ],
+  "replies": [
+    "อยู่นอกเวลาทำการ กรุณาติดต่อใหม่อีกครั้งในภายหลังหรือติดต่อเจ้าหน้าที่",
+  ],
+  "roomEnsure": [
+    [
+      "Uroomboot0000000000000000000001",
+      {},
+      null,
+      "a0d000000000000000000013",
+      "line",
+    ],
+  ],
+  "steps": [
+    "room.ensure",
+    "room.findOne",
+    "member.read",
+    "line.profile",
+    "external.fetch",
+    "member.write",
+    "chat.log",
+    "line.reply",
+    "chat.log",
+  ],
+}
+`;
+
+exports[`[TEST-20260813-ROOMBOOT-B-RB2] BEFORE pack — full-flow characterisation S16 status-off, silent arm — เงียบแต่เก็บแชท (WH-G14) 1`] = `
+{
+  "chatRowKinds": [
+    "customer:text",
+  ],
+  "logKinds": [
+    "incoming_line_webhook",
+  ],
+  "replies": [],
+  "roomEnsure": [
+    [
+      "Uroomboot0000000000000000000001",
+      {},
+      null,
+      "a0d000000000000000000013",
+      "line",
+    ],
+  ],
+  "steps": [
+    "room.ensure",
+    "room.findOne",
+    "member.read",
+    "line.profile",
+    "external.fetch",
+    "member.write",
+    "chat.log",
+  ],
+}
+`;
+
+exports[`[TEST-20260813-ROOMBOOT-B-RB2] BEFORE pack — full-flow characterisation S17 dummy test event in events[0] — must never gain a room (WH-E10 residual) 1`] = `
+{
+  "chatRowKinds": [
+    "customer:text",
+  ],
+  "logKinds": [
+    "incoming_line_webhook",
+    "generate_response",
+  ],
+  "replies": [],
+  "roomEnsure": [],
+  "steps": [
+    "room.findOne",
+    "member.read",
+    "line.profile",
+    "external.fetch",
+    "member.write",
+    "chat.log",
+    "ai.generate",
+  ],
+}
+`;
+
+exports[`[TEST-20260813-ROOMBOOT-B-RB2] BEFORE pack — full-flow characterisation S18 join — no source.userId, whole user block skipped (WH-G7/E8) 1`] = `
+{
+  "chatRowKinds": [],
+  "logKinds": [
+    "incoming_line_webhook",
+  ],
+  "replies": [],
+  "roomEnsure": [],
+  "steps": [],
+}
+`;
+
+exports[`[TEST-20260813-ROOMBOOT-B-RB2] BEFORE pack — full-flow characterisation S19 inbound logMessage fails — today the room is lost with it (WH-T4) 1`] = `
+{
+  "chatRowKinds": [
+    "customer:text",
+    "bot:text",
+  ],
+  "logKinds": [
+    "incoming_line_webhook",
+    "generate_response",
+    "line_reply",
+  ],
+  "replies": [
+    "ตอบได้แม้ log พัง",
+  ],
+  "roomEnsure": [
+    [
+      "Uroomboot0000000000000000000001",
+      {},
+      null,
+      "a0d000000000000000000013",
+      "line",
+    ],
+  ],
+  "steps": [
+    "room.ensure",
+    "room.findOne",
+    "member.read",
+    "line.profile",
+    "external.fetch",
+    "member.write",
+    "chat.log",
+    "chat.log.FAILED",
+    "ai.generate",
+    "chat.log",
+    "line.reply",
+  ],
+}
+`;

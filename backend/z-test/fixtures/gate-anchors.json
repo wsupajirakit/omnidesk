@@ -1,0 +1,150 @@
+{
+  "_comment": [
+    "[PROG-20260905-ANCHORS] Machine-readable navigation for the webhook spine.",
+    "",
+    "WHY THIS FILE EXISTS. Line numbers rot on every edit, and this repo has already",
+    "been bitten: planning documents carried :NNNN references that were 20-40 lines",
+    "stale within a day. Anchors here are STRINGS plus an OCCURRENCE RULE, because",
+    "neither tags nor code strings are unique in this file — `await this.wlogEmit({`",
+    "appears twelve times and `if (userId) {` twice, and a doc that says 'the one at",
+    "if (userId)' is telling the reader something false.",
+    "",
+    "HOW IT STAYS TRUE. z-test/unit/flow-map/anchor-census.spec.ts asserts every count",
+    "below against the real file on every run, so a rename or a new occurrence is a named",
+    "red rather than silent rot. `line` is EVIDENCE OF RECORD ONLY — it is not asserted,",
+    "because asserting it would make every unrelated edit red for no reason.",
+    "",
+    "measuredAt is the commit these counts were taken on.",
+    "Anchors carry an optional `file`. An extracted body takes its anchor with it, and the census follows — an anchor whose count drops in the spine WITHOUT a file move is real rot.",
+    "SP10: C2 moved the assist body out but LEFT its `if (userId) {` guard in the spine, so the occurrence count stayed at 2. Recorded because the first attempt claimed it dropped to 1 and the census refused the claim — an occurrence count is a fact about the spine, and only measuring settles it.",
+    "SP19 finding: G20 (paid slip verify) CANNOT be extracted as a unit. Its valuable half is the ticket category upgrade, and the `upgradeTicketCategoryOnSlip` import is a CONTEXT BYTE of docs/menu-plug-in.patch. Moving the code makes the import unused, tsc rejects an unused import, and removing it breaks the patch — proven by breaking it and reverting. A block is un-cuttable when its import is patch-owned, not only when its body is.",
+    "SP19: slip-answer-twin-sites converted to read across the service + the directories a moved CALL SITE may live in — deliberately NOT slip-flex/, which holds handleSlipFlex's implementation and would count the definition as a third call. The twin obligation is unchanged: still exactly two of each, still spelled identically.",
+    "SP24 dive result — the patch-free pool at the spine's current shape is EXHAUSTED. Full map of the ten in-method patch boxes was rebuilt by locating every hunk's context sequence: :1633-1671, :1936-2112, :2623-2632, :3486-3495, :3580-3589, :4322-4523 (three overlapping menu hunks), :5331-5354.",
+    "The non-text branch (G31-A) CANNOT be cut: its body opens braces before :4322 and closes after :4523, so no balanced boundary exists below the first menu box. Confirmed by code-only brace counting; the last balanced line is :3958.",
+    "Three blocks sit in the free region :2633-3485. Two carry menu-patch bytes. The third (:3113-3178, the refusal assist hand-off) is completely clean — and was still NOT cut: its body is a 20-field argument literal forwarded to runAssistGuarded, so moving it makes the caller pass all 20 and the method loses ~0 lines. Same shape as the G22 result. A move that relocates a literal is not an improvement.",
+    "What remains for further reduction is Phase 5 work: regenerate the plug patches so the menu seat and the non-text branch stop being byte-frozen.",
+    "SP51 (05/09): the census now counts CODE LINES ONLY. It counted a COMMENT as a call site - `G14.assist.guard` is the string `if (userId) {`, and a comment explaining why eleven locals had moved into that block NAMES the block, so the count went 2 -> 3 and this suite went red over prose while nothing about the code had changed. That failure mode is worse than it looks: this directory's premise is that documentation is only worth having when a test keeps it honest, and a census that reddens when somebody DOCUMENTS the spine teaches people to stop writing comments. Second time the same class was found in one day - the ladder's slice-order fence counted the phrase `runLadder(IMAGE_REFUSAL_LADDER, ...)` inside a revert instruction as a call. Measured before changing: of the fourteen anchors exactly ONE counts differently with comments stripped, and for that one the code-only count equals the number already declared - so this narrows the census to what it always meant and widens nothing. Control-tested both ways: a comment mentioning the anchor stays green, a real third `if (userId) {` written as code still fails.",
+    "SP51 finding, recorded because it changes where things are: ELEVEN method-scope `let`s moved into the `if (userId)` block - profileBlock, profileCircuitOpen, msgContent, msgType, internalContentId, customerMsg and the five slip variables. They were declared 480-950 lines above their first use. Every one has BOTH its first and last use inside that block, so the method scope was simply wider than the truth; `profileData` stayed behind because its last read is in the perf summary AFTER the block closes. Method-scope locals: 19 -> 8. The measurement needed two corrections: a line scan picked the wrong `if (userId) {` (it appears TWICE, and the first is a 29-line decoy - exactly what this file warns about), and it read `slipCreatedAt: Date | null` (a type) and `slipCreatedAt: sf.slipCreatedAt` (a property key) as uses of the local, which would have stranded one slip variable above its three siblings."
+  ],
+  "file": "src/modules/webhook/webhook.service.ts",
+  "measuredAt": "sp5 (post step-zero, wt-spinecut-05092026)",
+  "anchors": [
+    {
+      "id": "spine.method",
+      "text": "private async processLockedEvent(",
+      "occurrences": 1,
+      "line": 1561,
+      "role": "The spine method itself. The ratchet locates it by this string and closes on indentation."
+    },
+    {
+      "id": "G07.credentials",
+      "text": "const channelSecret =",
+      "occurrences": 1,
+      "role": "Opens the credentials / vendor-pair derivation (cut candidate C5). Pure, no IO, no exits. 🔪 EXTRACTED at SP9/C5: the derivation now lives in ai-vendors/request-credentials.ts; the spine keeps one destructure.",
+      "file": "src/modules/webhook/ai-vendors/request-credentials.ts",
+      "movedBy": "SP9/C5"
+    },
+    {
+      "id": "G13.menu.exit",
+      "text": "if (menuPb.handled) return;",
+      "occurrences": 1,
+      "line": 2227,
+      "role": "The menu seat's exit. Pinned by menu-coexistence.spec.ts; the whole seat is menu-plug patch bytes. ⚠ PATCH-OWNED: this text appears in a docs/*.patch hunk, so the plug moves or removes it — measured, not assumed.",
+      "patchOwned": true
+    },
+    {
+      "id": "G14.assist.guard",
+      "text": "if (userId) {",
+      "occurrences": 2,
+      "which": "first",
+      "line": 2243,
+      "role": "Opens the assist-state gate (cut C2). ⚠ TWO occurrences: the second opens the member-sync guard. 🔪 SP10/C2 moved the BODY to assist/assist-state.gate.ts and left this guard in the spine, so the count is unchanged — checked rather than assumed: I first recorded it as dropping to one, and the census refused it."
+    },
+    {
+      "id": "G16a.member.sync",
+      "text": "const PROFILE_REFRESH_MS",
+      "occurrences": 1,
+      "role": "Opens member sync + LINE profile upsert (cut candidate C3), inside the SECOND `if (userId) {`. 🔪 EXTRACTED at SP6/C3: the anchor now lives in src/modules/webhook/room-bootstrap/sync-member-profile.ts. The spine keeps the guard and the call.",
+      "file": "src/modules/webhook/room-bootstrap/sync-member-profile.ts",
+      "movedBy": "SP6/C3"
+    },
+    {
+      "id": "message.type.branch",
+      "text": "if (event.type === 'message')",
+      "occurrences": 2,
+      "line": 2461,
+      "role": "⚠ NOT unique. A pin written against this string without an occurrence rule matches two places — the defect the plan's audit caught in P4's original wording."
+    },
+    {
+      "id": "quota.consume",
+      "text": "this.rateLimit.consume(",
+      "occurrences": 3,
+      "line": 3023,
+      "role": "⚠ THREE mutually-exclusive consume sites (notice closure, silent types, main path). The main one is the EXACTLY-ONCE INCR; a fourth would double-charge a customer. ⚠ PATCH-OWNED: this text appears in a docs/*.patch hunk, so the plug moves or removes it — measured, not assumed.",
+      "patchOwned": true
+    },
+    {
+      "id": "G24.silent.types",
+      "text": "SILENT_MESSAGE_TYPES.includes(",
+      "occurrences": 1,
+      "line": 3993,
+      "role": "The silent-type gate. Charged-but-silent by owner rule; one of the three quota consume sites sits inside it."
+    },
+    {
+      "id": "hook.off.ratelimit",
+      "text": "if (hook?.['status'] === 0) {",
+      "occurrences": 1,
+      "line": 3268,
+      "role": "Hook switched off, INSIDE the rate-limit arm: limited AND off means silence, no reply and no rows. [PROG-20260905-LADDER] it used to share its text with the out-of-hours branch (2 occurrences, and a `which` rule to tell them apart); that branch is now a ladder step and carries its own anchor below. The two arms always behaved differently — they simply no longer look alike."
+    },
+    {
+      "id": "hook.off.branch",
+      "text": "ctx.hook?.['status'] === 0",
+      "occurrences": 1,
+      "line": 31,
+      "file": "src/modules/webhook/gates/out-of-hours.step.ts",
+      "movedBy": "SP35 (LADDER L1+L2a) — the guard became the step's `when`",
+      "role": "Hook switched off on the MAIN path: answer with the OA-off line, or stay silent. Its position is the feature and is now a declared constraint (`mustFollow: ['non-text-branch']`) rather than a comment: above the non-text branch a switched-off OA stops answering images with image_answer_text."
+    },
+    {
+      "id": "wlog.await.writer",
+      "text": "await this.wlogEmit({",
+      "occurrences": 4,
+      "line": 3478,
+      "role": "⚠ The spine's own `await this.wlogEmit({` writers. Was 12 at SP5, then 10, now 6 — each cut took its rows with it. MEASURED across the whole module the total is UNCHANGED (27 write sites, verified against git at two commits): the rows moved, none was deleted. Never anchor on this bare; it is recorded so a DROP without a matching new file is visible as loss rather than progress. 🔴 CORRECTION: an earlier note said 29. That figure double-counted the two send-row BUILDERS as writers. Re-derived from git at SP19 and at HEAD: 27 both times. The claim (nothing deleted) held; the number was wrong, and a proof quoting a wrong number is not a proof. 6 -> 5 at SP19-G19: the unlinked-slip refusal's row moved into hook-reply/unlinked-slip-refusal.handler.ts, where the door is spelled `await deps.emitWlog({` — that is the established dep name for the wlog door in a role file (event-handler.port.ts, out-of-hours-reply.handler.ts), so the text legitimately stops appearing in the spine. Module-wide write sites re-counted at this commit: 30 across the module, still nothing deleted. 5 -> 4 at SP30-G31: the missing-profile-data reply's row went with its branch into hook-reply/missing-profile-data-reply.handler.ts, where the door is `await deps.wlogEmit({` — the sibling handlers' spelling. Module-wide write sites re-counted at this commit: 32, still nothing deleted.",
+      "patchOwned": true
+    },
+    {
+      "id": "G39.carousel.feed",
+      "text": "ctx.tags.imageTag",
+      "occurrences": 2,
+      "line": 26,
+      "role": "Feeds the tagged-image carousel. [FIX-20260815-IMGTAGSTRIPPED] the tag is read off the RESOLVER, before the marker strip removes `[[[img_promo]]]` by name — re-scanning the finished text found nothing and this branch was dead for a week, silently. The spine's `const matchingTag = tags.imageTag;` is gone: the step reads it from the turn context instead.",
+      "file": "src/modules/webhook/gates/tagged-image-reply.step.ts",
+      "which": "the step's `when` predicate and the input it hands the handler",
+      "movedBy": "SP40 (LADDER L5) — the carousel became a ladder step"
+    },
+    {
+      "id": "G39.carousel.open",
+      "text": "when: (ctx) => Boolean(ctx.tags.imageTag)",
+      "occurrences": 1,
+      "role": "The guard for the tagged-image carousel. SP8/C1 moved the BODY to hook-reply/tagged-image-reply.handler.ts and rewrote the guard across lines; SP40 moved the guard itself into the ladder, where it is the step's `when`. The rule is unchanged and now declared: it may only run after `resolve-reply-tags`, and only a DELIVERED carousel ends the turn.",
+      "movedBy": "SP8/C1 moved the body · SP40 (LADDER L5) moved the guard",
+      "line": 26,
+      "file": "src/modules/webhook/gates/tagged-image-reply.step.ts"
+    },
+    {
+      "id": "G39.carousel.handler",
+      "text": "export async function replyWithTaggedImages(",
+      "occurrences": 1,
+      "file": "src/modules/webhook/hook-reply/tagged-image-reply.handler.ts",
+      "movedBy": "SP8/C1",
+      "role": "The extracted carousel body. Answers true only on the delivered path, which is what lets the spine keep its `return` at the original position."
+    }
+  ],
+  "patchOwnedAnchors": [
+    "G13.menu.exit",
+    "quota.consume",
+    "wlog.await.writer"
+  ]
+}

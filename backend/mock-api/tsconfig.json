@@ -1,0 +1,4 @@
+{
+  "files": [],
+  "references": [{ "path": "packages/core" }, { "path": "apps/member-api" }, { "path": "apps/walletpay-api" }]
+}

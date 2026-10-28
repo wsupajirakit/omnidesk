@@ -1,0 +1,93 @@
+/**
+ * ==== [FEAT-20260810-PAYSTATEFLEX] Variable Mapping tables for `slip` cards ====
+ *
+ * WHAT: the two tag tables the flex editor shows for `flex_type: 'slip'` — the
+ * slip DATA tags, and the payment ACTION tags. Pure data, no React.
+ *
+ * WHY A SEPARATE FILE: `FlexMessageFormModal.tsx` is ~1.5k lines and these are
+ * tables, not modal logic. The `normal`/`profile`/`custom` table was already
+ * moved out of the component for the same reason (see the note this file
+ * replaces), so this follows the direction the file had already taken. Adding a
+ * tag now means editing a table, not scrolling through a modal.
+ *
+ * ⚠️ THESE ARE NOT ONLY FOR DISPLAY. `FlexMessageFormModal` builds its save-time
+ * ALLOWLIST from the same rows: a `{{tag}}` in the card JSON that appears in no
+ * table is REJECTED on save. So a tag missing here cannot be typed into a card
+ * at all — that is the mechanism, not a side effect.
+ *
+ * ⚠️ KNOWN DEBT (owner-decided 2026-08-10, Q7): `normal`/`profile`/`custom` load
+ * their table from the BE, while `slip` is hardcoded here. The truth therefore
+ * lives in two places and a BE-side tag change does not reach this file — nothing
+ * warns. The owner chose to keep it in the FE for now; the follow-up is to serve
+ * both tables from the same endpoint as the other types, at which point the
+ * `source_role` values below carry over unchanged.
+ * รู้อยู่ว่าความจริงอยู่ 2 ที่ — เจ้าของเลือกทำที่ FE ก่อน ย้ายทีหลังได้ไม่เสียของ
+ */
+
+import { translateNow } from '../i18n';
+
+/** One row of the Variable Mapping panel. */
+export interface FlexGuidelineRow {
+  /** The tag exactly as it must be typed into the card, braces included. */
+  tag: string;
+  /** A realistic rendered value, so an admin can picture the output. */
+  example: string;
+  desc: string;
+  /** Where the value comes from — shown verbatim in the table. */
+  source: string;
+  /**
+   * Which filter chip this row sits under. The chips and their counts are built
+   * from these values automatically ([FEAT-20260802-FLEXNS]), so a new group
+   * needs no UI change. Rows without one fall under `profile`.
+   */
+  source_role: string;
+}
+
+/**
+ * Slip DATA tags — values read from the verified slip. Safe anywhere in the card
+ * (text, image url, …) because each one substitutes to a plain string.
+ *
+ * `current_datetime` is the only row whose example is live, which is why this is
+ * a function: the caller passes the clock it already renders in the panel.
+ */
+export const buildSlipDataGuidelines = (
+  currentTime?: string,
+): FlexGuidelineRow[] => [
+  { tag: '{{amount}}', example: '1,500.00', desc: translateNow('pageui.config.slip_desc.amount', 'จำนวนเงิน ใส่คอมม่า + ทศนิยม 2 ตำแหน่ง'), source: '3rd Party API (amount.amount)', source_role: 'slip' },
+  { tag: '{{date_on_slip}}', example: '6 เมษายน 69 08:03:07', desc: translateNow('pageui.config.slip_desc.date_on_slip', 'แสดงวันเวลาในสลิป (ตามเวลาสลิปจริง)'), source: '3rd Party API (date)', source_role: 'slip' },
+  { tag: '{{sender_bank_logo}}', example: '/assets/banks/KTB.png', desc: translateNow('pageui.config.slip_desc.sender_bank_logo', 'โลโก้ธนาคารผู้โอน (Map ตาม Bank ID)'), source: '3rd Party API (sender.bank.id)', source_role: 'slip' },
+  { tag: '{{sender_bank_name}}', example: 'ธนาคารกรุงไทย', desc: translateNow('pageui.config.slip_desc.sender_bank_name', 'ชื่อธนาคารผู้โอน'), source: '3rd Party API (sender.bank.name)', source_role: 'slip' },
+  { tag: '{{sender_name}}', example: 'น.ส.ญาณเทพ ป', desc: translateNow('pageui.config.slip_desc.sender_name', 'ชื่อผู้โอน (Thai/English)'), source: '3rd Party API (sender.account.name)', source_role: 'slip' },
+  { tag: '{{sender_acc_no}}', example: 'XXX-X-XX564-4', desc: translateNow('pageui.config.slip_desc.sender_acc_no', 'เลขบัญชีผู้โอน (Masked)'), source: '3rd Party API (sender.account.bank)', source_role: 'slip' },
+  { tag: '{{receiver_bank_logo}}', example: '/assets/banks/SCB.png', desc: translateNow('pageui.config.slip_desc.receiver_bank_logo', 'โลโก้ธนาคารผู้รับ (Map ตาม Bank ID)'), source: '3rd Party API (receiver.bank.id)', source_role: 'slip' },
+  { tag: '{{receiver_bank_name}}', example: 'ธนาคารไทยพาณิชย์', desc: translateNow('pageui.config.slip_desc.receiver_bank_name', 'ชื่อธนาคารผู้รับ'), source: '3rd Party API (receiver.bank.name)', source_role: 'slip' },
+  { tag: '{{receiver_name}}', example: 'บจก. บุญโฟน', desc: translateNow('pageui.config.slip_desc.receiver_name', 'ชื่อผู้รับ (Thai/English)'), source: '3rd Party API (receiver.account.name)', source_role: 'slip' },
+  { tag: '{{receiver_acc_no}}', example: 'XXX-X-XX917-2', desc: translateNow('pageui.config.slip_desc.receiver_acc_no', 'เลขบัญชีผู้รับ (Masked)'), source: '3rd Party API (receiver.account.bank)', source_role: 'slip' },
+  { tag: '{{current_datetime}}', example: currentTime || '06/04/2569 15:26:10', desc: translateNow('pageui.config.slip_desc.current_datetime', 'วันเวลาที่ระบบทำงานสำเร็จ (Bangkok Time)'), source: 'Generated by System', source_role: 'slip' },
+];
+
+/**
+ * [FIX-20260831-PAYLINKONESOURCE] the paylink rows USED to be hard-coded
+ * here, and that copy is gone.
+ * ===========================================================================
+ * The server owns the list (`common/utils/paylink-tag.ts` → the variables
+ * endpoint), and this file never learned about a tag added there — so
+ * `{{paylink.contact_admin_via_withdraw}}` was minted correctly by the server,
+ * did not appear in this table, and was then REFUSED ON SAVE, because this
+ * table doubles as the allowlist. Two lists, one of them always behind.
+ *
+ * The slip DATA tags above stay here: the server has no catalogue for them.
+ * What the modal does now is merge — this file's data rows + the paylink rows
+ * the server sends for `flex_type=slip`. ตัวแปรมีแหล่งเดียว ฝั่งเว็บไม่ตั้งเอง
+ *
+ * revert: paste the two rows back and drop the merge in FlexMessageFormModal.
+ */
+
+/**
+ * The full set for a `slip` card: data tags plus the payment action tags.
+ * One entry point so the modal cannot accidentally show one group and validate
+ * against the other.
+ */
+export const buildSlipGuidelines = (
+  currentTime?: string,
+): FlexGuidelineRow[] => buildSlipDataGuidelines(currentTime);

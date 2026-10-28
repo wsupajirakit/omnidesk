@@ -1,0 +1,5 @@
+{
+  "name": "OmniDesk Console",
+  "description": "OmniDesk console for managing LINE Webhooks with analytics and data management.",
+  "requestFramePermissions": []
+}

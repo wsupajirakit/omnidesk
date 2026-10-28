@@ -1,0 +1,78 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`[WRAP-AI W2-0] summary response fixtures (frozen — B-W2S2) response clean json → recorded {summary, category} 1`] = `
+{
+  "category": "Collection",
+  "summary": "ปิดบัญชี",
+}
+`;
+
+exports[`[WRAP-AI W2-0] summary response fixtures (frozen — B-W2S2) response empty → recorded {summary, category} 1`] = `
+{
+  "category": "Other",
+  "summary": "ไม่สามารถวิเคราะห์ข้อมูลได้ในขณะนี้",
+}
+`;
+
+exports[`[WRAP-AI W2-0] summary response fixtures (frozen — B-W2S2) response fenced json → recorded {summary, category} 1`] = `
+{
+  "category": "IT",
+  "summary": "ไอที",
+}
+`;
+
+exports[`[WRAP-AI W2-0] summary response fixtures (frozen — B-W2S2) response malformed json → recorded {summary, category} 1`] = `
+{
+  "category": "Other",
+  "summary": "{"summary":"x", broken",
+}
+`;
+
+exports[`[WRAP-AI W2-0] summary response fixtures (frozen — B-W2S2) response missing category field → recorded {summary, category} 1`] = `
+{
+  "category": "Other",
+  "summary": "only summary",
+}
+`;
+
+exports[`[WRAP-AI W2-0] summary response fixtures (frozen — B-W2S2) response missing summary field → recorded {summary, category} 1`] = `
+{
+  "category": "IT",
+  "summary": "ไม่สามารถสรุปข้อมูลได้",
+}
+`;
+
+exports[`[WRAP-AI W2-0] summary response fixtures (frozen — B-W2S2) response no braces → recorded {summary, category} 1`] = `
+{
+  "category": "Other",
+  "summary": "สรุปแบบไม่มี json เลย",
+}
+`;
+
+exports[`[WRAP-AI W2-0] summary wire snapshots (frozen — B-W2S1) a normal hand-off 1`] = `
+{
+  "body": "{"contents":[{"parts":[{"text":"\\nวิเคราะห์บทสนทนาระหว่างลูกค้าและบอท สรุปความต้องการของลูกค้าให้กระชับที่สุด และจัดหมวดหมู่ปัญหา\\nตอบกลับเป็น JSON format เท่านั้น โดยมีโครงสร้างดังนี้:\\n{\\n  \\"summary\\": \\"รายละเอียดความต้องการของลูกค้าสั้นๆ 1-2 บรรทัด (เช่น ต้องการปลดระบบ 'ติดกำกับ' หลังผ่อนชำระครบถ้วน)\\",\\n  \\"category\\": \\"หมวดหมู่ (ต้องเป็นหนึ่งในค่าภาษาอังกฤษที่กำหนดเท่านั้น)\\"\\n}\\n\\nหมวดหมู่ที่อนุญาตให้ใช้มีดังนี้เท่านั้น (ห้ามใช้ค่าอื่นนอกจากนี้ ถ้าไม่เข้าเงื่อนไขใดเลยให้ลง Other ทันที):\\n- Collection (สำหรับ ทวงถาม: เช่น สอบถามยอดค้างชำระ, ถามยอดค่างวดของสัญญาเดิม, ต้องการจ่ายเงิน/ชำระค่างวด, ขอเลื่อนหรือต่อรองการจ่ายเงิน, การประนอมหนี้)\\n- IT (สำหรับ ไอที: เช่น อุปกรณ์มีปัญหา, หน้าจอโดนล็อค/เครื่องล็อค, ปัญหาเข้าแอพไม่ได้, ปัญหาเทคนิคและอุปกรณ์)\\n- Other (สำหรับ อื่นๆ หรือกรณีที่ไม่เข้าเงื่อนไขด้านบนเลย)\\n\\nบทสนทนาย้อนหลัง:\\nลูกค้า: สวัสดี\\nบอท: สวัสดีครับ\\n\\nเหตุการณ์ล่าสุด:\\n- ลูกค้า: \\"ยอดค้างเท่าไหร่\\"\\n- ระบบ (บอท): \\"ยอดค้างของคุณคือ 1000 บาท\\"\\n"}]}],"generationConfig":{"temperature":0.1,"topP":0.1,"topK":1}}",
+  "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent",
+}
+`;
+
+exports[`[WRAP-AI W2-0] summary wire snapshots (frozen — B-W2S1) no history → the ไม่มีประวัติ default in the prompt 1`] = `
+{
+  "body": "{"contents":[{"parts":[{"text":"\\nวิเคราะห์บทสนทนาระหว่างลูกค้าและบอท สรุปความต้องการของลูกค้าให้กระชับที่สุด และจัดหมวดหมู่ปัญหา\\nตอบกลับเป็น JSON format เท่านั้น โดยมีโครงสร้างดังนี้:\\n{\\n  \\"summary\\": \\"รายละเอียดความต้องการของลูกค้าสั้นๆ 1-2 บรรทัด (เช่น ต้องการปลดระบบ 'ติดกำกับ' หลังผ่อนชำระครบถ้วน)\\",\\n  \\"category\\": \\"หมวดหมู่ (ต้องเป็นหนึ่งในค่าภาษาอังกฤษที่กำหนดเท่านั้น)\\"\\n}\\n\\nหมวดหมู่ที่อนุญาตให้ใช้มีดังนี้เท่านั้น (ห้ามใช้ค่าอื่นนอกจากนี้ ถ้าไม่เข้าเงื่อนไขใดเลยให้ลง Other ทันที):\\n- Collection (สำหรับ ทวงถาม: เช่น สอบถามยอดค้างชำระ, ถามยอดค่างวดของสัญญาเดิม, ต้องการจ่ายเงิน/ชำระค่างวด, ขอเลื่อนหรือต่อรองการจ่ายเงิน, การประนอมหนี้)\\n- IT (สำหรับ ไอที: เช่น อุปกรณ์มีปัญหา, หน้าจอโดนล็อค/เครื่องล็อค, ปัญหาเข้าแอพไม่ได้, ปัญหาเทคนิคและอุปกรณ์)\\n- Other (สำหรับ อื่นๆ หรือกรณีที่ไม่เข้าเงื่อนไขด้านบนเลย)\\n\\nบทสนทนาย้อนหลัง:\\nไม่มีประวัติ\\n\\nเหตุการณ์ล่าสุด:\\n- ลูกค้า: \\"ยอดค้างเท่าไหร่\\"\\n- ระบบ (บอท): \\"ยอดค้างของคุณคือ 1000 บาท\\"\\n"}]}],"generationConfig":{"temperature":0.1,"topP":0.1,"topK":1}}",
+  "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent",
+}
+`;
+
+exports[`[WRAP-AI W2-0] summary wire snapshots (frozen — B-W2S1) null history → same ไม่มีประวัติ default 1`] = `
+{
+  "body": "{"contents":[{"parts":[{"text":"\\nวิเคราะห์บทสนทนาระหว่างลูกค้าและบอท สรุปความต้องการของลูกค้าให้กระชับที่สุด และจัดหมวดหมู่ปัญหา\\nตอบกลับเป็น JSON format เท่านั้น โดยมีโครงสร้างดังนี้:\\n{\\n  \\"summary\\": \\"รายละเอียดความต้องการของลูกค้าสั้นๆ 1-2 บรรทัด (เช่น ต้องการปลดระบบ 'ติดกำกับ' หลังผ่อนชำระครบถ้วน)\\",\\n  \\"category\\": \\"หมวดหมู่ (ต้องเป็นหนึ่งในค่าภาษาอังกฤษที่กำหนดเท่านั้น)\\"\\n}\\n\\nหมวดหมู่ที่อนุญาตให้ใช้มีดังนี้เท่านั้น (ห้ามใช้ค่าอื่นนอกจากนี้ ถ้าไม่เข้าเงื่อนไขใดเลยให้ลง Other ทันที):\\n- Collection (สำหรับ ทวงถาม: เช่น สอบถามยอดค้างชำระ, ถามยอดค่างวดของสัญญาเดิม, ต้องการจ่ายเงิน/ชำระค่างวด, ขอเลื่อนหรือต่อรองการจ่ายเงิน, การประนอมหนี้)\\n- IT (สำหรับ ไอที: เช่น อุปกรณ์มีปัญหา, หน้าจอโดนล็อค/เครื่องล็อค, ปัญหาเข้าแอพไม่ได้, ปัญหาเทคนิคและอุปกรณ์)\\n- Other (สำหรับ อื่นๆ หรือกรณีที่ไม่เข้าเงื่อนไขด้านบนเลย)\\n\\nบทสนทนาย้อนหลัง:\\nไม่มีประวัติ\\n\\nเหตุการณ์ล่าสุด:\\n- ลูกค้า: \\"ยอดค้างเท่าไหร่\\"\\n- ระบบ (บอท): \\"ยอดค้างของคุณคือ 1000 บาท\\"\\n"}]}],"generationConfig":{"temperature":0.1,"topP":0.1,"topK":1}}",
+  "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent",
+}
+`;
+
+exports[`[WRAP-AI W2-0] summary wire snapshots (frozen — B-W2S1) quotes/newlines in the strings are interpolated verbatim 1`] = `
+{
+  "body": "{"contents":[{"parts":[{"text":"\\nวิเคราะห์บทสนทนาระหว่างลูกค้าและบอท สรุปความต้องการของลูกค้าให้กระชับที่สุด และจัดหมวดหมู่ปัญหา\\nตอบกลับเป็น JSON format เท่านั้น โดยมีโครงสร้างดังนี้:\\n{\\n  \\"summary\\": \\"รายละเอียดความต้องการของลูกค้าสั้นๆ 1-2 บรรทัด (เช่น ต้องการปลดระบบ 'ติดกำกับ' หลังผ่อนชำระครบถ้วน)\\",\\n  \\"category\\": \\"หมวดหมู่ (ต้องเป็นหนึ่งในค่าภาษาอังกฤษที่กำหนดเท่านั้น)\\"\\n}\\n\\nหมวดหมู่ที่อนุญาตให้ใช้มีดังนี้เท่านั้น (ห้ามใช้ค่าอื่นนอกจากนี้ ถ้าไม่เข้าเงื่อนไขใดเลยให้ลง Other ทันที):\\n- Collection (สำหรับ ทวงถาม: เช่น สอบถามยอดค้างชำระ, ถามยอดค่างวดของสัญญาเดิม, ต้องการจ่ายเงิน/ชำระค่างวด, ขอเลื่อนหรือต่อรองการจ่ายเงิน, การประนอมหนี้)\\n- IT (สำหรับ ไอที: เช่น อุปกรณ์มีปัญหา, หน้าจอโดนล็อค/เครื่องล็อค, ปัญหาเข้าแอพไม่ได้, ปัญหาเทคนิคและอุปกรณ์)\\n- Other (สำหรับ อื่นๆ หรือกรณีที่ไม่เข้าเงื่อนไขด้านบนเลย)\\n\\nบทสนทนาย้อนหลัง:\\nลูกค้า: สวัสดี\\nบอท: สวัสดีครับ\\n\\nเหตุการณ์ล่าสุด:\\n- ลูกค้า: \\"มี \\"เครื่องหมาย\\" และ\\nขึ้นบรรทัด\\"\\n- ระบบ (บอท): \\"ตอบ: \\"ได้ครับ\\"\\"\\n"}]}],"generationConfig":{"temperature":0.1,"topP":0.1,"topK":1}}",
+  "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent",
+}
+`;

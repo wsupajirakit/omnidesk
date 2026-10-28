@@ -1,0 +1,110 @@
+[
+  {
+    "bank_code": "002",
+    "bank_name_en": "Bangkok Bank (BBL)",
+    "bank_name_th": "ธนาคารกรุงเทพ จำกัด (มหาชน)",
+    "image_path": "/banks/BBL.png"
+  },
+  {
+    "bank_code": "004",
+    "bank_name_en": "Kasikornbank (KBANK)",
+    "bank_name_th": "ธนาคารกสิกรไทย จำกัด (มหาชน)",
+    "image_path": "/banks/KBANK.png"
+  },
+  {
+    "bank_code": "006",
+    "bank_name_en": "Krung Thai Bank (KTB)",
+    "bank_name_th": "ธนาคารกรุงไทย จำกัด (มหาชน)",
+    "image_path": "/banks/KTB.png"
+  },
+  {
+    "bank_code": "011",
+    "bank_name_en": "TMB Bank / TTB",
+    "bank_name_th": "ธนาคารทหารไทยธนชาต (TTB)",
+    "image_path": "/banks/TTB.png"
+  },
+  {
+    "bank_code": "014",
+    "bank_name_en": "Siam Commercial Bank (SCB)",
+    "bank_name_th": "ธนาคารไทยพาณิชย์ จำกัด (มหาชน)",
+    "image_path": "/banks/SCB.png"
+  },
+  {
+    "bank_code": "017",
+    "bank_name_en": "Citibank (CITI)",
+    "bank_name_th": "ธนาคารซิตี้แบงก์",
+    "image_path": "/banks/CITI.png"
+  },
+  {
+    "bank_code": "024",
+    "bank_name_en": "United Overseas Bank (UOB)",
+    "bank_name_th": "ธนาคารยูไนเต็ด โอเวอร์ซีส์ (ไทย) จำกัด (มหาชน)",
+    "image_path": "/banks/UOB.png"
+  },
+  {
+    "bank_code": "025",
+    "bank_name_en": "Bank of Ayudhya (BAY)",
+    "bank_name_th": "ธนาคารกรุงศรีอยุธยา จำกัด (มหาชน)",
+    "image_path": "/banks/BAY.png"
+  },
+  {
+    "bank_code": "026",
+    "bank_name_en": "Mega International Commercial Bank",
+    "bank_name_th": "ธนาคารเมกะ สากลพาณิชย์ จำกัด (มหาชน)",
+    "image_path": "/banks/ICBC.png"
+  },
+  {
+    "bank_code": "030",
+    "bank_name_en": "Government Saving Bank (GSB)",
+    "bank_name_th": "ธนาคารออมสิน",
+    "image_path": "/banks/GSB.png"
+  },
+  {
+    "bank_code": "031",
+    "bank_name_en": "Hong Kong & Shanghai Corporation (HSBC)",
+    "bank_name_th": "ธนาคารฮ่องกงและเซี่ยงไฮ้ จำกัด",
+    "image_path": "/banks/HSBC.png"
+  },
+  {
+    "bank_code": "033",
+    "bank_name_en": "Government Housing Bank (GHB)",
+    "bank_name_th": "ธนาคารอาคารสงเคราะห์",
+    "image_path": "/banks/GHB.png"
+  },
+  {
+    "bank_code": "034",
+    "bank_name_en": "Bank for Agriculture and Agricultural Cooperatives (BAAC)",
+    "bank_name_th": "ธนาคารเพื่อการเกษตรและสหกรณ์การเกษตร",
+    "image_path": "/banks/BAAC.png"
+  },
+  {
+    "bank_code": "066",
+    "bank_name_en": "Islamic Bank of Thailand (ISBT)",
+    "bank_name_th": "ธนาคารอิสลามแห่งประเทศไทย",
+    "image_path": "/banks/IBANK.png"
+  },
+  {
+    "bank_code": "067",
+    "bank_name_en": "Tisco Bank",
+    "bank_name_th": "ธนาคารทิสโก้ จำกัด (มหาชน)",
+    "image_path": "/banks/TISCO.png"
+  },
+  {
+    "bank_code": "069",
+    "bank_name_en": "Kiatnakin Phatra Bank (KKP)",
+    "bank_name_th": "ธนาคารเกียรตินาคินภัทร จำกัด (มหาชน)",
+    "image_path": "/banks/KKP.png"
+  },
+  {
+    "bank_code": "071",
+    "bank_name_en": "The Thai Credit Retail Bank (TCRB)",
+    "bank_name_th": "ธนาคารไทยเครดิตเพื่อรายย่อย จำกัด (มหาชน)",
+    "image_path": "/banks/TCRB.png"
+  },
+  {
+    "bank_code": "073",
+    "bank_name_en": "Land & House Bank (LHB)",
+    "bank_name_th": "ธนาคารแลนด์ แอนด์ เฮ้าส์ เพื่อรายย่อย จำกัด (มหาชน)",
+    "image_path": "/banks/LHB.png"
+  }
+]

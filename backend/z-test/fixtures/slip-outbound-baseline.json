@@ -1,0 +1,41 @@
+{
+  "url": "https://api.swiftcheck.example.com/v2/verify/bank",
+  "timeout": 30000,
+  "headers": {
+    "Content-Type": "application/json",
+    "Authorization": "Bearer BASELINE-KEY"
+  },
+  "body": {
+    "base64": {
+      "bytes": 256,
+      "sha256": "6ea37342595761fffd2ae6739c6b436ff41117c38beae930bbd387f9b1f33837"
+    },
+    "checkDuplicate": true,
+    "matchAccount": true
+  },
+  "webhookLog": {
+    "hook_id": "baseline-hook",
+    "hook_alias": "baseline",
+    "channel": "swiftcheck_api",
+    "action_type": "verify_bank_slip",
+    "method": "POST",
+    "endpoint": "/verify/bank",
+    "status": "success",
+    "http_status": 200,
+    "raw_request": {
+      "base64": "[BINARY_DATA]",
+      "checkDuplicate": true,
+      "matchAccount": true
+    },
+    "raw_response": {
+      "success": true,
+      "data": {
+        "rawSlip": {
+          "transRef": "BASELINE-REF"
+        }
+      }
+    },
+    "duration_ms": "<number>",
+    "reference_id": "mbaseline"
+  }
+}

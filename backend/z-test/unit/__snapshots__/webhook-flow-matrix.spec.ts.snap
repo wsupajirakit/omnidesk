@@ -1,0 +1,777 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`[FIX-20260815-IMGTAGDEAD] tag → image set → carousel flex object → a carousel is POSTed and the plain sentence is NOT sent 1`] = `
+"[
+  {
+    "action_type": "incoming_line_webhook",
+    "channel": "webhook",
+    "endpoint": "/flowmatrix/webhook",
+    "hook_alias": "flowmatrix",
+    "hook_id": "a0d000000000000000000014",
+    "method": "POST",
+    "raw_request": {
+      "destination": "Uflow",
+      "events": [
+        {
+          "eventId": "ev-มีโปรอะไ",
+          "message": {
+            "id": "m1",
+            "text": "มีโปรอะไรบ้าง",
+            "type": "text"
+          },
+          "replyToken": "rt-1",
+          "source": {
+            "type": "user",
+            "userId": "Uflow0000000000000000000000000001"
+          },
+          "timestamp": "<volatile>",
+          "type": "message"
+        }
+      ]
+    },
+    "status": "success"
+  },
+  {
+    "action_type": "generate_response",
+    "channel": "gemini",
+    "duration_ms": "<volatile>",
+    "endpoint": "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent",
+    "hook_alias": "flowmatrix",
+    "hook_id": "a0d000000000000000000014",
+    "http_status": 0,
+    "line_event_id": "ev-มีโปรอะไ",
+    "line_key_mask": "fl...en",
+    "method": "POST",
+    "payload_summary": {
+      "answer_tags": [
+        "img_promo"
+      ],
+      "doc_len": "0/0",
+      "doc_sha": "e3b0c442/e3b0c442",
+      "event_id": "ev-มีโปรอะไ",
+      "fast_mode": 0,
+      "question": "มีโปรอะไรบ้าง",
+      "thai_time": "<volatile>"
+    },
+    "request_meta": {
+      "event_id": "ev-มีโปรอะไ",
+      "reply_token": "rt-1"
+    },
+    "response_summary": {
+      "fallback": false,
+      "noData": false,
+      "response_ai": null,
+      "tag_status": null,
+      "text": "ดูโปรโมชั่นได้เลยค่ะ [[[img_promo]]]"
+    },
+    "status": "success"
+  },
+  {
+    "action_type": "line_reply_flex",
+    "channel": "line_api",
+    "duration_ms": "<volatile>",
+    "endpoint": "https://api.line.me/v2/bot/message/reply",
+    "hook_alias": "flowmatrix",
+    "hook_id": "a0d000000000000000000014",
+    "http_status": 200,
+    "line_event_id": "ev-มีโปรอะไ",
+    "line_key_mask": "fl...en",
+    "method": "POST",
+    "payload_summary": {
+      "flex_json": [
+        {
+          "altText": "โปรโมชั่นเดือนนี้",
+          "contents": {
+            "contents": [
+              {
+                "body": {
+                  "contents": [
+                    {
+                      "size": "xs",
+                      "text": "ใบที่ 1",
+                      "type": "text",
+                      "weight": "bold",
+                      "wrap": true
+                    }
+                  ],
+                  "layout": "vertical",
+                  "type": "box"
+                },
+                "hero": {
+                  "aspectMode": "fit",
+                  "aspectRatio": "2:3",
+                  "size": "full",
+                  "type": "image",
+                  "url": "https://cdn.test/p1.jpg"
+                },
+                "type": "bubble"
+              },
+              {
+                "body": {
+                  "contents": [
+                    {
+                      "size": "xs",
+                      "text": "ใบที่ 2",
+                      "type": "text",
+                      "weight": "bold",
+                      "wrap": true
+                    }
+                  ],
+                  "layout": "vertical",
+                  "type": "box"
+                },
+                "hero": {
+                  "aspectMode": "fit",
+                  "aspectRatio": "2:3",
+                  "size": "full",
+                  "type": "image",
+                  "url": "https://cdn.test/p2.jpg"
+                },
+                "type": "bubble"
+              }
+            ],
+            "type": "carousel"
+          },
+          "type": "flex"
+        }
+      ],
+      "img_count": 2,
+      "matching_tag": "img_promo"
+    },
+    "response_summary": {},
+    "status": "success"
+  }
+]"
+`;
+
+exports[`[FIX-20260815-IMGTAGDEAD] tag → image set → carousel media object → up to five image messages, not a flex bubble 1`] = `
+"[
+  {
+    "action_type": "incoming_line_webhook",
+    "channel": "webhook",
+    "endpoint": "/flowmatrix/webhook",
+    "hook_alias": "flowmatrix",
+    "hook_id": "a0d000000000000000000014",
+    "method": "POST",
+    "raw_request": {
+      "destination": "Uflow",
+      "events": [
+        {
+          "eventId": "ev-ขอดูรูป",
+          "message": {
+            "id": "m1",
+            "text": "ขอดูรูป",
+            "type": "text"
+          },
+          "replyToken": "rt-1",
+          "source": {
+            "type": "user",
+            "userId": "Uflow0000000000000000000000000001"
+          },
+          "timestamp": "<volatile>",
+          "type": "message"
+        }
+      ]
+    },
+    "status": "success"
+  },
+  {
+    "action_type": "generate_response",
+    "channel": "gemini",
+    "duration_ms": "<volatile>",
+    "endpoint": "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent",
+    "hook_alias": "flowmatrix",
+    "hook_id": "a0d000000000000000000014",
+    "http_status": 0,
+    "line_event_id": "ev-ขอดูรูป",
+    "line_key_mask": "fl...en",
+    "method": "POST",
+    "payload_summary": {
+      "answer_tags": [
+        "img_promo"
+      ],
+      "doc_len": "0/0",
+      "doc_sha": "e3b0c442/e3b0c442",
+      "event_id": "ev-ขอดูรูป",
+      "fast_mode": 0,
+      "question": "ขอดูรูป",
+      "thai_time": "<volatile>"
+    },
+    "request_meta": {
+      "event_id": "ev-ขอดูรูป",
+      "reply_token": "rt-1"
+    },
+    "response_summary": {
+      "fallback": false,
+      "noData": false,
+      "response_ai": null,
+      "tag_status": null,
+      "text": "รูปสินค้าค่ะ [[[img_promo]]]"
+    },
+    "status": "success"
+  },
+  {
+    "action_type": "line_reply_image",
+    "channel": "line_api",
+    "duration_ms": "<volatile>",
+    "endpoint": "https://api.line.me/v2/bot/message/reply",
+    "hook_alias": "flowmatrix",
+    "hook_id": "a0d000000000000000000014",
+    "http_status": 200,
+    "line_event_id": "ev-ขอดูรูป",
+    "line_key_mask": "fl...en",
+    "method": "POST",
+    "payload_summary": {
+      "flex_json": [
+        {
+          "originalContentUrl": "https://cdn.test/p1.jpg",
+          "previewImageUrl": "https://cdn.test/p1.jpg",
+          "type": "image"
+        },
+        {
+          "originalContentUrl": "https://cdn.test/p2.jpg",
+          "previewImageUrl": "https://cdn.test/p2.jpg",
+          "type": "image"
+        }
+      ],
+      "img_count": 2,
+      "matching_tag": "img_promo"
+    },
+    "response_summary": {},
+    "status": "success"
+  }
+]"
+`;
+
+exports[`[RULER-20260815-WLOGGOLDEN] get_profile (Telegram not_found branch) R1 the branch writes the get_profile row, frozen byte-for-byte 1`] = `
+"[
+  {
+    "action_type": "incoming_line_webhook",
+    "channel": "webhook",
+    "endpoint": "/flowmatrix/webhook",
+    "hook_alias": "flowmatrix",
+    "hook_id": "a0d000000000000000000014",
+    "method": "POST",
+    "raw_request": {
+      "destination": "Uflow",
+      "events": [
+        {
+          "eventId": "ev-ถามอะไรท",
+          "message": {
+            "id": "m1",
+            "text": "ถามอะไรที่ไม่มีในเอกสาร",
+            "type": "text"
+          },
+          "replyToken": "rt-1",
+          "source": {
+            "type": "user",
+            "userId": "Uflow0000000000000000000000000001"
+          },
+          "timestamp": "<volatile>",
+          "type": "message"
+        }
+      ]
+    },
+    "status": "success"
+  },
+  {
+    "action_type": "generate_response",
+    "channel": "gemini",
+    "duration_ms": "<volatile>",
+    "endpoint": "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent",
+    "hook_alias": "flowmatrix",
+    "hook_id": "a0d000000000000000000014",
+    "http_status": 0,
+    "line_event_id": "ev-ถามอะไรท",
+    "line_key_mask": "fl...en",
+    "method": "POST",
+    "payload_summary": {
+      "answer_tags": [],
+      "doc_len": "0/0",
+      "doc_sha": "e3b0c442/e3b0c442",
+      "event_id": "ev-ถามอะไรท",
+      "fast_mode": 0,
+      "question": "ถามอะไรที่ไม่มีในเอกสาร",
+      "thai_time": "<volatile>"
+    },
+    "request_meta": {
+      "event_id": "ev-ถามอะไรท",
+      "reply_token": "rt-1"
+    },
+    "response_summary": {
+      "fallback": false,
+      "noData": false,
+      "response_ai": null,
+      "tag_status": "not_found",
+      "text": "ยังไม่พบข้อมูลค่ะ"
+    },
+    "status": "success"
+  },
+  {
+    "action_type": "get_profile",
+    "channel": "line_api",
+    "duration_ms": "<volatile>",
+    "endpoint": "https://api.line.me/v2/bot/profile/{userId}",
+    "hook_alias": "flowmatrix",
+    "hook_id": "a0d000000000000000000014",
+    "http_status": 0,
+    "line_event_id": "ev-ถามอะไรท",
+    "line_key_mask": "fl...en",
+    "method": "GET",
+    "payload_summary": {
+      "alias": "flowmatrix",
+      "user_id": "Uflow0000000000000000000000000001"
+    },
+    "response_summary": null,
+    "status": "error"
+  }
+]"
+`;
+
+exports[`[RULER-20260815-WLOGGOLDEN] webhook_logs rows are byte-frozen (reply family) M1 text + linked profile + AI answer — generate_response + line_reply rows 1`] = `
+"[
+  {
+    "action_type": "incoming_line_webhook",
+    "channel": "webhook",
+    "endpoint": "/flowmatrix/webhook",
+    "hook_alias": "flowmatrix",
+    "hook_id": "a0d000000000000000000014",
+    "method": "POST",
+    "raw_request": {
+      "destination": "Uflow",
+      "events": [
+        {
+          "eventId": "ev-ยอดเงินเ",
+          "message": {
+            "id": "m1",
+            "text": "ยอดเงินเท่าไหร่",
+            "type": "text"
+          },
+          "replyToken": "rt-1",
+          "source": {
+            "type": "user",
+            "userId": "Uflow0000000000000000000000000001"
+          },
+          "timestamp": "<volatile>",
+          "type": "message"
+        }
+      ]
+    },
+    "status": "success"
+  },
+  {
+    "action_type": "generate_response",
+    "channel": "gemini",
+    "duration_ms": "<volatile>",
+    "endpoint": "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent",
+    "hook_alias": "flowmatrix",
+    "hook_id": "a0d000000000000000000014",
+    "http_status": 0,
+    "line_event_id": "ev-ยอดเงินเ",
+    "line_key_mask": "fl...en",
+    "method": "POST",
+    "payload_summary": {
+      "answer_tags": [],
+      "doc_len": "0/0",
+      "doc_sha": "e3b0c442/e3b0c442",
+      "event_id": "ev-ยอดเงินเ",
+      "fast_mode": 0,
+      "question": "ยอดเงินเท่าไหร่",
+      "thai_time": "<volatile>"
+    },
+    "request_meta": {
+      "event_id": "ev-ยอดเงินเ",
+      "reply_token": "rt-1"
+    },
+    "response_summary": {
+      "fallback": false,
+      "noData": false,
+      "response_ai": null,
+      "tag_status": null,
+      "text": "ยอดคงเหลือของคุณคือ 1,200 บาทค่ะ"
+    },
+    "status": "success"
+  },
+  {
+    "action_type": "line_reply",
+    "channel": "line_api",
+    "duration_ms": "<volatile>",
+    "endpoint": "https://api.line.me/v2/bot/message/reply",
+    "hook_alias": "flowmatrix",
+    "hook_id": "a0d000000000000000000014",
+    "http_status": 200,
+    "line_event_id": "ev-ยอดเงินเ",
+    "line_key_mask": "fl...en",
+    "method": "POST",
+    "payload_summary": {
+      "alias": "flowmatrix",
+      "message": "ยอดเงินเท่าไหร่",
+      "reply_token": "rt-1",
+      "user_id": "Uflow0000000000000000000000000001"
+    },
+    "request_meta": {
+      "event_id": "ev-ยอดเงินเ",
+      "reply_token": "rt-1"
+    },
+    "response_summary": {},
+    "status": "success"
+  }
+]"
+`;
+
+exports[`[RULER-20260815-WLOGGOLDEN] webhook_logs rows are byte-frozen (reply family) M2 rate-limited — rate_limit_reply row 1`] = `
+"[
+  {
+    "action_type": "incoming_line_webhook",
+    "channel": "webhook",
+    "endpoint": "/flowmatrix/webhook",
+    "hook_alias": "flowmatrix",
+    "hook_id": "a0d000000000000000000014",
+    "method": "POST",
+    "raw_request": {
+      "destination": "Uflow",
+      "events": [
+        {
+          "eventId": "ev-สวัสดี",
+          "message": {
+            "id": "m1",
+            "text": "สวัสดี",
+            "type": "text"
+          },
+          "replyToken": "rt-1",
+          "source": {
+            "type": "user",
+            "userId": "Uflow0000000000000000000000000001"
+          },
+          "timestamp": "<volatile>",
+          "type": "message"
+        }
+      ]
+    },
+    "status": "success"
+  },
+  {
+    "action_type": "rate_limit_reply",
+    "channel": "line_api",
+    "endpoint": "https://api.line.me/v2/bot/message/reply",
+    "hook_alias": "flowmatrix",
+    "hook_id": "a0d000000000000000000014",
+    "http_status": 200,
+    "line_event_id": "ev-สวัสดี",
+    "line_key_mask": "fl...en",
+    "method": "POST",
+    "payload_summary": {
+      "reply_token": "rt-1",
+      "text": "กรุณารอสักครู่และลองใหม่อีกครั้ง"
+    },
+    "response_summary": {},
+    "status": "success"
+  }
+]"
+`;
+
+exports[`[RULER-20260815-WLOGGOLDEN] webhook_logs rows are byte-frozen (reply family) M3 image + image_answer_text + linked profile — image_answer_reply row 1`] = `
+"[
+  {
+    "action_type": "incoming_line_webhook",
+    "channel": "webhook",
+    "endpoint": "/flowmatrix/webhook",
+    "hook_alias": "flowmatrix",
+    "hook_id": "a0d000000000000000000014",
+    "method": "POST",
+    "raw_request": {
+      "destination": "Uflow",
+      "events": [
+        {
+          "eventId": "ev-image",
+          "message": {
+            "id": "img1",
+            "type": "image"
+          },
+          "replyToken": "rt-img",
+          "source": {
+            "type": "user",
+            "userId": "Uflow0000000000000000000000000001"
+          },
+          "timestamp": "<volatile>",
+          "type": "message"
+        }
+      ]
+    },
+    "status": "success"
+  },
+  {
+    "action_type": "image_answer_reply",
+    "channel": "line_api",
+    "endpoint": "https://api.line.me/v2/bot/message/reply",
+    "hook_alias": "flowmatrix",
+    "hook_id": "a0d000000000000000000014",
+    "http_status": 200,
+    "line_event_id": "ev-image",
+    "line_key_mask": "fl...en",
+    "method": "POST",
+    "payload_summary": {
+      "incoming_type": "image",
+      "reply_token": "rt-img",
+      "text": "รับรูปแล้วค่ะ"
+    },
+    "response_summary": {},
+    "status": "success"
+  }
+]"
+`;
+
+exports[`[RULER-20260815-WLOGGOLDEN] webhook_logs rows are byte-frozen (reply family) M4 image + unregistered customer — missing_profile_data_reply row 1`] = `
+"[
+  {
+    "action_type": "incoming_line_webhook",
+    "channel": "webhook",
+    "endpoint": "/flowmatrix/webhook",
+    "hook_alias": "flowmatrix",
+    "hook_id": "a0d000000000000000000014",
+    "method": "POST",
+    "raw_request": {
+      "destination": "Uflow",
+      "events": [
+        {
+          "eventId": "ev-image",
+          "message": {
+            "id": "img1",
+            "type": "image"
+          },
+          "replyToken": "rt-img",
+          "source": {
+            "type": "user",
+            "userId": "Uflow0000000000000000000000000001"
+          },
+          "timestamp": "<volatile>",
+          "type": "message"
+        }
+      ]
+    },
+    "status": "success"
+  },
+  {
+    "action_type": "missing_profile_data_reply",
+    "channel": "line_api",
+    "endpoint": "https://api.line.me/v2/bot/message/reply",
+    "hook_alias": "flowmatrix",
+    "hook_id": "a0d000000000000000000014",
+    "http_status": 200,
+    "line_event_id": "ev-image",
+    "line_key_mask": "fl...en",
+    "method": "POST",
+    "payload_summary": {
+      "reply_token": "rt-img",
+      "text": "กรุณาผูกบัญชีก่อนค่ะ"
+    },
+    "response_summary": {},
+    "status": "success"
+  }
+]"
+`;
+
+exports[`[RULER-20260815-WLOGGOLDEN] webhook_logs rows are byte-frozen (reply family) M5 verified slip + success card — the slip_flex_reply row 1`] = `
+"[
+  {
+    "action_type": "incoming_line_webhook",
+    "channel": "webhook",
+    "endpoint": "/flowmatrix/webhook",
+    "hook_alias": "flowmatrix",
+    "hook_id": "a0d000000000000000000014",
+    "method": "POST",
+    "raw_request": {
+      "destination": "Uflow",
+      "events": [
+        {
+          "eventId": "ev-image",
+          "message": {
+            "id": "img1",
+            "type": "image"
+          },
+          "replyToken": "rt-img",
+          "source": {
+            "type": "user",
+            "userId": "Uflow0000000000000000000000000001"
+          },
+          "timestamp": "<volatile>",
+          "type": "message"
+        }
+      ]
+    },
+    "status": "success"
+  },
+  {
+    "action_type": "slip_flex_reply",
+    "channel": "line_api",
+    "endpoint": "https://api.line.me/v2/bot/message/reply",
+    "hook_alias": "flowmatrix",
+    "hook_id": "a0d000000000000000000014",
+    "http_status": 200,
+    "line_event_id": "ev-image",
+    "line_key_mask": "fl...en",
+    "method": "POST",
+    "payload_summary": {
+      "condition": "Verified successfully",
+      "flex_doc_id": "fx-success",
+      "reply_token": "rt-img"
+    },
+    "response_summary": {
+      "sentMessages": []
+    },
+    "status": "success"
+  }
+]"
+`;
+
+exports[`[RULER-20260815-WLOGGOLDEN] webhook_logs rows are byte-frozen (reply family) M6 slip from a provably-unlinked customer — slip_refused_no_profile row 1`] = `
+"[
+  {
+    "action_type": "incoming_line_webhook",
+    "channel": "webhook",
+    "endpoint": "/flowmatrix/webhook",
+    "hook_alias": "flowmatrix",
+    "hook_id": "a0d000000000000000000014",
+    "method": "POST",
+    "raw_request": {
+      "destination": "Uflow",
+      "events": [
+        {
+          "eventId": "ev-image",
+          "message": {
+            "id": "img1",
+            "type": "image"
+          },
+          "replyToken": "rt-img",
+          "source": {
+            "type": "user",
+            "userId": "Uflow0000000000000000000000000001"
+          },
+          "timestamp": "<volatile>",
+          "type": "message"
+        }
+      ]
+    },
+    "status": "success"
+  },
+  {
+    "action_type": "slip_refused_no_profile",
+    "channel": "line_api",
+    "endpoint": "https://api.line.me/v2/bot/message/reply",
+    "hook_alias": "flowmatrix",
+    "hook_id": "a0d000000000000000000014",
+    "http_status": 200,
+    "line_event_id": "ev-image",
+    "line_key_mask": "fl...en",
+    "method": "POST",
+    "payload_summary": {
+      "reply_token": "rt-img",
+      "text": "ผูกบัญชีก่อนส่งสลิปนะคะ"
+    },
+    "response_summary": {},
+    "status": "success"
+  }
+]"
+`;
+
+exports[`[RULER-20260815-WLOGGOLDEN] webhook_logs rows are byte-frozen (reply family) M7 hook status 0 (out of hours) — out_of_hours_reply row 1`] = `
+"[
+  {
+    "action_type": "incoming_line_webhook",
+    "channel": "webhook",
+    "endpoint": "/flowmatrix/webhook",
+    "hook_alias": "flowmatrix",
+    "hook_id": "a0d000000000000000000014",
+    "method": "POST",
+    "raw_request": {
+      "destination": "Uflow",
+      "events": [
+        {
+          "eventId": "ev-เปิดอยู่",
+          "message": {
+            "id": "m1",
+            "text": "เปิดอยู่ไหม",
+            "type": "text"
+          },
+          "replyToken": "rt-1",
+          "source": {
+            "type": "user",
+            "userId": "Uflow0000000000000000000000000001"
+          },
+          "timestamp": "<volatile>",
+          "type": "message"
+        }
+      ]
+    },
+    "status": "success"
+  },
+  {
+    "action_type": "out_of_hours_reply",
+    "channel": "line_api",
+    "endpoint": "https://api.line.me/v2/bot/message/reply",
+    "hook_alias": "flowmatrix",
+    "hook_id": "a0d000000000000000000014",
+    "http_status": 200,
+    "line_event_id": "ev-เปิดอยู่",
+    "line_key_mask": "fl...en",
+    "method": "POST",
+    "payload_summary": {
+      "reply_token": "rt-1",
+      "text": "ร้านปิดแล้วค่ะ"
+    },
+    "response_summary": {},
+    "status": "success"
+  }
+]"
+`;
+
+exports[`[RULER-20260815-WLOGGOLDEN] webhook_logs rows are byte-frozen (reply family) M8 AI quoted an API number while the fetch failed — api_missing_data_reply row 1`] = `
+"[
+  {
+    "action_type": "incoming_line_webhook",
+    "channel": "webhook",
+    "endpoint": "/flowmatrix/webhook",
+    "hook_alias": "flowmatrix",
+    "hook_id": "a0d000000000000000000014",
+    "method": "POST",
+    "raw_request": {
+      "destination": "Uflow",
+      "events": [
+        {
+          "eventId": "ev-ยอดเท่าไ",
+          "message": {
+            "id": "m1",
+            "text": "ยอดเท่าไหร่",
+            "type": "text"
+          },
+          "replyToken": "rt-1",
+          "source": {
+            "type": "user",
+            "userId": "Uflow0000000000000000000000000001"
+          },
+          "timestamp": "<volatile>",
+          "type": "message"
+        }
+      ]
+    },
+    "status": "success"
+  },
+  {
+    "action_type": "api_missing_data_reply",
+    "channel": "line_api",
+    "endpoint": "https://api.line.me/v2/bot/message/reply",
+    "hook_alias": "flowmatrix",
+    "hook_id": "a0d000000000000000000014",
+    "http_status": 200,
+    "line_event_id": "ev-ยอดเท่าไ",
+    "line_key_mask": "fl...en",
+    "method": "POST",
+    "payload_summary": {
+      "reply_token": "rt-1",
+      "text": "ระบบข้อมูลขัดข้อง กรุณาลองใหม่ค่ะ"
+    },
+    "response_summary": {},
+    "status": "success"
+  }
+]"
+`;

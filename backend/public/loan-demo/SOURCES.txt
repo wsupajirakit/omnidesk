@@ -1,0 +1,13 @@
+Demo images for the loan-site flex cards (mobile-phone installment promos).
+Served by the backend as static files: <BE base URL>/loan-demo/<file>.
+Source: Unsplash (https://unsplash.com/license) — free to use, commercial use allowed,
+no attribution required. Cropped/resized via the Unsplash image CDN at download time.
+
+phone-iphone-black.jpg     https://images.unsplash.com/photo-1605236453806-6ff36851218e
+phone-iphone-dark.jpg      https://images.unsplash.com/photo-1592899677977-9c10ca588bbd
+phone-samsung-violet.jpg   https://images.unsplash.com/photo-1610945265064-0e34e5519bbf
+phone-android.jpg          https://images.unsplash.com/photo-1598327105666-5b89351aff97
+phone-red.jpg              https://images.unsplash.com/photo-1567581935884-3349723552ca
+banner-many-phones.jpg     https://images.unsplash.com/photo-1556656793-08538906a9f8
+hero-phone-hand.jpg        https://images.unsplash.com/photo-1523206489230-c012c64b2b48
+steps-phone-desk.jpg       https://images.unsplash.com/photo-1585060544812-6b45742d762f

@@ -1,0 +1,77 @@
+# OmniDesk — full demo stack behind Traefik.
+#
+#   cp ../backend/.env.example ../backend/.env        # then fill the secrets
+#   cp ../backend/ws/.env.example ../backend/ws/.env
+#   cp ../backend/mock-api/.env.example ../backend/mock-api/.env
+#   docker compose up -d --build
+#   docker compose exec api node demo/seed-demo.mjs   # optional demo data
+#
+# Console: http://console.localhost   ·   Public API host (webhooks): http://api.localhost
+# Only Traefik publishes a port; every other container is reachable on the internal network only.
+name: omnidesk
+
+services:
+  traefik:
+    image: traefik:v3.1
+    command: ["--configFile=/etc/traefik/traefik.yml"]
+    ports: ["80:80"]
+    environment:
+      INTERNAL_PROXY_SECRET: ${INTERNAL_PROXY_SECRET:?set INTERNAL_PROXY_SECRET in deploy/.env}
+    volumes:
+      - ./traefik/traefik.yml:/etc/traefik/traefik.yml:ro
+      - ./traefik/dynamic:/etc/traefik/dynamic:ro
+    depends_on: [api, console, ws]
+    restart: unless-stopped
+
+  mongo:
+    image: mongo:7
+    volumes: [mongo-data:/data/db]
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes: [redis-data:/data]
+    restart: unless-stopped
+
+  api:
+    build: ../backend
+    env_file: ../backend/.env
+    environment:
+      MONGODB_URI: mongodb://mongo:27017/omnidesk
+      REDIS_HOST: redis
+      INTERNAL_PROXY_SECRET: ${INTERNAL_PROXY_SECRET}
+    volumes:
+      - ../backend/demo:/app/demo:ro
+    depends_on: [mongo, redis]
+    restart: unless-stopped
+
+  ws:
+    build: ../backend/ws
+    env_file: ../backend/ws/.env
+    environment:
+      REDIS_HOST: redis
+    depends_on: [redis]
+    restart: unless-stopped
+
+  member-api:
+    build:
+      context: ../backend/mock-api
+      args: { APP: member-api }
+    env_file: ../backend/mock-api/.env
+    restart: unless-stopped
+
+  walletpay-api:
+    build:
+      context: ../backend/mock-api
+      args: { APP: walletpay-api }
+    env_file: ../backend/mock-api/.env
+    restart: unless-stopped
+
+  console:
+    build: ../frontend
+    restart: unless-stopped
+
+volumes:
+  mongo-data:
+  redis-data:

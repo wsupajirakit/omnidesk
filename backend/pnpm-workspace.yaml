@@ -1,0 +1,8 @@
+# Native/postinstall scripts are opt-in per package. Reviewed and allowed:
+#   @scarf/scarf     analytics ping from a transitive dep — harmless, no build
+#   msgpackr-extract native msgpack accelerator used by bullmq
+#   unrs-resolver    native module resolver used by eslint-plugin-import
+allowBuilds:
+  '@scarf/scarf': true
+  msgpackr-extract: true
+  unrs-resolver: true

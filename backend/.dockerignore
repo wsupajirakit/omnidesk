@@ -1,0 +1,17 @@
+node_modules
+dist
+.git
+.github
+.env*
+!env.example
+z-test
+check-list.md
+local-setup.md
+README.md
+.prettierrc
+eslint.config.mjs
+jest.config.ts
+*.log
+
+# [RULE-20260818-NOBYPASSINGIT] local-only bypass patches must never reach an image
+local-only

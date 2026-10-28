@@ -1,0 +1,8 @@
+{
+  "name": "@zcrm/walletpay-api",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Mock wallet pay-in upstream (replaces the old payment gateway): slip upload against a pay-in reference.",
+  "dependencies": { "@fastify/multipart": "^10.0.0", "@zcrm/core": "*", "fastify": "^5.12.0", "typebox": "^1.1.14" }
+}

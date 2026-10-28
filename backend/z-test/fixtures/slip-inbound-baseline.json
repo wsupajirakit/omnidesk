@@ -1,0 +1,359 @@
+{
+  "v1_success_primary": {
+    "hook_id": "hook1",
+    "slip_provider": "swiftcheck",
+    "transaction_date": "2026-08-09T12:00:25.000Z",
+    "api_status": "success",
+    "trans_ref": "REF-PRIMARY",
+    "sender_account_no": "S-ACC",
+    "sender_account_name": "sender-th",
+    "sender_bank": "SENDSHORT",
+    "receiver_account_no": "R-ACC",
+    "receiver_account_name": "receiver-th",
+    "receiver_bank": "RECVSHORT",
+    "slip_type": "Bank Transfer",
+    "amount": 1200,
+    "branch": "Display Name",
+    "internal_content_id": null,
+    "sender_line_user_id": "Uxyz",
+    "raw_content": {
+      "isDuplicate": false,
+      "amountInSlip": 1200,
+      "rawSlip": {
+        "transRef": "REF-PRIMARY",
+        "date": "2026-08-09T19:00:25+07:00",
+        "amount": {
+          "amount": 1200
+        },
+        "sender": {
+          "bank": {
+            "short": "SENDSHORT",
+            "name": "sender bank name"
+          },
+          "account": {
+            "name": {
+              "th": "sender-th",
+              "en": "sender-en"
+            },
+            "bank": {
+              "account": "S-ACC"
+            }
+          }
+        },
+        "receiver": {
+          "bank": {
+            "short": "RECVSHORT",
+            "name": "receiver bank name"
+          },
+          "account": {
+            "name": {
+              "th": "receiver-th",
+              "en": "receiver-en"
+            },
+            "bank": {
+              "account": "R-ACC"
+            }
+          }
+        }
+      }
+    },
+    "raw_response": {
+      "success": true,
+      "data": {
+        "isDuplicate": false,
+        "amountInSlip": 1200,
+        "rawSlip": {
+          "transRef": "REF-PRIMARY",
+          "date": "2026-08-09T19:00:25+07:00",
+          "amount": {
+            "amount": 1200
+          },
+          "sender": {
+            "bank": {
+              "short": "SENDSHORT",
+              "name": "sender bank name"
+            },
+            "account": {
+              "name": {
+                "th": "sender-th",
+                "en": "sender-en"
+              },
+              "bank": {
+                "account": "S-ACC"
+              }
+            }
+          },
+          "receiver": {
+            "bank": {
+              "short": "RECVSHORT",
+              "name": "receiver bank name"
+            },
+            "account": {
+              "name": {
+                "th": "receiver-th",
+                "en": "receiver-en"
+              },
+              "bank": {
+                "account": "R-ACC"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "v1_success_fallback": {
+    "hook_id": "hook1",
+    "slip_provider": "swiftcheck",
+    "transaction_date": "2026-08-10T04:49:34.000Z",
+    "api_status": "success",
+    "trans_ref": "REF-FALLBACK",
+    "sender_account_no": "S-ACC2",
+    "sender_account_name": "sender-en-only",
+    "sender_bank": "sender bank name only",
+    "receiver_account_no": "PROMPTPAY-1",
+    "receiver_account_name": "receiver-en-only",
+    "receiver_bank": "receiver bank name only",
+    "slip_type": "Bank Transfer",
+    "amount": 55,
+    "branch": "Display Name",
+    "internal_content_id": null,
+    "sender_line_user_id": "Uxyz",
+    "raw_content": {
+      "isDuplicate": false,
+      "amountInSlip": 55,
+      "rawSlip": {
+        "transRef": "REF-FALLBACK",
+        "date": "2026-08-10T11:49:34+07:00",
+        "amount": {
+          "amount": 55
+        },
+        "sender": {
+          "bank": {
+            "name": "sender bank name only"
+          },
+          "account": {
+            "name": {
+              "en": "sender-en-only"
+            },
+            "bank": {
+              "account": "S-ACC2"
+            }
+          }
+        },
+        "receiver": {
+          "bank": {
+            "name": "receiver bank name only"
+          },
+          "account": {
+            "name": {
+              "en": "receiver-en-only"
+            },
+            "proxy": {
+              "account": "PROMPTPAY-1"
+            }
+          }
+        }
+      }
+    },
+    "raw_response": {
+      "success": true,
+      "data": {
+        "isDuplicate": false,
+        "amountInSlip": 55,
+        "rawSlip": {
+          "transRef": "REF-FALLBACK",
+          "date": "2026-08-10T11:49:34+07:00",
+          "amount": {
+            "amount": 55
+          },
+          "sender": {
+            "bank": {
+              "name": "sender bank name only"
+            },
+            "account": {
+              "name": {
+                "en": "sender-en-only"
+              },
+              "bank": {
+                "account": "S-ACC2"
+              }
+            }
+          },
+          "receiver": {
+            "bank": {
+              "name": "receiver bank name only"
+            },
+            "account": {
+              "name": {
+                "en": "receiver-en-only"
+              },
+              "proxy": {
+                "account": "PROMPTPAY-1"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "v1_success_empty": {
+    "hook_id": "hook1",
+    "slip_provider": "swiftcheck",
+    "transaction_date": "2026-09-02T12:00:00.000Z",
+    "api_status": "success",
+    "trans_ref": "SWIFTCHECK_1788350400000",
+    "sender_account_no": "",
+    "sender_account_name": "",
+    "sender_bank": "",
+    "receiver_account_no": "",
+    "receiver_account_name": "",
+    "receiver_bank": "",
+    "slip_type": "Bank Transfer",
+    "amount": 0,
+    "branch": "Display Name",
+    "internal_content_id": null,
+    "sender_line_user_id": "Uxyz",
+    "raw_content": {
+      "rawSlip": {}
+    },
+    "raw_response": {
+      "success": true,
+      "data": {
+        "rawSlip": {}
+      }
+    }
+  },
+  "v1_receiver_has_both": {
+    "hook_id": "hook1",
+    "slip_provider": "swiftcheck",
+    "transaction_date": "2026-08-11T02:00:00.000Z",
+    "api_status": "success",
+    "trans_ref": "REF-BOTH",
+    "sender_account_no": "S-ACC3",
+    "sender_account_name": "sender-th",
+    "sender_bank": "S",
+    "receiver_account_no": "BANK-WINS",
+    "receiver_account_name": "receiver-th",
+    "receiver_bank": "R",
+    "slip_type": "Bank Transfer",
+    "amount": 77,
+    "branch": "Display Name",
+    "internal_content_id": null,
+    "sender_line_user_id": "Uxyz",
+    "raw_content": {
+      "isDuplicate": false,
+      "amountInSlip": 77,
+      "rawSlip": {
+        "transRef": "REF-BOTH",
+        "date": "2026-08-11T09:00:00+07:00",
+        "amount": {
+          "amount": 77
+        },
+        "sender": {
+          "bank": {
+            "short": "S"
+          },
+          "account": {
+            "name": {
+              "th": "sender-th"
+            },
+            "bank": {
+              "account": "S-ACC3"
+            }
+          }
+        },
+        "receiver": {
+          "bank": {
+            "short": "R"
+          },
+          "account": {
+            "name": {
+              "th": "receiver-th"
+            },
+            "bank": {
+              "account": "BANK-WINS"
+            },
+            "proxy": {
+              "account": "PROXY-LOSES"
+            }
+          }
+        }
+      }
+    },
+    "raw_response": {
+      "success": true,
+      "data": {
+        "isDuplicate": false,
+        "amountInSlip": 77,
+        "rawSlip": {
+          "transRef": "REF-BOTH",
+          "date": "2026-08-11T09:00:00+07:00",
+          "amount": {
+            "amount": 77
+          },
+          "sender": {
+            "bank": {
+              "short": "S"
+            },
+            "account": {
+              "name": {
+                "th": "sender-th"
+              },
+              "bank": {
+                "account": "S-ACC3"
+              }
+            }
+          },
+          "receiver": {
+            "bank": {
+              "short": "R"
+            },
+            "account": {
+              "name": {
+                "th": "receiver-th"
+              },
+              "bank": {
+                "account": "BANK-WINS"
+              },
+              "proxy": {
+                "account": "PROXY-LOSES"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "v2_api_said_no": {
+    "hook_id": "hook1",
+    "transaction_date": "2026-09-02T12:00:00.000Z",
+    "api_status": "failed",
+    "slip_provider": "swiftcheck",
+    "trans_ref": "FAIL_1788350400000",
+    "amount": 0,
+    "internal_content_id": null,
+    "sender_line_user_id": "Uxyz",
+    "raw_response": {
+      "success": false,
+      "message": "nope"
+    }
+  },
+  "v3_call_threw": {
+    "hook_id": "hook1",
+    "transaction_date": "2026-09-02T12:00:00.000Z",
+    "api_status": "failed",
+    "slip_provider": "swiftcheck",
+    "trans_ref": "ERR_1788350400000",
+    "amount": 0,
+    "internal_content_id": null,
+    "sender_line_user_id": "Uxyz",
+    "raw_response": {
+      "error": "boom"
+    },
+    "metadata": {
+      "error_type": "exception",
+      "message": "boom"
+    }
+  }
+}

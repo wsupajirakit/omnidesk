@@ -1,0 +1,425 @@
+{
+  "_readme": "[FEAT-20260802-FLEXVARAPI] Raw sample of the CUSTOMER_PROFILE endpoint (shop-api) — demo account, not a real customer. Single source of truth: อ่านโดย flexVarSpec (ตาราง Template Guidelines), seedTranslationDict, ยาม dictguard และเทส flow ทั้งหมด · เดิมชื่อ flexVarSample.json ตั้งตามผู้อ่านคนแรก เปลี่ยนให้ตรงกับ endpoint role คู่กับ siteRulesSample.json (SITE_RULES) · update: node scripts/flex-vars.js update <file.json>",
+  "data": {
+    "profile": {
+      "web_code": "demo-omnidesk",
+      "line_user_id": "U2e9daca4b8ab5265a21e3ecda626a720",
+      "status": "enable",
+      "line_of_work": "master",
+      "phone": "0955550010",
+      "tier": {
+        "code": "normal",
+        "name": "Normal",
+        "level": 0
+      },
+      "registered_at": "2026-07-17T06:49:24.073507Z",
+      "bank": {
+        "code": "BBL",
+        "account_no": "5864854725",
+        "account_name": "judy"
+      },
+      "truewallet": "",
+      "promotion": {
+        "current_promotion_info": {
+          "agent_id": "00000000-0000-4000-8000-000000000001",
+          "asset_code": "credit",
+          "created_at": 1754550848,
+          "deleted_at": null,
+          "deposit_amount": 50,
+          "desc": "เฉพาะหมวดแฟชั่น",
+          "end_date": 1788109200000,
+          "id": "00000000-0000-4000-8000-000000000002",
+          "img_path": "https://cdn.example.com/cdn-cgi/image/f=auto/SETTING-1754550821.png",
+          "is_cal_cashback": false,
+          "is_view": true,
+          "max_per_user": 10,
+          "max_user": 100,
+          "mtk_code": "",
+          "name": "ซื้อครบ 500 รับ 50 แต้ม ",
+          "promotion_clear": 10,
+          "promotion_config_info": {
+            "act_home_living": 99999,
+            "act_online_activity": 99999,
+            "act_electronics": 99999,
+            "act_gift_card": 99999,
+            "act_collectibles": 99999,
+            "act_fashion": 1,
+            "act_outdoor_activity": 99999,
+            "withdraw_max_amount": 100,
+            "withdraw_min_amount": 0,
+            "withdraw_min_balance": 200
+          },
+          "promotion_info": {
+            "amount_bonus": 50,
+            "balance_amount": 0,
+            "deposit_per_day": 0,
+            "max_bonus": 0,
+            "percent_bonus": 0
+          },
+          "promotion_mode": "fix-deposit",
+          "promotion_type": "forever",
+          "promotion_type_clear": "fix_value",
+          "start_date": 1785430800000,
+          "status": "open",
+          "tier_accepts": [],
+          "activity_volume_open_info": {
+            "act_home_living_open": false,
+            "act_online_activity_open": false,
+            "act_electronics_open": false,
+            "act_gift_card_open": false,
+            "act_collectibles_open": false,
+            "act_fashion_open": true,
+            "act_outdoor_activity_open": false
+          },
+          "updated_at": 1785522958,
+          "use_true_money": false,
+          "withdraw_all_open": true,
+          "withdraw_mode": "wait-approve"
+        },
+        "has_active_promotion": true,
+        "outstanding": {
+          "home_living": 0,
+          "online_activity": 0,
+          "electronics": 0,
+          "gift_card": 0,
+          "collectibles": 0,
+          "fashion": 0,
+          "outdoor_activity": 0,
+          "total": 0
+        },
+        "recent_products": [
+          {
+            "created_at": 1769149835,
+            "product_name": "NetCo",
+            "product_type": "FASHION",
+            "catalog_image_path": "https://thumbnails.example.com/r_net_s/minipuzzle3ne.jpg",
+            "catalog_name": "아메리칸 퍼즐",
+            "updated_at": 1769149835
+          },
+          {
+            "created_at": 1783335488,
+            "product_name": "BRIGHTCO",
+            "product_type": "FASHION",
+            "catalog_image_path": "https://images.example-crm.dev/public/product/nova/du1dw3k4mpcf1.png",
+            "catalog_name": "Nudge Goal Fever",
+            "updated_at": 1783335488
+          },
+          {
+            "created_at": 1785211170,
+            "product_name": "NORTHCO",
+            "product_type": "FASHION",
+            "catalog_image_path": "https://images.example-crm.dev/public/product/pg/2126622.png",
+            "catalog_name": "Tornado Rampage",
+            "updated_at": 1785211170
+          },
+          {
+            "created_at": 1658126992,
+            "product_name": "DELTACO",
+            "product_type": "FASHION",
+            "catalog_image_path": "https://storage.googleapis.com/examplecrma/public/product/dt/estate5x25.png",
+            "catalog_name": "Board Party",
+            "updated_at": 1658126992
+          },
+          {
+            "created_at": 1783932895,
+            "product_name": "NORTHCO",
+            "product_type": "FASHION",
+            "catalog_image_path": "https://images.example-crm.dev/public/product/pg/2090174.png",
+            "catalog_name": "Monkey Party",
+            "updated_at": 1783932895
+          },
+          {
+            "created_at": 1783932895,
+            "product_name": "NORTHCO",
+            "product_type": "FASHION",
+            "catalog_image_path": "https://images.example-crm.dev/public/product/pg/2090174.png",
+            "catalog_name": "Monkey Party",
+            "updated_at": 1783932895
+          },
+          {
+            "created_at": 1711358224,
+            "product_name": "BRIGHTCO",
+            "product_type": "ELECTRONICS",
+            "catalog_image_path": "img.qiangmingbao.net/gameimages/landscape/8d7r1okge7nrk.png",
+            "catalog_name": "Target Hunt: Da Sheng Nao Hai",
+            "updated_at": 1711358224
+          },
+          {
+            "created_at": 1782897443,
+            "product_name": "RedCo",
+            "product_type": "FASHION",
+            "catalog_image_path": "https://shots.example.com/thumbnail/lokisdescendants_med_XL.jpg",
+            "catalog_name": "Loki's Descendants",
+            "updated_at": 1782897443
+          },
+          {
+            "created_at": 1770620299,
+            "product_name": "JoyCo",
+            "product_type": "ELECTRONICS",
+            "catalog_image_path": "https://images.example-crm.dev/public/product/joyco/MINI-TARGET-015.png",
+            "catalog_name": "Circus Top Gift",
+            "updated_at": 1770620299
+          },
+          {
+            "created_at": 1658126992,
+            "product_name": "DELTACO",
+            "product_type": "FASHION",
+            "catalog_image_path": "https://storage.googleapis.com/examplecrma/public/product/dt/egyptian.png",
+            "catalog_name": "Eye Of Egypt",
+            "updated_at": 1658126992
+          }
+        ],
+        "activity_volume_done": {
+          "home_living": 0,
+          "online_activity": 0,
+          "electronics": 0,
+          "gift_card": 0,
+          "collectibles": 0,
+          "fashion": 307.2,
+          "outdoor_activity": 0,
+          "total": 307.2
+        },
+        "activity_volume_required": {
+          "home_living": 9999900,
+          "online_activity": 9999900,
+          "electronics": 9999900,
+          "gift_card": 9999900,
+          "collectibles": 9999900,
+          "fashion": 100,
+          "outdoor_activity": 9999900,
+          "total": 59999500
+        }
+      },
+      "finance": {
+        "balances": [
+          {
+            "amount": 0,
+            "asset_code": "cash",
+            "asset_description": "รับเงินจาก bank",
+            "updated_at": 1785565468
+          },
+          {
+            "amount": 671.37,
+            "asset_code": "credit",
+            "asset_description": "แปลงเงินจาก cash",
+            "updated_at": 1785691527
+          },
+          {
+            "amount": 60,
+            "asset_code": "coin",
+            "asset_description": "ได้รับจากกิจกรรม",
+            "updated_at": 1785691526
+          },
+          {
+            "amount": 0,
+            "asset_code": "diamond",
+            "asset_description": "ได้รับจากกิจกรรม หรือ รอบสะสมแต้ม",
+            "updated_at": 1784270973
+          }
+        ],
+        "bank": {
+          "account_name": "judy",
+          "account_no": "5864854725",
+          "code": "BBL",
+          "name": "ธนาคารกรุงเทพ"
+        },
+        "is_auto_deposit": false,
+        "is_auto_withdraw": true,
+        "total_deposit": 23422,
+        "total_withdraw": 0,
+        "transactions": {
+          "deposit": [
+            {
+              "amount": 50,
+              "date": 1785565456421,
+              "ref_id": "00000000-0000-4000-8000-000000000003",
+              "status": "success",
+              "type": "deposit"
+            },
+            {
+              "amount": 1000,
+              "date": 1785524965356,
+              "ref_id": "00000000-0000-4000-8000-000000000004",
+              "status": "success",
+              "type": "deposit"
+            },
+            {
+              "amount": 50,
+              "date": 1785523072088,
+              "ref_id": "00000000-0000-4000-8000-000000000005",
+              "status": "success",
+              "type": "deposit"
+            },
+            {
+              "amount": 100,
+              "date": 1785521759286,
+              "ref_id": "00000000-0000-4000-8000-000000000006",
+              "status": "success",
+              "type": "deposit"
+            },
+            {
+              "amount": 22222,
+              "date": 1785521415338,
+              "ref_id": "00000000-0000-4000-8000-000000000007",
+              "status": "success",
+              "type": "deposit"
+            }
+          ],
+          "withdraw": [
+            {
+              "amount": 222,
+              "date": 1785565249351,
+              "ref_id": "00000000-0000-4000-8000-000000000008",
+              "status": "wait-approve",
+              "type": "withdraw"
+            },
+            {
+              "amount": 100,
+              "date": 1785525363788,
+              "ref_id": "00000000-0000-4000-8000-000000000009",
+              "status": "wait-approve",
+              "type": "withdraw"
+            }
+          ]
+        },
+        "true_wallet": {
+          "name": "",
+          "number": "",
+          "type": "",
+          "username": ""
+        }
+      },
+      "bonus": {
+        "cashback_history": [
+          {
+            "amount": 0,
+            "date": 1785700867221,
+            "status": "pending"
+          },
+          {
+            "amount": 0,
+            "date": 1785614439521,
+            "status": "cancel"
+          },
+          {
+            "amount": 0,
+            "date": 1785528064999,
+            "status": "cancel"
+          },
+          {
+            "amount": 0,
+            "date": 1785268868867,
+            "status": "cancel"
+          },
+          {
+            "amount": 0,
+            "date": 1785009848224,
+            "status": "cancel"
+          }
+        ],
+        "friend_count": 2,
+        "pending_cashback": 0,
+        "pending_referral_bonus": 85.2,
+        "referral_history": [
+          {
+            "amount": 85.2,
+            "child_mtk_code": "master",
+            "child_mtk_name": "master",
+            "child_phone": "0635550011",
+            "child_user_id": "00000000-0000-4000-8000-000000000010",
+            "date": 1785787247232,
+            "status": "pending"
+          }
+        ]
+      },
+      "activity": {
+        "coin_received": [
+          {
+            "action": "ACTION_COIN_DEPOSIT",
+            "amount": 5,
+            "date": 1785565469738,
+            "note": "ฝากเงิน 50.00 บาท(คำนวนจาก10/ 1 เหรียญ)"
+          },
+          {
+            "action": "ACTION_COIN_DEPOSIT",
+            "amount": 100,
+            "date": 1785565240297,
+            "note": "ฝากเงิน 1000.00 บาท(คำนวนจาก10/ 1 เหรียญ)"
+          },
+          {
+            "action": "ACTION_COIN_DEPOSIT",
+            "amount": 5,
+            "date": 1785523081494,
+            "note": "ฝากเงิน 50.00 บาท(คำนวนจาก10/ 1 เหรียญ)"
+          }
+        ],
+        "coin_spent": [
+          {
+            "action": "ACTION_COIN_SPEND",
+            "amount": 10,
+            "date": 1785691526580,
+            "note": "สุ่มของสมนาคุณรอบสะสมแต้มจำนวน 10 เหรียญ"
+          },
+          {
+            "action": "ACTION_COIN_SPEND",
+            "amount": 10,
+            "date": 1785691508340,
+            "note": "สุ่มของสมนาคุณรอบสะสมแต้มจำนวน 10 เหรียญ"
+          },
+          {
+            "action": "ACTION_COIN_SPEND",
+            "amount": 10,
+            "date": 1785691485575,
+            "note": "สุ่มของสมนาคุณรอบสะสมแต้มจำนวน 10 เหรียญ"
+          },
+          {
+            "action": "ACTION_COIN_SPEND",
+            "amount": 10,
+            "date": 1785691385413,
+            "note": "สุ่มของสมนาคุณรอบสะสมแต้มจำนวน 10 เหรียญ"
+          },
+          {
+            "action": "ACTION_COIN_SPEND",
+            "amount": 10,
+            "date": 1785691361883,
+            "note": "สุ่มของสมนาคุณรอบสะสมแต้มจำนวน 10 เหรียญ"
+          }
+        ],
+        "point_round_history": [
+          {
+            "date": 1785691526495,
+            "note": "ได้รับของสมนาคุณจำนวน 20 เครดิต",
+            "reward_amount": 20,
+            "reward_type": "credit"
+          },
+          {
+            "date": 1785691508246,
+            "note": "ได้รับของสมนาคุณจำนวน 20 เครดิต",
+            "reward_amount": 20,
+            "reward_type": "credit"
+          },
+          {
+            "date": 1785691485480,
+            "note": "ได้รับของสมนาคุณจำนวน 20 เครดิต",
+            "reward_amount": 20,
+            "reward_type": "credit"
+          },
+          {
+            "date": 1785691385319,
+            "note": "ได้รับของสมนาคุณจำนวน 20 เครดิต",
+            "reward_amount": 20,
+            "reward_type": "credit"
+          },
+          {
+            "date": 1785691361553,
+            "note": "ได้รับของสมนาคุณจำนวน 20 เครดิต",
+            "reward_amount": 20,
+            "reward_type": "credit"
+          }
+        ],
+        "point_round_tickets": null
+      }
+    }
+  },
+  "success": true
+}

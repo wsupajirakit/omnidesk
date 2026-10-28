@@ -1,0 +1,69 @@
+{
+  "api_endpoints": [
+    {
+      "name": "Contract API",
+      "method": "POST",
+      "url": "https://x.x.x/api/line/v1/contract.php",
+      "headers": {
+        "Authorization": "Bearer {{access_token}}"
+      },
+      "body": {
+        "type": "form-data",
+        "fields": {
+          "userid":  "{{lineuserid}}"
+        }
+      }
+    },
+    {
+      "name": "Payment History API",
+      "method": "POST",
+      "url": "https://x.x.x/api/line/v1/payment_history.php",
+      "headers": {
+        "Authorization": "Bearer {{access_token}}"
+      },
+      "body": {
+        "type": "form-data",
+        "fields": {
+          "userid":  "{{lineuserid}}"
+        }
+      }
+    },
+    {
+      "name": "Installment API",
+      "method": "POST",
+      "url": "https://x.x.x/api/line/v1/installment.php",
+      "headers": {
+        "Authorization": "Bearer {{access_token}}"
+      },
+      "body": {
+        "type": "form-data",
+        "fields": {
+          "userid":  "{{lineuserid}}"
+        }
+      }
+    },
+    {
+      "name": "Installment Current API",
+      "method": "POST",
+      "url": "https://x.x.x/api/line/v1/installment_current.php",
+      "headers": {
+        "Authorization": "Bearer {{access_token}}"
+      },
+      "body": {
+        "type": "form-data",
+        "fields": {
+          "userid": "{{lineuserid}}"
+        }
+      }
+    },
+    {
+      "name": "Customer Profile API",
+      "method": "GET",
+      "url": "https://x.x.x/api/v1/customer/{{lineuserid}}",
+      "headers": {
+        "Authorization": "Bearer {{access_token}}"
+      },
+      "body": null
+    }
+  ]
+}

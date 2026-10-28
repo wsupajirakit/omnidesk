@@ -1,0 +1,1041 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="https://vitejs.dev/logo.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>dashboard</title>
+    <!-- ==== [FIX-20260729-TWBUILD] Tailwind moved out of the browser
+         🔒 AUTO track — to_dev_auto branch only
+
+         This used to load the Tailwind CDN build plus an inline tailwind.config
+         object holding the theme.
+
+         That CDN build is the JIT compiler: every visitor downloaded it and their
+         browser compiled the whole stylesheet on each page load, blocking first
+         paint. The browser warns about it directly ("cdn.tailwindcss.com should
+         not be used in production"), and it is the main reason /ticket-support
+         felt slow while every API call answered in ~0.09s.
+
+         Tailwind is now compiled at build time. The theme that lived in the
+         config object above now lives in index.css (@theme), imported from
+         index.tsx. Add new colours/breakpoints there — not here.
+         revert: see the block comment at the top of index.css -->
+    <!-- [FEAT-20260801-CHATFONT] เพิ่ม Sarabun เข้าไปในลิงก์เดิม (ไม่ได้เพิ่ม request ใหม่)
+         Google Fonts เรียกฟอนต์ตระกูล "TH Sarabun" ว่า Sarabun เฉย ๆ — ตัวเดียวกัน
+         โหลด 400/500/600/700 เพราะข้อความในแชทมีทั้งปกติและตัวหนา (บอทตอบด้วย **มาร์กดาวน์**)
+         revert: เอา &family=Sarabun:wght@400;500;600;700 ออกจาก URL -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Kanit:wght@300;400;500;600&family=Sarabun:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+      body {
+        background-color: #D5DBE3;
+        color: #1E293B;
+      }
+      /* ===== GLOBAL Light-mode surface/border/text overrides ===== */
+      html:not(.theme-dark) body,
+      html:not(.theme-dark) .bg-dark-900 {
+        background-color: #D5DBE3 !important;
+        color: #1E293B !important;
+      }
+      html:not(.theme-dark) .bg-white,
+      html:not(.theme-dark) .bg-dark-800 {
+        background-color: #EDF1F6 !important;
+      }
+      /* Datatable Headers in Light Mode — same bright light color (#EDF1F6) as datatable card container */
+      html:not(.theme-dark) table thead,
+      html:not(.theme-dark) table thead tr,
+      html:not(.theme-dark) table thead th,
+      html:not(.theme-dark) table thead tr th {
+        background-color: #EDF1F6 !important;
+        color: #475569 !important;
+        border-bottom-color: #DCE3EC !important;
+      }
+      html:not(.theme-dark) table tbody tr {
+        background-color: #EDF1F6 !important;
+      }
+      html:not(.theme-dark) table tbody tr:hover {
+        background-color: #E6ECF2 !important;
+      }
+      html:not(.theme-dark) .bg-slate-50,
+      html:not(.theme-dark) .bg-gray-50,
+      html:not(.theme-dark) .bg-slate-100,
+      html:not(.theme-dark) .bg-gray-100,
+      html:not(.theme-dark) .bg-slate-200,
+      html:not(.theme-dark) .bg-gray-200,
+      html:not(.theme-dark) .bg-dark-700 {
+        background-color: #E0E6ED !important;
+      }
+      html:not(.theme-dark) .hover\:bg-gray-100:hover,
+      html:not(.theme-dark) .hover\:bg-slate-100:hover {
+        background-color: #E8EEF5 !important;
+      }
+      html:not(.theme-dark) input,
+      html:not(.theme-dark) select,
+      html:not(.theme-dark) textarea {
+        background-color: #E2E8F0 !important;
+        border-color: #DCE3EC !important;
+        color: #1E293B !important;
+      }
+      /* [UI-20260828-BORDERCLEAR] Owner, 28/08: *"border ทุกตัวให้ชัด"*.
+         #DCE3EC sat one step off the #EDF1F6 card surface — about 1.06:1 — so in
+         the light theme an unselected card read as empty space rather than as a
+         thing you can click. The owner sent two screenshots of the broadcast
+         form making exactly that point.
+
+         🔴 THIS IS THE ONLY PLACE WORTH CHANGING, and the reason is the `.border`
+            selector on the first line: it matches the bare Tailwind `border`
+            utility, so in the light theme EVERY bordered element lands here with
+            `!important` no matter what colour class sits beside it. Editing a
+            component to say `border-slate-400` changes nothing — the repeat-mode
+            pills already ask for `border-slate-700` (#334155, nearly black) and
+            still render as pale grey. One component-level "fix" was written and
+            reverted after this was measured; do not write another.
+            แก้ที่คอมโพเนนต์ไม่ขยับ กฎนี้ทับด้วย !important — ต้องแก้ตรงนี้ที่เดียว
+
+         #B4C0D0 keeps the same cool grey family, still recedes behind the green
+         "chosen" states, and is plainly visible on #EDF1F6 and #E0E6ED alike.
+
+         ⚠️ Light theme only. The dark theme has its own values further down
+            (`html.theme-dark .border-dark-700`) and is deliberately untouched.
+         revert: put #DCE3EC back — every light-theme border fades to the old
+         value in one edit. */
+      html:not(.theme-dark) .border,
+      html:not(.theme-dark) .border-slate-100,
+      html:not(.theme-dark) .border-slate-200,
+      html:not(.theme-dark) .border-slate-300,
+      html:not(.theme-dark) .border-gray-200,
+      html:not(.theme-dark) .border-dark-700 {
+        border-color: #B4C0D0 !important;
+      }
+      html:not(.theme-dark) .text-slate-900,
+      html:not(.theme-dark) .text-slate-800,
+      html:not(.theme-dark) .text-slate-700 {
+        color: #1E293B !important;
+      }
+      html:not(.theme-dark) .text-gray-500,
+      html:not(.theme-dark) .text-slate-500,
+      html:not(.theme-dark) .text-gray-400 {
+        color: #475569 !important;
+      }
+      html.theme-dark body {
+        background-color: #0a0f1f;
+        color: #e5e7eb;
+        background-image: radial-gradient(1200px 600px at 20% -10%, rgba(65, 99, 245, 0.15), transparent 60%);
+      }
+      html.theme-dark .bg-dark-900 {
+        background-color: #0b1022 !important;
+      }
+      html.theme-dark .bg-dark-800 {
+        background-color: #0f1a33 !important;
+      }
+      html.theme-dark .bg-dark-700 {
+        background-color: #132042 !important;
+      }
+      html.theme-dark .bg-dark-600 {
+        background-color: #1a2a52 !important;
+      }
+      /* [FIX-20260801-CHATFONTPARSE] เดิมบรรทัดนี้เขียน "bg-dark-" ดาว ทับด้วย /opacity
+         ติดกัน → กลายเป็นเครื่องหมายปิดคอมเมนต์กลางประโยค ปิดคอมเมนต์ตั้งแต่ตรงนั้น
+         ข้อความที่เหลือจึงเป็นขยะกลาง CSS และกลืน rule ถัดไป (.bg-dark-700/30)
+         หายไปเงียบๆ — เว้นวรรคคั่นแล้ว rule นั้นกลับมาทำงาน
+         All bg-dark-* opacity variants the app uses. Without these the custom
+         dark-* palette (which is LIGHT by design: 800=#fff, 700=#e5e7eb) shows
+         through at partial opacity as washed-out grey/white in dark mode (e.g.
+         the Edit User permission + OA boxes). Map every used variant to the dark
+         panel colours. dark-700 → #14213f, dark-800 → #0f1a33, dark-900 → #0b1022,
+         dark-950 → #070c1a. */
+      html.theme-dark .bg-dark-700\/30 { background-color: rgba(20, 33, 63, 0.30) !important; }
+      html.theme-dark .bg-dark-700\/50 { background-color: rgba(20, 33, 63, 0.50) !important; }
+      html.theme-dark .bg-dark-700\/60 { background-color: rgba(20, 33, 63, 0.60) !important; }
+      html.theme-dark .bg-dark-800\/40 { background-color: rgba(15, 26, 51, 0.40) !important; }
+      html.theme-dark .bg-dark-800\/50 { background-color: rgba(15, 26, 51, 0.50) !important; }
+      html.theme-dark .bg-dark-800\/70 { background-color: rgba(15, 26, 51, 0.70) !important; }
+      html.theme-dark .bg-dark-800\/80 { background-color: rgba(15, 26, 51, 0.80) !important; }
+      html.theme-dark .bg-dark-900\/10 { background-color: rgba(11, 16, 34, 0.10) !important; }
+      html.theme-dark .bg-dark-900\/20 { background-color: rgba(11, 16, 34, 0.20) !important; }
+      html.theme-dark .bg-dark-900\/30 { background-color: rgba(11, 16, 34, 0.30) !important; }
+      html.theme-dark .bg-dark-900\/40 { background-color: rgba(11, 16, 34, 0.40) !important; }
+      html.theme-dark .bg-dark-900\/50 { background-color: rgba(11, 16, 34, 0.50) !important; }
+      html.theme-dark .bg-dark-900\/60 { background-color: rgba(11, 16, 34, 0.60) !important; }
+      html.theme-dark .bg-dark-900\/80 { background-color: rgba(11, 16, 34, 0.80) !important; }
+      html.theme-dark .bg-dark-900\/90 { background-color: rgba(11, 16, 34, 0.90) !important; }
+      html.theme-dark .bg-dark-950\/20 { background-color: rgba(7, 12, 26, 0.20) !important; }
+      html.theme-dark .bg-dark-950\/40 { background-color: rgba(7, 12, 26, 0.40) !important; }
+      html.theme-dark .bg-dark-950\/60 { background-color: rgba(7, 12, 26, 0.60) !important; }
+      html.theme-dark .bg-dark-950\/80 { background-color: rgba(7, 12, 26, 0.80) !important; }
+      html.theme-dark .bg-dark-950\/90 { background-color: rgba(7, 12, 26, 0.90) !important; }
+      html.theme-dark .border-dark-700 {
+        border-color: #1b2a52 !important;
+      }
+      html.theme-dark .border-dark-600 {
+        border-color: #223461 !important;
+      }
+      html.theme-dark .text-slate-900 {
+        color: #e6edf8 !important;
+      }
+      html.theme-dark .text-slate-700 {
+        color: #c7d2f2 !important;
+      }
+      html.theme-dark .text-slate-600 {
+        color: #97a7c6 !important;
+      }
+      html.theme-dark .text-slate-500 {
+        color: #8da0c5 !important;
+      }
+      html.theme-dark .text-slate-400 {
+        color: #8da0c5 !important;
+      }
+      html.theme-dark .sidebar-link {
+        border: 1px solid transparent;
+      }
+      html.theme-dark .sidebar-link:hover {
+        background-color: #1a2548 !important;
+        border-color: #2b3d6b !important;
+        box-shadow: 0 6px 14px rgba(6, 12, 26, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.04);
+        color: #e6edf8 !important;
+      }
+      html.theme-dark .sidebar-link-active {
+        background-color: rgba(6, 199, 85, 0.14) !important;
+        border-color: rgba(6, 199, 85, 0.35) !important;
+        box-shadow: 0 8px 18px rgba(6, 12, 26, 0.65), inset 0 1px 0 rgba(6, 199, 85, 0.2);
+        color: #b7f5d4 !important;
+      }
+      html.theme-dark .sidebar-link svg {
+        color: #7f92ba;
+      }
+      html.theme-dark .sidebar-link:hover svg,
+      html.theme-dark .sidebar-link-active svg {
+        color: #6ee7a8;
+      }
+      .sidebar-link {
+        border: 1px solid transparent;
+      }
+      .sidebar-link:hover {
+        background-color: #dcfce7;
+        border-color: #86efac;
+        box-shadow: 0 8px 16px rgba(22, 163, 74, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.7);
+        color: #0f172a;
+      }
+      .sidebar-link:hover svg {
+        color: #16a34a;
+      }
+      html.theme-dark table thead tr {
+        background-color: #0f1a33 !important;
+      }
+      html.theme-dark table tbody tr {
+        background-color: #111f3d !important;
+      }
+      html.theme-dark table tbody tr:hover {
+        background-color: #14264a !important;
+      }
+      html.theme-dark table tbody tr + tr {
+        border-top-color: #1f2d55 !important;
+      }
+      html.theme-dark table thead tr th {
+        color: #9fb0d1 !important;
+      }
+      html.theme-dark .demo-chat .bg-slate-100 {
+        background-color: #0f1a33 !important;
+      }
+      html.theme-dark .demo-chat .bg-white {
+        background-color: #0b1022 !important;
+      }
+      html.theme-dark .demo-chat .border-slate-200 {
+        border-color: #1f2b4f !important;
+      }
+      html.theme-dark .demo-chat .text-slate-800 {
+        color: #e6edf8 !important;
+      }
+      html.theme-dark .demo-chat .text-slate-700 {
+        color: #c7d2f2 !important;
+      }
+      html.theme-dark .demo-chat .text-slate-600 {
+        color: #9fb0d1 !important;
+      }
+      html.theme-dark .demo-chat .text-slate-500 {
+        color: #8da0c5 !important;
+      }
+      html.theme-dark .demo-chat .text-slate-400 {
+        color: #8da0c5 !important;
+      }
+      /* Custom Scrollbar for Light Theme */
+      ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #e5e7eb; 
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #cbd5e1; 
+        border-radius: 4px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #94a3b8; 
+      }
+      html.theme-dark ::-webkit-scrollbar-track {
+        background: #0f1a33; 
+      }
+      html.theme-dark ::-webkit-scrollbar-thumb {
+        background: #263a6a; 
+      }
+      html.theme-dark ::-webkit-scrollbar-thumb:hover {
+        background: #2f4680; 
+      }
+      /* Large Scrollbar Utility */
+      .large-scrollbar::-webkit-scrollbar {
+        width: 12px;
+        height: 12px;
+      }
+      .large-scrollbar::-webkit-scrollbar-thumb {
+        border-radius: 6px;
+      }
+      /* Disable Tailwind space reverse variables */
+      * {
+        --tw-flex flex-col gap-reverse: 0 !important;
+        --tw-flex gap-reverse: 0 !important;
+      }
+      @keyframes slideInRight {
+        from {
+          transform: translateX(120%) scale(0.9);
+          opacity: 0;
+        }
+        to {
+          transform: translateX(0) scale(1);
+          opacity: 1;
+        }
+      }
+      .animate-slide-in-right {
+        animation: slideInRight 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+      }
+
+      /* ===== GLOBAL dark-mode surface/border/text overrides =====
+         The pages are built from light Tailwind utilities (bg-white, bg-slate-50,
+         border-slate-200, text-slate-800, …). The theme-dark block above only
+         recolored a few text utilities, so every card/modal/list stayed light in
+         dark mode. These rules recolor the surface/border/text utilities globally
+         (same palette as the dark dashboard: #0f1a33 panel, #0b1022 deep,
+         #1b2a52 border) so all pages go dark at once. Page-scoped blocks (.tc,
+         .demo-chat) still win where they set their own palette. */
+      /* surfaces */
+      html.theme-dark .bg-white { background-color: #0f1a33 !important; }
+      html.theme-dark .bg-slate-50,
+      html.theme-dark .bg-gray-50 { background-color: #0d1730 !important; }
+      html.theme-dark .bg-slate-100,
+      html.theme-dark .bg-gray-100 { background-color: #14213f !important; }
+      html.theme-dark .bg-slate-200,
+      html.theme-dark .bg-gray-200 { background-color: #1a2a4d !important; }
+      /* Opacity variants (bg-white/45, bg-slate-50/60, …). Tailwind's `dark:`
+         utilities are dead here (darkMode keys off .dark, app toggles
+         .theme-dark), so light surfaces at partial opacity showed as washed-out
+         grey (e.g. BulkClone row cards `bg-slate-50/60`). Attribute selectors
+         recolour every opacity step at once, keeping the requested alpha. */
+      html.theme-dark [class*="bg-white/"] { background-color: rgba(15, 26, 51, 0.55) !important; }
+      html.theme-dark [class*="bg-slate-50/"],
+      html.theme-dark [class*="bg-gray-50/"] { background-color: rgba(13, 23, 48, 0.55) !important; }
+      html.theme-dark [class*="bg-slate-100/"],
+      html.theme-dark [class*="bg-gray-100/"] { background-color: rgba(20, 33, 63, 0.55) !important; }
+      html.theme-dark [class*="bg-slate-200/"],
+      html.theme-dark [class*="bg-gray-200/"] { background-color: rgba(26, 42, 77, 0.55) !important; }
+      /* borders */
+      html.theme-dark .border-white,
+      html.theme-dark .border-slate-100,
+      html.theme-dark .border-slate-200,
+      html.theme-dark .border-slate-300,
+      html.theme-dark .border-gray-50,
+      html.theme-dark .border-gray-100,
+      html.theme-dark .border-gray-200,
+      html.theme-dark .border-gray-300 { border-color: #1f2b4f !important; }
+      /* text utilities not covered above */
+      html.theme-dark .text-slate-800,
+      html.theme-dark .text-gray-800,
+      html.theme-dark .text-gray-900 { color: #e6edf8 !important; }
+      html.theme-dark .text-gray-700,
+      html.theme-dark .text-gray-600 { color: #c7d2f2 !important; }
+      html.theme-dark .text-slate-300,
+      html.theme-dark .text-gray-500,
+      html.theme-dark .text-gray-400,
+      html.theme-dark .text-gray-300 { color: #9fb0d1 !important; }
+      /* form controls */
+      html.theme-dark input,
+      html.theme-dark select,
+      html.theme-dark textarea { background-color: #14213f !important; border-color: #1f2b4f !important; color: #e6edf8 !important; }
+      html.theme-dark input::placeholder,
+      html.theme-dark textarea::placeholder { color: #7f92ba !important; }
+      html.theme-dark select option { background: #0f1a33; color: #e6edf8; }
+      /* soft accent tints stay readable on dark */
+      html.theme-dark .bg-blue-50 { background-color: rgba(96,132,247,0.14) !important; }
+      html.theme-dark .bg-primary-50,
+      html.theme-dark .bg-primary-light { background-color: rgba(6,199,85,0.12) !important; }
+      html.theme-dark .bg-indigo-50 { background-color: rgba(99,102,241,0.14) !important; }
+      html.theme-dark .bg-emerald-50 { background-color: rgba(16,185,129,0.14) !important; }
+      /* gradient colour stops — the global bg-* overrides don't touch
+         --tw-gradient-from/to, so `from-white to-slate-50` cards stayed light on
+         dark (Insight Report). Recolor the light stops to dark surfaces. */
+      html.theme-dark .from-white { --tw-gradient-from: #0f1a33 var(--tw-gradient-from-position) !important; --tw-gradient-to: rgba(15,26,51,0) var(--tw-gradient-to-position) !important; --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to) !important; }
+      html.theme-dark .to-white { --tw-gradient-to: #0f1a33 var(--tw-gradient-to-position) !important; }
+      html.theme-dark .from-slate-50,
+      html.theme-dark .from-gray-50 { --tw-gradient-from: #0d1730 var(--tw-gradient-from-position) !important; --tw-gradient-to: rgba(13,23,48,0) var(--tw-gradient-to-position) !important; --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to) !important; }
+      html.theme-dark .to-slate-50,
+      html.theme-dark .to-gray-50 { --tw-gradient-to: #0d1730 var(--tw-gradient-to-position) !important; }
+
+      /* ===== Brand tints — solid -50 / -100 badge & alert fills =====
+         Light coloured surfaces (bg-red-50, bg-emerald-100, …) that the base
+         overrides above don't touch. Recolour to a low-alpha brand tint so the
+         badge keeps its hue but sits on the dark panel. */
+      html.theme-dark .bg-red-50     { background-color: rgba(239,68,68,0.14) !important; }
+      html.theme-dark .bg-orange-50  { background-color: rgba(249,115,22,0.14) !important; }
+      html.theme-dark .bg-amber-50   { background-color: rgba(245,158,11,0.14) !important; }
+      html.theme-dark .bg-yellow-50  { background-color: rgba(234,179,8,0.14) !important; }
+      html.theme-dark .bg-green-50   { background-color: rgba(34,197,94,0.14) !important; }
+      html.theme-dark .bg-teal-50    { background-color: rgba(20,184,166,0.14) !important; }
+      html.theme-dark .bg-cyan-50    { background-color: rgba(6,182,212,0.14) !important; }
+      html.theme-dark .bg-sky-50     { background-color: rgba(14,165,233,0.14) !important; }
+      html.theme-dark .bg-purple-50  { background-color: rgba(168,85,247,0.14) !important; }
+      html.theme-dark .bg-violet-50  { background-color: rgba(139,92,246,0.14) !important; }
+      html.theme-dark .bg-fuchsia-50 { background-color: rgba(217,70,239,0.14) !important; }
+      html.theme-dark .bg-pink-50    { background-color: rgba(236,72,153,0.14) !important; }
+      html.theme-dark .bg-rose-50    { background-color: rgba(244,63,94,0.14) !important; }
+      html.theme-dark .bg-lime-50    { background-color: rgba(132,204,22,0.14) !important; }
+      html.theme-dark .bg-red-100     { background-color: rgba(239,68,68,0.20) !important; }
+      html.theme-dark .bg-orange-100  { background-color: rgba(249,115,22,0.20) !important; }
+      html.theme-dark .bg-amber-100   { background-color: rgba(245,158,11,0.20) !important; }
+      html.theme-dark .bg-yellow-100  { background-color: rgba(234,179,8,0.20) !important; }
+      html.theme-dark .bg-green-100   { background-color: rgba(34,197,94,0.20) !important; }
+      html.theme-dark .bg-emerald-100 { background-color: rgba(16,185,129,0.20) !important; }
+      html.theme-dark .bg-teal-100    { background-color: rgba(20,184,166,0.20) !important; }
+      html.theme-dark .bg-cyan-100    { background-color: rgba(6,182,212,0.20) !important; }
+      html.theme-dark .bg-sky-100     { background-color: rgba(14,165,233,0.20) !important; }
+      html.theme-dark .bg-blue-100    { background-color: rgba(59,130,246,0.20) !important; }
+      html.theme-dark .bg-indigo-100  { background-color: rgba(99,102,241,0.20) !important; }
+      html.theme-dark .bg-purple-100  { background-color: rgba(168,85,247,0.20) !important; }
+      html.theme-dark .bg-violet-100  { background-color: rgba(139,92,246,0.20) !important; }
+      html.theme-dark .bg-fuchsia-100 { background-color: rgba(217,70,239,0.20) !important; }
+      html.theme-dark .bg-pink-100    { background-color: rgba(236,72,153,0.20) !important; }
+      html.theme-dark .bg-rose-100    { background-color: rgba(244,63,94,0.20) !important; }
+      html.theme-dark .bg-lime-100    { background-color: rgba(132,204,22,0.20) !important; }
+      html.theme-dark .bg-primary-100 { background-color: rgba(6,199,85,0.20) !important; }
+      html.theme-dark .bg-green-200, html.theme-dark .bg-emerald-200,
+      html.theme-dark .bg-red-200, html.theme-dark .bg-amber-200,
+      html.theme-dark .bg-indigo-200, html.theme-dark .bg-yellow-200 { background-color: rgba(120,140,170,0.18) !important; }
+
+      /* ===== Coloured opacity variants (bg-<brand>-<step>/<n>) =====
+         Attribute selectors so every /10 /20 /50 … step is caught at once. The
+         requested alpha is dropped (a flat tint), which is fine for badges/hover
+         fills. Covers the biggest gap (emerald-500/10 ×43, primary-500/10 ×32…). */
+      html.theme-dark [class*="bg-emerald-500/"], html.theme-dark [class*="bg-emerald-600/"] { background-color: rgba(16,185,129,0.16) !important; }
+      html.theme-dark [class*="bg-primary-500/"], html.theme-dark [class*="bg-primary-600/"] { background-color: rgba(6,199,85,0.16) !important; }
+      html.theme-dark [class*="bg-red-500/"], html.theme-dark [class*="bg-red-600/"] { background-color: rgba(239,68,68,0.16) !important; }
+      html.theme-dark [class*="bg-blue-500/"], html.theme-dark [class*="bg-blue-600/"] { background-color: rgba(59,130,246,0.16) !important; }
+      html.theme-dark [class*="bg-amber-500/"], html.theme-dark [class*="bg-amber-600/"] { background-color: rgba(245,158,11,0.16) !important; }
+      html.theme-dark [class*="bg-orange-500/"] { background-color: rgba(249,115,22,0.16) !important; }
+      html.theme-dark [class*="bg-yellow-500/"] { background-color: rgba(234,179,8,0.16) !important; }
+      html.theme-dark [class*="bg-pink-500/"] { background-color: rgba(236,72,153,0.16) !important; }
+      html.theme-dark [class*="bg-purple-500/"] { background-color: rgba(168,85,247,0.16) !important; }
+      html.theme-dark [class*="bg-indigo-500/"] { background-color: rgba(99,102,241,0.16) !important; }
+      html.theme-dark [class*="bg-violet-500/"] { background-color: rgba(139,92,246,0.16) !important; }
+      html.theme-dark [class*="bg-sky-400/"], html.theme-dark [class*="bg-sky-500/"] { background-color: rgba(14,165,233,0.16) !important; }
+      html.theme-dark [class*="bg-slate-500/"], html.theme-dark [class*="bg-slate-600/"] { background-color: rgba(100,116,139,0.16) !important; }
+      /* uncovered -50/-100 opacity steps for non-slate colours */
+      html.theme-dark [class*="bg-emerald-50/"] { background-color: rgba(16,185,129,0.12) !important; }
+      html.theme-dark [class*="bg-emerald-100/"] { background-color: rgba(16,185,129,0.18) !important; }
+      html.theme-dark [class*="bg-blue-50/"] { background-color: rgba(59,130,246,0.12) !important; }
+      html.theme-dark [class*="bg-indigo-50/"] { background-color: rgba(99,102,241,0.12) !important; }
+      html.theme-dark [class*="bg-purple-50/"] { background-color: rgba(168,85,247,0.12) !important; }
+      html.theme-dark [class*="bg-orange-50/"] { background-color: rgba(249,115,22,0.12) !important; }
+      html.theme-dark [class*="bg-yellow-50/"] { background-color: rgba(234,179,8,0.12) !important; }
+      html.theme-dark [class*="bg-primary-50/"] { background-color: rgba(6,199,85,0.12) !important; }
+      html.theme-dark [class*="bg-primary-100/"] { background-color: rgba(6,199,85,0.18) !important; }
+
+      /* ===== Brand gradient stops (from-/to-/via-) =====
+         Only from/to-white & slate-50 were handled. Recolour the rest so stat/
+         channel cards (Dashboard, InsightReport) aren't light gradients on dark. */
+      html.theme-dark [class*="from-blue-"] { --tw-gradient-from: rgba(59,130,246,0.18) var(--tw-gradient-from-position) !important; --tw-gradient-to: rgba(59,130,246,0) var(--tw-gradient-to-position) !important; --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to) !important; }
+      html.theme-dark [class*="from-emerald-"] { --tw-gradient-from: rgba(16,185,129,0.18) var(--tw-gradient-from-position) !important; --tw-gradient-to: rgba(16,185,129,0) var(--tw-gradient-to-position) !important; --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to) !important; }
+      html.theme-dark [class*="from-pink-"] { --tw-gradient-from: rgba(236,72,153,0.18) var(--tw-gradient-from-position) !important; --tw-gradient-to: rgba(236,72,153,0) var(--tw-gradient-to-position) !important; --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to) !important; }
+      html.theme-dark [class*="from-amber-"], html.theme-dark [class*="from-orange-"] { --tw-gradient-from: rgba(245,158,11,0.18) var(--tw-gradient-from-position) !important; --tw-gradient-to: rgba(245,158,11,0) var(--tw-gradient-to-position) !important; --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to) !important; }
+      html.theme-dark [class*="from-sky-"] { --tw-gradient-from: rgba(14,165,233,0.18) var(--tw-gradient-from-position) !important; --tw-gradient-to: rgba(14,165,233,0) var(--tw-gradient-to-position) !important; --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to) !important; }
+      html.theme-dark [class*="from-violet-"], html.theme-dark [class*="from-purple-"] { --tw-gradient-from: rgba(139,92,246,0.18) var(--tw-gradient-from-position) !important; --tw-gradient-to: rgba(139,92,246,0) var(--tw-gradient-to-position) !important; --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to) !important; }
+      html.theme-dark [class*="from-primary-"] { --tw-gradient-from: rgba(6,199,85,0.20) var(--tw-gradient-from-position) !important; --tw-gradient-to: rgba(6,199,85,0) var(--tw-gradient-to-position) !important; --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to) !important; }
+      html.theme-dark [class*="from-slate-700"], html.theme-dark [class*="from-slate-800"], html.theme-dark [class*="from-slate-900"] { --tw-gradient-from: #14213f var(--tw-gradient-from-position) !important; --tw-gradient-to: rgba(20,33,63,0) var(--tw-gradient-to-position) !important; --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to) !important; }
+
+      /* ===== Hardcoded light hex ===== */
+      html.theme-dark .bg-\[\#ebebed\] { background-color: #0d1730 !important; }
+      html.theme-dark .bg-\[\#f0f2f5\] { background-color: #1f2733 !important; }
+
+      /* text-black → light (rare, but breaks on dark) */
+      html.theme-dark .text-black { color: #e6edf8 !important; }
+
+      /* Mega-menu item states — own colours so the global bg overrides above
+         don't wash them out. Hover = neutral grey; active = clearer light green. */
+      .mm-item:hover { background-color: #f1f5f9; }               /* slate-100 */
+      .mm-item.mm-item-active { background-color: #dcfce7; }       /* green-100 */
+      html.theme-dark .mm-item:hover { background-color: rgba(255,255,255,0.06) !important; }
+      html.theme-dark .mm-item.mm-item-active { background-color: rgba(6,199,85,0.20) !important; }
+      /* Mega-menu top-bar buttons (parents): grey hover, light-green active. */
+      .mm-parent:hover { background-color: #f1f5f9; }
+      .mm-parent.mm-parent-active { background-color: #dcfce7; }
+      html.theme-dark .mm-parent:hover { background-color: rgba(255,255,255,0.06) !important; }
+      html.theme-dark .mm-parent.mm-parent-active { background-color: rgba(6,199,85,0.20) !important; }
+
+      /* ===== Ticket+Chat page — dark "comfort" palette =====
+         The page is built with light Tailwind utilities (light theme = default).
+         Dark mode reuses the same theme-dark toggle and overrides those utilities
+         with the reference mockup's palette (omnichannel_chat_interface_dark_comfort.html):
+         "dark เขา = dark เรา". Scoped to .tc so it never leaks to other pages. */
+      .tc {
+        --tc-bg: #1f2633;
+        --tc-panel: #26303d;
+        --tc-panel-2: #2b3544;
+        --tc-surface: #313d4e;
+        --tc-surface-soft: #39475a;
+        --tc-border-soft: #46556b;
+        --tc-text-main: #e7edf7;
+        --tc-text-soft: #cad3e2;
+        --tc-text-muted: #9eabc0;
+        --tc-accent: #7aa2f7;
+        --tc-accent-soft: rgba(122,162,247,0.16);
+        --tc-accent-strong: #5f8ef3;
+      }
+      /* Light mode .tc overrides for ticket-support page */
+      html:not(.theme-dark) .tc {
+        background-color: #D5DBE3;
+      }
+      html:not(.theme-dark) .tc-col-left,
+      html:not(.theme-dark) .tc-col-right {
+        background-color: #EDF1F6 !important;
+      }
+      html:not(.theme-dark) .tc-col-center {
+        background-color: #E6ECF2 !important;
+      }
+      /* Right Panel Tab Bar & Inactive Tabs */
+      html:not(.theme-dark) .tc-col-right > div:first-child,
+      html:not(.theme-dark) .tc-col-right .bg-gray-50,
+      html:not(.theme-dark) .tc-col-right .bg-slate-50 {
+        background-color: #E2E8F0 !important;
+        border-color: #DCE3EC !important;
+      }
+      html:not(.theme-dark) .tc-col-right button:not(.text-primary) {
+        background-color: #E2E8F0 !important;
+        color: #475569 !important;
+      }
+      html:not(.theme-dark) .tc-col-right button:not(.text-primary):hover {
+        background-color: #E8EEF5 !important;
+        color: #1E293B !important;
+      }
+      html:not(.theme-dark) .tc-col-right button.text-primary {
+        background-color: #EDF1F6 !important;
+        color: #2563eb !important;
+        border-color: #2563eb !important;
+      }
+
+      /* column backgrounds */
+      html.theme-dark .tc { background: var(--tc-bg); color: var(--tc-text-main); }
+      html.theme-dark .tc-col-left,
+      html.theme-dark .tc-col-right { background: #242d3a !important; }
+      html.theme-dark .tc-col-center { background: #1f2733 !important; }
+      /* edge collapse/expand handles — translucent, themed to the panel surface,
+         big hit area. Dark theme: darker glass + light glyph. */
+      html.theme-dark .tc .tc-edge-handle {
+        background: rgba(42,52,66,0.72) !important;
+        border-color: rgba(70,85,107,0.6) !important;
+        color: var(--tc-text-soft) !important;
+      }
+      html.theme-dark .tc .tc-edge-handle:hover {
+        background: #2a3442 !important;
+        color: var(--tc-accent) !important;
+      }
+      html.theme-dark .tc-chat-history { background: #202937 !important; }
+      /* text tones */
+      html.theme-dark .tc .text-gray-900,
+      html.theme-dark .tc .text-gray-800,
+      html.theme-dark .tc .text-slate-900,
+      html.theme-dark .tc .text-slate-800 { color: var(--tc-text-main) !important; }
+      html.theme-dark .tc .text-gray-700,
+      html.theme-dark .tc .text-gray-600,
+      html.theme-dark .tc .text-slate-700,
+      html.theme-dark .tc .text-slate-600,
+      html.theme-dark .tc .text-blue-900 { color: var(--tc-text-soft) !important; }
+      html.theme-dark .tc .text-gray-500,
+      html.theme-dark .tc .text-gray-400,
+      html.theme-dark .tc .text-slate-500,
+      html.theme-dark .tc .text-slate-400 { color: var(--tc-text-muted) !important; }
+      html.theme-dark .tc .text-primary,
+      html.theme-dark .tc .text-blue-600,
+      html.theme-dark .tc .text-blue-500 { color: var(--tc-accent) !important; }
+      /* surfaces */
+      html.theme-dark .tc .bg-white { background-color: var(--tc-panel) !important; }
+      html.theme-dark .tc .bg-gray-50,
+      html.theme-dark .tc .bg-slate-50,
+      html.theme-dark .tc .bg-primary-light { background-color: var(--tc-panel-2) !important; }
+      html.theme-dark .tc .bg-gray-100,
+      html.theme-dark .tc .bg-slate-100,
+      html.theme-dark .tc .bg-gray-200,
+      html.theme-dark .tc .bg-slate-200 { background-color: var(--tc-surface) !important; }
+      html.theme-dark .tc .bg-blue-50,
+      html.theme-dark .tc .bg-blue-100,
+      html.theme-dark .tc [class*="bg-blue-50\\/"] { background-color: var(--tc-accent-soft) !important; }
+      /* borders */
+      html.theme-dark .tc [class*="border-gray-1"],
+      html.theme-dark .tc [class*="border-gray-2"],
+      html.theme-dark .tc [class*="border-gray-3"],
+      html.theme-dark .tc [class*="border-slate-1"],
+      html.theme-dark .tc [class*="border-slate-2"],
+      html.theme-dark .tc [class*="border-blue-1"],
+      html.theme-dark .tc [class*="border-blue-2"],
+      html.theme-dark .tc .border-border { border-color: var(--tc-border-soft) !important; }
+      html.theme-dark .tc .border-primary,
+      html.theme-dark .tc .border-blue-400 { border-color: var(--tc-accent) !important; }
+      /* top bar stays dark in both themes; nudge to palette in dark */
+      html.theme-dark .tc .bg-slate-900 { background-color: #273140 !important; }
+      html.theme-dark .tc .bg-slate-800 { background-color: #303a49 !important; }
+      html.theme-dark .tc .bg-slate-700 { background-color: #3a4656 !important; }
+      /* inputs */
+      html.theme-dark .tc input,
+      html.theme-dark .tc select,
+      html.theme-dark .tc textarea {
+        background-color: var(--tc-surface) !important;
+        border-color: var(--tc-border-soft) !important;
+        color: var(--tc-text-main) !important;
+      }
+      html.theme-dark .tc input::placeholder,
+      html.theme-dark .tc textarea::placeholder { color: var(--tc-text-muted) !important; }
+      html.theme-dark .tc select option { background: #2a3441; color: var(--tc-text-main); }
+      /* left list cards */
+      html.theme-dark .tc [data-chat-card] { background: #293342 !important; }
+      html.theme-dark .tc [data-chat-card]:hover { background: var(--tc-surface-soft) !important; }
+      html.theme-dark .tc [data-chat-card].tc-card-selected { background: rgba(122,162,247,0.14) !important; }
+      /* center bubbles */
+      html.theme-dark .tc .tc-bubble-in { background: #2a3442 !important; border-color: var(--tc-border-soft) !important; color: var(--tc-text-main) !important; }
+      html.theme-dark .tc .tc-bubble-out { background: rgba(122,162,247,0.18) !important; border-color: rgba(122,162,247,0.35) !important; color: var(--tc-text-main) !important; }
+      /* accent solids */
+      html.theme-dark .tc .bg-blue-500,
+      html.theme-dark .tc .bg-primary { background-color: var(--tc-accent-strong) !important; }
+      html.theme-dark .tc .bg-red-500 { background-color: #c96a7e !important; }
+
+      /* ===== Chat stream — exact palette from ai-chat_interface_final(.copy).html =====
+         Values are lifted verbatim: LIGHT = the mock's default, DARK = its
+         body.dark-comfort overrides. Scoped to .tc so nothing leaks. ===== */
+
+      /* chat scroll background */
+      .tc .tc-chat-bg { background: #f0f2f5; }
+      html.theme-dark .tc .tc-chat-bg { background: #202937 !important; }
+      /* ==== [FEAT-20260801-CHATFONT] START — ฟอนต์ในแชทของหน้า ticket-support
+         🔒 สาย AUTO — to_dev_auto / to_prod_auto
+
+         ผู้ใช้สั่ง "ในหน้า ticket support เท่านั้น (ในแชทเท่านั้น)"
+         → ต้องเจาะจง 2 ชั้น ไม่ใช่ตั้งฟอนต์รวมของทั้งเว็บ:
+
+         ชั้นที่ 1 `.tc`  = root ของหน้า /ticket-support (TicketChat.tsx)
+              ตรวจแล้วว่า **มีที่เดียวในโปรเจกต์** — /legacy-ticket (TicketSupport.tsx)
+              ไม่มีคลาสนี้เลย ทั้งที่ใช้ ChatRoomView ตัวเดียวกัน
+              → เปลี่ยนที่นี่จึงไม่กระทบหน้า legacy
+         ชั้นที่ 2 `.tc-chat-bg` = กล่องที่ไหลข้อความแชทโดยเฉพาะ
+              → รายชื่อห้องซ้าย · panel ขวา · หัวข้อ · ช่องพิมพ์ ยังเป็นฟอนต์เดิม
+
+         ต่อท้ายด้วย var(--font-sans) เสมอ เพื่อให้ตัวอักษรที่ Sarabun ไม่มี
+         (เช่น emoji หรือสัญลักษณ์บางตัว) ตกกลับไปใช้ฟอนต์เดิม ไม่กลายเป็นกล่องเปล่า
+         revert: ลบบล็อกนี้ + เอา Sarabun ออกจาก <link> ด้านบน
+
+         ⚠️⚠️ [FIX-20260801-CHATFONTPARSE] ตรงนี้เคยมีเครื่องหมายปิดคอมเมนต์เร็วเกินไป
+         ทำให้ข้อความอธิบายด้านล่างกลายเป็น "ขยะ" ลอยอยู่กลาง CSS (ไม่ใช่คอมเมนต์)
+         → parser กลืนขยะไปเรื่อยจนเจอวงเล็บปีกกาก้อนแรก ซึ่งคือ rule ของ
+           data-font="chat" พอดี ทั้ง rule จึงถูกทิ้ง แล้ว parser ค่อยฟื้นที่ rule
+           ถัดไป (data-font="all") — คือสาเหตุจริงที่ "ทุกหน้า" ใช้ได้
+           แต่ "เฉพาะแชท" ไม่เคยทำงานเลยตั้งแต่แรก
+         ห้ามปิดคอมเมนต์กลางบล็อกนี้อีก — บล็อกนี้ต้องปิดที่ท้ายที่เดียว
+         (และห้ามพิมพ์เครื่องหมายปิดคอมเมนต์ลงในเนื้อคอมเมนต์เด็ดขาด)
+
+         ── ตั้งค่าได้ 3 แบบผ่าน preference `ui.chatFont` (ดู hooks/chatFont.ts) ──
+         ตัวเลือกถูกเขียนเป็น data-font บน <html> · ไม่มี attribute = แบบเดิม
+
+           (ไม่มี / "default")  ไม่มีกฎไหน match → ฟอนต์เดิมทั้งเว็บ เหมือนก่อนมี Sarabun
+           data-font="chat"     Sarabun เฉพาะกล่องข้อความแชทของหน้า ticket-support
+           data-font="all"      Sarabun ทั้งเว็บ — ทำโดยทับตัวแปร --font-sans ตัวเดียว
+
+         ทำไม "ทุกหน้า" ถึงทับที่ตัวแปร ไม่ใช่ตั้ง font-family ตรงๆ:
+         Tailwind v4 คอมไพล์ออกมาเป็น `html { font-family: var(--default-font-family) }`
+         และ `--default-font-family: var(--font-sans)` (ตรวจจาก CSS ที่ compile จริง)
+         → ทับ --font-sans ที่ <html> ทีเดียว ได้ทั้ง element ที่สืบทอดมาและคลาส
+           `font-sans` ของ Tailwind พร้อมกัน · ส่วน `font-mono` ยังเป็น mono ตามเดิม
+           (ถ้าไปตั้ง font-family แบบ !important จะทับ font-mono พังไปด้วย) */
+      /* [FIX-20260801-CHATFONTBUG] rev2 — โหมด "ทุกหน้า" (all) ใช้ได้ แต่ "เฉพาะแชท" ไม่ติด
+         เดิมพึ่งการสืบทอด/ตัวแปร --font-sans/ .tc ancestor — เลิกทั้งหมด แล้วบังคับตรงๆ:
+         literal "Sarabun" + !important ลงที่กล่องแชท .tc-chat-bg และลูกทุกตัว (เว้น mono)
+         · .tc-chat-bg มีเฉพาะสตรีมแชท (ChatRoomView) จึงไม่ต้องมี .tc นำหน้า และไม่รั่ว
+           ออกนอกแชท · ครอบทั้งหน้า ticket-support ใหม่และ legacy ที่ใช้ ChatRoomView เหมือนกัน
+         · เว้น .font-mono/code/pre/kbd/samp ไว้ให้คงเป็น mono (เช่น LINE user id)
+         revert: กลับเป็นบรรทัดเดียว
+           html[data-font="chat"] .tc .tc-chat-bg { font-family: "Sarabun", var(--font-sans); } */
+      /* [FIX-20260830-CHATFONTCOMPOSER] เจ้าของแจ้ง 30/08: เลือก "เฉพาะช่องแชท"
+         แล้ว **ช่องพิมพ์ · ตอบด่วน · สติกเกอร์ ยังเป็นฟอนต์เดิม**
+         สาเหตุ: `.tc-chat-bg` คือสตรีมข้อความอย่างเดียว (ChatRoomView) — composer
+         และแผงเครื่องมือทั้งสามอยู่นอกกล่องนั้น จึงไม่เคยโดนกฎนี้เลย
+         แก้: เพิ่ม `.tc-col-center` ซึ่งเป็นคอลัมน์กลางทั้งคอลัมน์ (ครอบทั้งสตรีม
+         ข้อความ composer และ tray ทั้งสาม) ⇒ "ช่องแชท" ในความหมายที่แอดมินเห็น
+         ⚠️ ไม่รั่วออกนอกช่องกลาง: panel ซ้าย/ขวา header menu อยู่นอก selector นี้
+         ⚠️ คง `.tc-chat-bg` ไว้ด้วย เพราะหน้า legacy ที่ใช้ ChatRoomView แต่ไม่มี
+            `.tc-col-center` ยังต้องได้ฟอนต์เหมือนเดิม (ถ้าลบทิ้งจะพังเงียบ)
+         revert: ลบสองบรรทัด .tc-col-center ออก */
+      html[data-font="chat"] .tc-chat-bg,
+      html[data-font="chat"] .tc-chat-bg *:not(.font-mono):not(code):not(pre):not(kbd):not(samp),
+      html[data-font="chat"] .tc-col-center,
+      html[data-font="chat"] .tc-col-center *:not(.font-mono):not(code):not(pre):not(kbd):not(samp) {
+        font-family: "Sarabun", "Inter", "Kanit", sans-serif !important;
+      }
+      html[data-font="all"] { --font-sans: "Sarabun", "Inter", "Kanit", sans-serif; }
+      /* ==== [FEAT-20260801-CHATFONT] END */
+
+      /* customer (incoming) bubble */
+      .tc .tc-msg-in {
+        background: #ffffff; border: 1px solid #e5e7eb; color: #1f2937;
+      }
+      html.theme-dark .tc .tc-msg-in {
+        background: #2a3442 !important; border-color: #46556b !important; color: #e7edf7 !important;
+      }
+      /* admin (outgoing) bubble */
+      .tc .tc-msg-out {
+        background: #dbeafe; border: 1px solid #bfdbfe; color: #1f2937;
+      }
+      html.theme-dark .tc .tc-msg-out {
+        background: rgba(122,162,247,0.18) !important; border-color: rgba(122,162,247,0.35) !important; color: #e7edf7 !important;
+      }
+      /* bubble timestamp / meta */
+      .tc .tc-msg-time { color: #9ca3af; }
+      html.theme-dark .tc .tc-msg-time { color: #9eabc0 !important; }
+
+      /* internal note bubble */
+      .tc .tc-note {
+        background: #ffe1a3; border: 1px solid #e8bb65; color: #2d2315;
+      }
+      html.theme-dark .tc .tc-note {
+        background: #6d5733 !important; border-color: #94713a !important; color: #fff1d0 !important;
+      }
+      .tc .tc-note-meta, .tc .tc-note-time { color: #8a6430; }
+      html.theme-dark .tc .tc-note-meta, html.theme-dark .tc .tc-note-time { color: #e8c988 !important; }
+
+      /* system divider pills */
+      .tc .tc-div-accept { background: #eff6ff; color: #1d4ed8; border: 1px solid #dbeafe; }
+      html.theme-dark .tc .tc-div-accept { background: rgba(122,162,247,0.16) !important; color: #9eabc0 !important; border-color: #46556b !important; }
+      .tc .tc-div-close { background: #f3f4f6; color: #374151; border: 1px solid #e5e7eb; }
+      html.theme-dark .tc .tc-div-close { background: #313d4e !important; color: #cad3e2 !important; border-color: #46556b !important; }
+      .tc .tc-div-bot { background: #f0fdf4; color: #15803d; border: 1px solid #dcfce7; }
+      html.theme-dark .tc .tc-div-bot { background: rgba(74,163,119,0.16) !important; color: #86e5b0 !important; border-color: #46556b !important; }
+      .tc .tc-div-assign { background: #f3f4f6; color: #6b7280; border: 1px solid #e5e7eb; }
+      html.theme-dark .tc .tc-div-assign { background: #313d4e !important; color: #9eabc0 !important; border-color: #46556b !important; }
+      .tc .tc-div-date { background: #e5e7eb; color: #9ca3af; }
+      html.theme-dark .tc .tc-div-date { background: #313d4e !important; color: #9eabc0 !important; }
+
+      /* mode switch pill (ตอบ / โน้ตในแชท) */
+      .tc .tc-mode-switch { background: #f0f1f4; border: 1px solid #e4e7ec; box-shadow: inset 0 1px 0 rgba(255,255,255,0.65); }
+      html.theme-dark .tc .tc-mode-switch { background: #303847 !important; border-color: #46556b !important; box-shadow: none !important; }
+      .tc .tc-mode-opt { color: #4b5563; background: transparent; }
+      html.theme-dark .tc .tc-mode-opt { color: #aeb9cb !important; }
+      .tc .tc-mode-opt.tc-mode-active { color: #111827; background: #ffffff; box-shadow: 0 2px 8px rgba(15,23,42,0.10); }
+      html.theme-dark .tc .tc-mode-opt.tc-mode-active { color: #26303d !important; background: #e5e9f0 !important; box-shadow: 0 3px 10px rgba(5,10,18,0.22) !important; }
+
+      /* ===== Category / tag chips — DARK ONLY brightening =====
+         In dark mode the `-800` text on a `-100` fill is too dark to read
+         (user report). Lift the text to a `-300` shade, drop the fill to a
+         translucent tint, and soften the border. LIGHT mode is untouched. ===== */
+      html.theme-dark .tc .bg-orange-100 { background-color: rgba(249,115,22,0.16) !important; }
+      html.theme-dark .tc .text-orange-800 { color: #fdba74 !important; }
+      html.theme-dark .tc [class*="border-orange-2"] { border-color: rgba(249,115,22,0.45) !important; }
+      html.theme-dark .tc .bg-sky-100 { background-color: rgba(14,165,233,0.16) !important; }
+      html.theme-dark .tc .text-sky-800 { color: #7dd3fc !important; }
+      html.theme-dark .tc [class*="border-sky-2"] { border-color: rgba(14,165,233,0.45) !important; }
+      html.theme-dark .tc .bg-emerald-100 { background-color: rgba(16,185,129,0.16) !important; }
+      html.theme-dark .tc .text-emerald-800 { color: #6ee7b7 !important; }
+      html.theme-dark .tc [class*="border-emerald-2"] { border-color: rgba(16,185,129,0.45) !important; }
+      html.theme-dark .tc .bg-indigo-100 { background-color: rgba(99,102,241,0.16) !important; }
+      html.theme-dark .tc .text-indigo-800 { color: #a5b4fc !important; }
+      html.theme-dark .tc [class*="border-indigo-2"] { border-color: rgba(99,102,241,0.45) !important; }
+      html.theme-dark .tc .bg-purple-100 { background-color: rgba(168,85,247,0.16) !important; }
+      html.theme-dark .tc .text-purple-800 { color: #d8b4fe !important; }
+      html.theme-dark .tc [class*="border-purple-2"] { border-color: rgba(168,85,247,0.45) !important; }
+      html.theme-dark .tc .bg-amber-100 { background-color: rgba(245,158,11,0.16) !important; }
+      html.theme-dark .tc .text-amber-800 { color: #fcd34d !important; }
+      html.theme-dark .tc [class*="border-amber-2"] { border-color: rgba(245,158,11,0.45) !important; }
+
+      /* ===== Composer "note mode" — yellow frame when writing an internal note.
+         Mirrors #chat-input-box.note-mode in ai-chat_interface_final.html
+         (light bg #ffe7ad / border #e7bd6c; dark bg #5c4b2d / border #8a6a37). ===== */
+      .tc .tc-note-mode { background: #ffe7ad !important; border-color: #e7bd6c !important; box-shadow: 0 0 0 1px rgba(231,189,108,0.22) !important; }
+      .tc .tc-note-mode .bg-white, .tc .tc-note-mode .bg-gray-50 { background-color: #ffe7ad !important; }
+      .tc .tc-note-mode textarea { color: #3b2c14 !important; }
+      .tc .tc-note-mode textarea::placeholder { color: #8a6a37 !important; }
+      html.theme-dark .tc .tc-note-mode { background: #5c4b2d !important; border-color: #8a6a37 !important; }
+      html.theme-dark .tc .tc-note-mode .bg-white, html.theme-dark .tc .tc-note-mode .bg-gray-50 { background-color: #5c4b2d !important; }
+      html.theme-dark .tc .tc-note-mode textarea { color: #fff3d6 !important; }
+      html.theme-dark .tc .tc-note-mode textarea::placeholder { color: #d7bd85 !important; }
+
+      /* ===== Unread badge (realtime new-message count on a chat-list card).
+         light = DEEP yellow on white text (stands out on a light card);
+         dark  = SOFT yellow on dark text (not glaring on a dark card). ===== */
+      .tc .tc-unread-badge { background: #d97706 !important; color: #ffffff !important; }      /* amber-600 */
+      .tc .tc-unread-text  { color: #b45309 !important; }                                      /* amber-700 */
+      html.theme-dark .tc .tc-unread-badge { background: #fde047 !important; color: #422006 !important; } /* soft yellow / dark text */
+      html.theme-dark .tc .tc-unread-text  { color: #fde047 !important; }
+      /* ===== [FEAT-20260811-CHATPIN] Pin badge on a chat-list card.
+         เจ้าของสั่ง 2026-08-11 (3 รอบ):
+           1. "หมุดเอา badge สวย ๆ เด่นขึ้นทั้ง dark light"
+           2. "pin เปลี่ยนสีฟ้า"                      ⇒ ฟ้า ไม่ใช่ส้ม
+           3. "light ธีมตอนไม่หมุดมองไม่เห็น (ใช้ออกดำเพิ่ม) เฉพาะ light"
+         ⚠️ **ฟ้า ห้ามเปลี่ยนกลับเป็นส้ม** — ส้มชนกับป้าย caution (direct_ticket) ที่อยู่
+            มุมขวาล่างของ avatar ใบเดียวกัน ⇒ สองอย่างคนละความหมายต้องคนละสี
+         light = ฟ้าเข้มพื้นขาว (เด่นบนการ์ดสว่าง) · dark = ฟ้าสว่างตัวอักษรเข้ม
+         ใช้คู่ light/dark แบบเดียวกับ tc-unread-badge ข้างบน — สีเดียวไม่พอเพราะ
+         ธีม dark มีกฎกลางที่ทำให้สีอ่อนทึบลงจนหม่น (เจอมาแล้วกับ tc-pending-arrow-*)
+         `!important` จำเป็น: กฎกลางของ .tc ทับคลาส utility ของ tailwind ===== */
+      .tc .tc-pin-badge {
+        background: #2563eb !important;   /* blue-600 */
+        color: #ffffff !important;
+        box-shadow: 0 1px 3px rgba(37,99,235,0.45) !important;
+      }
+      html.theme-dark .tc .tc-pin-badge {
+        background: #93c5fd !important;   /* blue-300 */
+        color: #0b213f !important;        /* น้ำเงินเข้ม — คอนทราสต์พอบนพื้นฟ้าสว่าง */
+        box-shadow: 0 1px 3px rgba(0,0,0,0.5) !important;
+      }
+      /* ปุ่มหมุดตอน "ยังไม่ปัก"
+         light: เจ้าของแจ้งว่า slate-300 มองไม่เห็นบนพื้นการ์ดสว่าง ⇒ ใช้ slate-600
+                (เข้มขึ้นหลายขั้น ออกดำตามที่สั่ง "ใช้ออกดำเพิ่ม เฉพาะ light")
+         dark : ยังใช้ slate ที่สว่างพอบนพื้นมืด — ไม่แตะเพราะเห็นอยู่แล้ว */
+      .tc .tc-pin-idle { color: #475569 !important; }                    /* slate-600 */
+      html.theme-dark .tc .tc-pin-idle { color: #94a3b8 !important; }    /* slate-400 */
+
+      /* Active status-tab count: the light bg-blue-100/700 glares on a dark card.
+         Soften to a muted blue chip in dark. */
+      html.theme-dark .tc-tab-count-on { background: rgba(59,130,246,0.22) !important; color: #93c5fd !important; }
+
+      /* Group tab / overflow-select with a NEW ticket → yellow glow ring.
+         NB: these are NOT under the .tc scope — the group switcher isn't wrapped
+         in .tc — so target the classes directly. light = deep amber glow on a
+         warm tint; dark = soft yellow glow. Animated pulse to catch the eye. */
+      /* thicker glow (3px ring + wide halo), gentle slow pulse. */
+      /* [FEAT-20260829-NOTICEUNSAVED] the notification tab's save button, flashed
+         when the main save is pressed with those settings still pending.
+         ⚠️ Animates `box-shadow` + `transform` only — never `background`, so the
+            button keeps its normal colour and stays readable while it pulses.
+         ⚠️ Runs 3 times and stops. A forever-loop next to a control the admin is
+            being asked to click reads as broken rather than urgent.
+         revert: delete this block and the `notice-save-flash` class in
+         `HookNoticeTab.tsx`. */
+      @keyframes notice-save-flash {
+        0%, 100% { box-shadow: 0 0 0 0 rgba(244, 63, 94, 0.55); transform: translateY(0); }
+        35%      { box-shadow: 0 0 0 10px rgba(244, 63, 94, 0);  transform: translateY(-3px); }
+        70%      { box-shadow: 0 0 0 0 rgba(244, 63, 94, 0);     transform: translateY(0); }
+      }
+      .notice-save-flash { animation: notice-save-flash 0.8s ease-in-out 3; }
+      @media (prefers-reduced-motion: reduce) {
+        .notice-save-flash { animation: none; }
+      }
+
+      @keyframes tc-yellow-pulse {
+        0%,100% { box-shadow: 0 0 0 3px rgba(245,158,11,0.65), 0 0 12px 3px rgba(245,158,11,0.40); }
+        50%     { box-shadow: 0 0 0 3px rgba(245,158,11,0.95), 0 0 20px 6px rgba(245,158,11,0.60); }
+      }
+      @keyframes tc-yellow-pulse-dark {
+        0%,100% { box-shadow: 0 0 0 3px rgba(253,224,71,0.55), 0 0 12px 3px rgba(253,224,71,0.35); }
+        50%     { box-shadow: 0 0 0 3px rgba(253,224,71,0.90), 0 0 20px 6px rgba(253,224,71,0.55); }
+      }
+      /* select "อื่นๆ" — thick animated yellow glow ring on the trigger. */
+      .tc-select-new .tc-select-trigger { border-color: #f59e0b !important; animation: tc-yellow-pulse 2s ease-in-out infinite; }
+      html.theme-dark .tc-select-new .tc-select-trigger { border-color: #fde047 !important; animation: tc-yellow-pulse-dark 2s ease-in-out infinite; }
+
+      /* ===== Theme switch — sliding sun/moon pill, lifted from
+         ai-chat_interface_final.html .theme-toggle-switch (light + dark). ===== */
+      .theme-switch {
+        border: 1px solid rgba(148,163,184,0.32);
+        background: rgba(255,255,255,0.82);
+        box-shadow: inset 0 1px 0 rgba(255,255,255,0.75);
+        transition: background-color .2s ease, border-color .2s ease;
+      }
+      .theme-switch:hover { background: rgba(255,255,255,0.92); border-color: rgba(148,163,184,0.42); }
+      .theme-switch .theme-switch-thumb {
+        /* LIGHT active (sun) — knob one shade darker with a warm/orange tint so the
+           active side reads clearly (was flat #f3f4f6 grey). */
+        background: #fed7aa;
+        box-shadow: 0 4px 10px rgba(15,23,42,0.18);
+      }
+      /* LIGHT: sun (active, under thumb) = yellow; moon (inactive) = grey */
+      .theme-switch .theme-sun { color: #f59e0b !important; }
+      .theme-switch .theme-sun svg { color: #f59e0b !important; }
+      .theme-switch .theme-moon, .theme-switch .theme-moon svg { color: #9aa0a8 !important; }
+      html.theme-dark .theme-switch {
+        border-color: rgba(255,255,255,0.10);
+        background: rgba(255,255,255,0.08);
+        box-shadow: inset 0 1px 0 rgba(255,255,255,0.05);
+      }
+      html.theme-dark .theme-switch:hover { background: rgba(255,255,255,0.12); border-color: rgba(255,255,255,0.18); }
+      html.theme-dark .theme-switch .theme-switch-thumb { background: #d7deea; box-shadow: 0 4px 10px rgba(3,8,18,0.28); }
+      /* DARK: moon (active, under thumb) = blue; sun (inactive) = dim grey */
+      html.theme-dark .theme-switch .theme-sun, html.theme-dark .theme-switch .theme-sun svg { color: #7c8598 !important; opacity: .8; }
+      html.theme-dark .theme-switch .theme-moon, html.theme-dark .theme-switch .theme-moon svg { color: #3b82f6 !important; }
+
+      /* Mega-menu collapse toggle — floating two-tier arrow, no pill. Blue with a
+         soft glow: DEEPER blue in light (reads on the pale header), lighter blue +
+         a stronger glow in dark. Hover intensifies the glow. */
+      .tc-mega-toggle { color: #1d4ed8; filter: drop-shadow(0 0 5px rgba(37,99,235,0.55)); }
+      .tc-mega-toggle:hover { color: #1e40af; filter: drop-shadow(0 0 8px rgba(37,99,235,0.85)); }
+      html.theme-dark .tc-mega-toggle { color: #60a5fa; filter: drop-shadow(0 0 6px rgba(96,165,250,0.7)); }
+      html.theme-dark .tc-mega-toggle:hover { color: #93c5fd; filter: drop-shadow(0 0 10px rgba(96,165,250,0.95)); }
+
+      /* ===== SearchableSelect — pretty dropdown + search (light + dark) ===== */
+      .tc-select-trigger { background: #f9fafb; border-color: #e5e7eb; color: #374151; }
+      .tc-select-trigger:hover { background: #f3f4f6; border-color: #d1d5db; }
+      .tc-select-menu { background: #ffffff; border-color: #e5e7eb; }
+      .tc-select-search { background: #f9fafb; border-color: #f0f1f3; color: #374151; }
+      .tc-select-opt { color: #374151; }
+      .tc-select-opt:hover { background: #f3f4f6; }
+      .tc-select-opt-active { color: #1d4ed8; background: #eff6ff; }
+      html.theme-dark .tc-select-trigger { background: #313d4e !important; border-color: #46556b !important; color: #e7edf7 !important; }
+      html.theme-dark .tc-select-trigger:hover { background: #39475a !important; border-color: #5a6b83 !important; }
+      html.theme-dark .tc-select-menu { background: #26303d !important; border-color: #46556b !important; }
+      html.theme-dark .tc-select-search { background: #2b3544 !important; border-color: #46556b !important; color: #e7edf7 !important; }
+      html.theme-dark .tc-select-opt { color: #cad3e2 !important; }
+      html.theme-dark .tc-select-opt:hover { background: #313d4e !important; }
+      html.theme-dark .tc-select-opt-active { color: #7aa2f7 !important; background: rgba(122,162,247,0.16) !important; }
+
+      /* ===== Customer tag chips — DARK ONLY: brighter fill + lighter text so the
+         pills are clearly visible on the dark background (were too faint at
+         0.14 bg / 0.40 border). Bumped to ~0.24 bg / ~0.55 border and the text
+         lifted one step lighter (-300 → -200 tints). LIGHT theme untouched
+         (these selectors only match under html.theme-dark). Covers every color a
+         tag can take: TAG_PRESETS (-100) + legacy TAG_COLORS (indigo/yellow/slate)
+         + the -50 fallback fills. ===== */
+      html.theme-dark .tag-item.bg-purple-100,  html.theme-dark .tag-item.bg-purple-50  { background-color: rgba(168,85,247,0.16) !important; color: #e9d5ff !important; border-color: rgba(168,85,247,0.42) !important; }
+      html.theme-dark .tag-item.bg-red-100,     html.theme-dark .tag-item.bg-red-50     { background-color: rgba(239,68,68,0.16) !important;  color: #fecaca !important; border-color: rgba(239,68,68,0.42) !important; }
+      html.theme-dark .tag-item.bg-orange-100,  html.theme-dark .tag-item.bg-orange-50  { background-color: rgba(249,115,22,0.16) !important; color: #fed7aa !important; border-color: rgba(249,115,22,0.42) !important; }
+      html.theme-dark .tag-item.bg-blue-100,    html.theme-dark .tag-item.bg-blue-50    { background-color: rgba(59,130,246,0.16) !important;  color: #bfdbfe !important; border-color: rgba(59,130,246,0.42) !important; }
+      html.theme-dark .tag-item.bg-emerald-100, html.theme-dark .tag-item.bg-emerald-50 { background-color: rgba(16,185,129,0.16) !important; color: #a7f3d0 !important; border-color: rgba(16,185,129,0.42) !important; }
+      html.theme-dark .tag-item.bg-rose-100,    html.theme-dark .tag-item.bg-rose-50    { background-color: rgba(244,63,94,0.16) !important;  color: #fecdd3 !important; border-color: rgba(244,63,94,0.42) !important; }
+      html.theme-dark .tag-item.bg-green-100,   html.theme-dark .tag-item.bg-green-50   { background-color: rgba(34,197,94,0.16) !important;  color: #bbf7d0 !important; border-color: rgba(34,197,94,0.42) !important; }
+      html.theme-dark .tag-item.bg-indigo-100,  html.theme-dark .tag-item.bg-indigo-50  { background-color: rgba(99,102,241,0.16) !important;  color: #c7d2fe !important; border-color: rgba(99,102,241,0.42) !important; }
+      html.theme-dark .tag-item.bg-yellow-100,  html.theme-dark .tag-item.bg-yellow-50  { background-color: rgba(234,179,8,0.16) !important;   color: #fef08a !important; border-color: rgba(234,179,8,0.42) !important; }
+      html.theme-dark .tag-item.bg-slate-100,   html.theme-dark .tag-item.bg-slate-50   { background-color: rgba(148,163,184,0.16) !important; color: #e2e8f0 !important; border-color: rgba(148,163,184,0.42) !important; }
+      html.theme-dark .tag-item.bg-gray-100,    html.theme-dark .tag-item.bg-gray-50    { background-color: rgba(148,163,184,0.16) !important; color: #e2e8f0 !important; border-color: rgba(148,163,184,0.42) !important; }
+
+      /* ===== Mock personal-panel badges (VIP / ฝาก / ถอน) — DARK ONLY =====
+         The app toggles html.theme-dark (NOT .dark), so Tailwind `dark:` utilities
+         never apply. These rules give the badges a coloured fill + WHITE text in
+         dark theme. Light theme keeps the Tailwind -100/-700 classes untouched. */
+      html.theme-dark .mock-badge { color: #ffffff !important; }
+      html.theme-dark .mock-badge-purple { background-color: rgba(168,85,247,0.30) !important; border-color: rgba(168,85,247,0.55) !important; }
+      html.theme-dark .mock-badge-green  { background-color: rgba(34,197,94,0.30)  !important; border-color: rgba(34,197,94,0.55)  !important; }
+      html.theme-dark .mock-badge-red    { background-color: rgba(239,68,68,0.30)  !important; border-color: rgba(239,68,68,0.55)  !important; }
+
+      /* ===== Settings gear dropdown — X + close button (blue tint) ===== */
+      /* Light: darker blue on a pale fill. Dark: lighter blue on a translucent fill. */
+      .gear-x { background: #dbeafe; color: #2563eb; }
+      .gear-x:hover { background: #bfdbfe; color: #1d4ed8; }
+      html.theme-dark .gear-x { background: rgba(59,130,246,0.22); color: #93c5fd; }
+      html.theme-dark .gear-x:hover { background: rgba(59,130,246,0.34); color: #bfdbfe; }
+      .gear-close { color: #2563eb; }
+      .gear-close:hover { background: #eff6ff; color: #1d4ed8; }
+      html.theme-dark .gear-close { color: #93c5fd; border-top-color: rgba(59,130,246,0.25) !important; }
+      html.theme-dark .gear-close:hover { background: rgba(59,130,246,0.14); color: #bfdbfe; }
+
+      /* ===== Chat loading skeleton (both themes) ===== */
+      @keyframes tcSkelPulse { 0%,100% { opacity: 1; } 50% { opacity: .45; } }
+      .tc-skel { background: #e3e7ee; animation: tcSkelPulse 1.3s ease-in-out infinite; }
+      .tc-skel-label { color: #9ca3af; }
+      html.theme-dark .tc-skel { background: #313d4e !important; }
+      html.theme-dark .tc-skel-label { color: #9eabc0 !important; }
+
+      /* ===== "Load previous messages" pill (both themes; unscoped like
+         .tc-skel so it also works on pages without the .tc wrapper) ===== */
+      .tc-load-older {
+        background: #ffffff; border: 1px solid #bfdbfe; color: #1d4ed8;
+        box-shadow: 0 1px 3px rgba(15,23,42,0.08);
+      }
+      .tc-load-older:hover:not(:disabled) {
+        background: #eff6ff; border-color: #93c5fd;
+        box-shadow: 0 3px 8px rgba(29,78,216,0.16);
+        transform: translateY(-1px);
+      }
+      .tc-load-older:active:not(:disabled) { transform: translateY(0) scale(0.97); }
+      .tc-load-older:disabled { opacity: 0.7; cursor: default; }
+      @keyframes tcLoadOlderNudge {
+        0%, 100% { transform: translateY(1px); opacity: 1; }
+        50% { transform: translateY(-2px); opacity: 0.5; }
+      }
+      .tc-load-older-arrow { animation: tcLoadOlderNudge 1.3s ease-in-out infinite; }
+      @media (prefers-reduced-motion: reduce) { .tc-load-older-arrow { animation: none; } }
+      html.theme-dark .tc-load-older {
+        background: #313d4e !important; border-color: rgba(122,162,247,0.4) !important;
+        color: #7aa2f7 !important; box-shadow: none !important;
+      }
+      html.theme-dark .tc-load-older:hover:not(:disabled) {
+        background: rgba(122,162,247,0.16) !important; border-color: #7aa2f7 !important;
+      }
+
+      /* ===== [UI-20260901-OBJGRIDFRAME] Re-layout a borrowed picker =========
+         `MultiCheckGrid` belongs to the broadcast lane and hardcodes two
+         columns and a 22rem scroll box. The Object modals give it the full
+         modal width with short labels, where two columns waste half the row.
+
+         Rather than add props to a component another feature owns — which
+         widens its contract forever and puts our layout question inside it —
+         the Object forms wrap it in `.object-grid-frame` and re-lay it out from
+         outside. Nothing under components/campaign/ changes.
+
+         EVERY RULE IS SCOPED UNDER .object-grid-frame. Nothing here can reach
+         a broadcast grid, because a broadcast grid is never inside one.
+
+         The columns rules need no `!important`: two classes beat Tailwind's
+         single utility class on specificity.
+
+         The height rule is the ONE exception and it is unavoidable, not
+         laziness: MultiCheckGrid sets `style={{maxHeight}}` inline, and an
+         inline style outranks every selector. This is the only declaration in
+         this block carrying it, and it is scoped to our own wrapper.
+
+         revert: delete this block and components/object/scope/ObjectGridFrame.tsx.
+         The grids go back to two columns and 22rem. */
+      .object-grid-frame [data-testid$="-grid"] {
+        display: grid;
+        gap: 0.25rem;
+        grid-template-columns: repeat(1, minmax(0, 1fr));
+      }
+      .object-grid-frame .custom-scrollbar {
+        max-height: var(--object-grid-max-h, 26rem) !important;
+      }
+      @media (min-width: 640px) {
+        .object-grid-frame [data-testid$="-grid"] {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+      }
+      @media (min-width: 1024px) {
+        .object-grid-frame.object-grid-3 [data-testid$="-grid"] {
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+        .object-grid-frame.object-grid-4 [data-testid$="-grid"] {
+          grid-template-columns: repeat(4, minmax(0, 1fr));
+        }
+      }
+    </style>
+    <!-- [FIX-20260819-NOCDNIMPORTMAP] An esm.sh import map for react, react-dom,
+         recharts, lucide-react and react-router-dom sat here, left over from the
+         project scaffold (it arrived with the fork commit e066273).
+
+         DEAD WEIGHT, not a dependency: vite.config.ts already names those same five
+         packages in build.rollupOptions.output.manualChunks, so Rollup resolves each
+         at build time and the browser never consults the map — verified before
+         removal, no file under dist/assets/ referenced the CDN.
+
+         It also named the WRONG major (react@^19.2.3 against a React 18.3.1 app), so
+         anything that ever HAD resolved through it would have loaded a second React
+         and broken hooks. ⇒ ของที่ไม่มีใครใช้ แต่พร้อมพังถ้ามีคนเผลอใช้
+
+         ⚠️ Do NOT write a literal script tag inside this comment: Vite then loses the
+            entry-script anchor and emits an index.html with no bootstrap tag at all.
+
+         revert: restore the importmap script block from this file @ 3877536.
+                 Nothing else changes. -->
+</head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/index.tsx"></script>
+  </body>
+</html>

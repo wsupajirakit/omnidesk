@@ -1,0 +1,20 @@
+{
+  "name": "omnidesk-ws",
+  "version": "1.0.0",
+  "description": "WebSocket fan-out server — bridges Redis pub/sub ticket events to authenticated dashboard clients",
+  "main": "server.js",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "test": "node --test \"test/**/*.test.js\""
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "ioredis": "^5.4.1",
+    "jsonwebtoken": "^9.0.2",
+    "ws": "^8.18.0"
+  }
+}

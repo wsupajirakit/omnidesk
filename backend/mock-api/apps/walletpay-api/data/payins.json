@@ -1,0 +1,64 @@
+{
+  "counters": {
+    "imageId": 100000,
+    "evidenceId": 5000000
+  },
+  "payins": [
+    {
+      "refId": "00000000-0000-4000-8000-000000000011",
+      "amount": 500,
+      "member_user_id": "MEM-00001",
+      "status": "waiting-deposit",
+      "scenario": "confirmed",
+      "bankExpectId": 884200,
+      "transactionId": 9414600,
+      "extRefId": "SIMEXT000000",
+      "created_at": "2026-10-19T09:00:00+07:00"
+    },
+    {
+      "refId": "00000000-0000-4000-8000-000000000012",
+      "amount": 300,
+      "member_user_id": "MEM-00001",
+      "status": "waiting-deposit",
+      "scenario": "pending",
+      "bankExpectId": 884201,
+      "transactionId": 9414601,
+      "extRefId": "SIMEXT000001",
+      "created_at": "2026-10-19T09:00:00+07:00"
+    },
+    {
+      "refId": "00000000-0000-4000-8000-000000000013",
+      "amount": 700,
+      "member_user_id": "MEM-00001",
+      "status": "waiting-deposit",
+      "scenario": "no_match",
+      "bankExpectId": 884202,
+      "transactionId": 9414602,
+      "extRefId": "SIMEXT000002",
+      "created_at": "2026-10-19T09:00:00+07:00"
+    },
+    {
+      "refId": "00000000-0000-4000-8000-000000000014",
+      "amount": 900,
+      "member_user_id": "MEM-00003",
+      "status": "waiting-deposit",
+      "scenario": "invalid_destination",
+      "bankExpectId": 884203,
+      "transactionId": 9414603,
+      "extRefId": "SIMEXT000003",
+      "created_at": "2026-10-19T09:00:00+07:00"
+    },
+    {
+      "refId": "00000000-0000-4000-8000-000000000015",
+      "amount": 500,
+      "member_user_id": "MEM-00004",
+      "status": "waiting-deposit",
+      "scenario": "confirmed",
+      "bankExpectId": 884204,
+      "transactionId": 9414604,
+      "extRefId": "SIMEXT000004",
+      "created_at": "2026-10-19T09:00:00+07:00"
+    }
+  ],
+  "uploads": []
+}

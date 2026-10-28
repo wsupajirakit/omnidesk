@@ -1,0 +1,193 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`[WRAP-AI W0] 400 thinking-retry — two bodies, second without thinkingConfig a 400 on thinkingConfig fires a second call with it stripped 1`] = `
+{
+  "first": {
+    "contents": [
+      {
+        "parts": [
+          {
+            "text": "Question:
+ยอดหนี้เท่าไหร่",
+          },
+        ],
+      },
+    ],
+    "generationConfig": {
+      "temperature": 0.4,
+      "thinkingConfig": {
+        "thinkingBudget": 128,
+      },
+      "topK": 20,
+      "topP": 0.4,
+    },
+    "system_instruction": {
+      "parts": [
+        {
+          "text": "---
+- If the answer is found, append "[[[FOUND]]]" at the end.
+- If the answer is NOT found, append "[[[NOT_FOUND]]]" at the end.
+- IMPORTANT: You MUST INCLUDE tags like [[[assist]]] exactly as they appear in the Document in your response.",
+        },
+      ],
+    },
+  },
+  "second": {
+    "contents": [
+      {
+        "parts": [
+          {
+            "text": "Question:
+ยอดหนี้เท่าไหร่",
+          },
+        ],
+      },
+    ],
+    "generationConfig": {
+      "temperature": 0.4,
+      "topK": 20,
+      "topP": 0.4,
+    },
+    "system_instruction": {
+      "parts": [
+        {
+          "text": "---
+- If the answer is found, append "[[[FOUND]]]" at the end.
+- If the answer is NOT found, append "[[[NOT_FOUND]]]" at the end.
+- IMPORTANT: You MUST INCLUDE tags like [[[assist]]] exactly as they appear in the Document in your response.",
+        },
+      ],
+    },
+  },
+}
+`;
+
+exports[`[WRAP-AI W0] response fixtures (B-W2) interprets NOT_FOUND tag identically (frozen) 1`] = `
+{
+  "error_message": null,
+  "http_status": 200,
+  "noData": false,
+  "tagStatus": "not_found",
+  "text": "sorry",
+}
+`;
+
+exports[`[WRAP-AI W0] response fixtures (B-W2) interprets empty candidates identically (frozen) 1`] = `
+{
+  "error_message": null,
+  "http_status": 200,
+  "noData": true,
+  "tagStatus": null,
+  "text": "ไม่พบข้อมูลที่เกี่ยวข้องในเอกสาร",
+}
+`;
+
+exports[`[WRAP-AI W0] response fixtures (B-W2) interprets fallback text (noData) identically (frozen) 1`] = `
+{
+  "error_message": null,
+  "http_status": 200,
+  "noData": true,
+  "tagStatus": null,
+  "text": "ไม่พบข้อมูลที่เกี่ยวข้องในเอกสาร",
+}
+`;
+
+exports[`[WRAP-AI W0] response fixtures (B-W2) interprets no candidates key identically (frozen) 1`] = `
+{
+  "error_message": null,
+  "http_status": 200,
+  "noData": true,
+  "tagStatus": null,
+  "text": "ไม่พบข้อมูลที่เกี่ยวข้องในเอกสาร",
+}
+`;
+
+exports[`[WRAP-AI W0] response fixtures (B-W2) interprets normal FOUND identically (frozen) 1`] = `
+{
+  "error_message": null,
+  "http_status": 200,
+  "noData": false,
+  "tagStatus": "found",
+  "text": "here you go",
+}
+`;
+
+exports[`[WRAP-AI W0] response fixtures (B-W2) interprets plain answer no tag identically (frozen) 1`] = `
+{
+  "error_message": null,
+  "http_status": 200,
+  "noData": false,
+  "tagStatus": null,
+  "text": "just an answer",
+}
+`;
+
+exports[`[WRAP-AI W0] wire snapshots — the frozen matrix (B-W1) a dynamic-tag marker in the suggestion is substituted in the wire body 1`] = `
+{
+  "body": "{"system_instruction":{"parts":[{"text":"สถานะบัญชี เปิดใช้งาน ตอนนี้\\n---\\n- If the answer is found, append \\"[[[FOUND]]]\\" at the end.\\n- If the answer is NOT found, append \\"[[[NOT_FOUND]]]\\" at the end.\\n- IMPORTANT: You MUST INCLUDE tags like [[[assist]]] exactly as they appear in the Document in your response."}]},"contents":[{"parts":[{"text":"Question:\\nยอดหนี้เท่าไหร่"}]}],"generationConfig":{"temperature":0.4,"topP":0.4,"topK":20,"thinkingConfig":{"thinkingLevel":"minimal"}}}",
+  "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent",
+}
+`;
+
+exports[`[WRAP-AI W0] wire snapshots — the frozen matrix (B-W1) all blocks on together (proves block ORDER) 1`] = `
+{
+  "body": "{"system_instruction":{"parts":[{"text":"---\\n- If the answer is found, append \\"[[[FOUND]]]\\" at the end.\\n- If the answer is NOT found, append \\"[[[NOT_FOUND]]]\\" at the end.\\n- IMPORTANT: You MUST INCLUDE tags like [[[assist]]] exactly as they appear in the Document in your response."}]},"contents":[{"parts":[{"text":"[RAW_JSON_PROFILE_START]\\nRaw Json Profile : enable = true\\nRaw Json =\\n{\\n  \\"Path : api/v1/customer\\": {\\n    \\"data\\": {\\n      \\"name\\": \\"x\\"\\n    }\\n  }\\n}\\n[RAW_JSON_PROFILE_END]"},{"text":"[RAW_JSON_PROFILE_RULES_START]\\njson rules\\n[RAW_JSON_PROFILE_RULES_END]"},{"text":"[RAW_SITE_RULES_START]\\nSite Rules =\\n{\\n  \\"SITE_RULES\\": {\\n    \\"role\\": \\"site_rules\\",\\n    \\"data\\": {\\n      \\"min_deposit\\": 100\\n    }\\n  }\\n}\\n[RAW_SITE_RULES_END]"},{"text":"[SITE_RULES_GUIDE_START]\\nsite guide\\n[SITE_RULES_GUIDE_END]"},{"text":"Document:\\ndoc"},{"text":"Question:\\nยอดหนี้เท่าไหร่"}]}],"generationConfig":{"temperature":0.4,"topP":0.4,"topK":20,"thinkingConfig":{"thinkingLevel":"minimal"}}}",
+  "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent",
+}
+`;
+
+exports[`[WRAP-AI W0] wire snapshots — the frozen matrix (B-W1) knobs unset (null) fall through to defaults 1`] = `
+{
+  "body": "{"system_instruction":{"parts":[{"text":"---\\n- If the answer is found, append \\"[[[FOUND]]]\\" at the end.\\n- If the answer is NOT found, append \\"[[[NOT_FOUND]]]\\" at the end.\\n- IMPORTANT: You MUST INCLUDE tags like [[[assist]]] exactly as they appear in the Document in your response."}]},"contents":[{"parts":[{"text":"Question:\\nยอดหนี้เท่าไหร่"}]}],"generationConfig":{"temperature":0,"topP":0.1,"topK":1,"thinkingConfig":{"thinkingLevel":"minimal"}}}",
+  "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent",
+}
+`;
+
+exports[`[WRAP-AI W0] wire snapshots — the frozen matrix (B-W1) plain question 1`] = `
+{
+  "body": "{"system_instruction":{"parts":[{"text":"---\\n- If the answer is found, append \\"[[[FOUND]]]\\" at the end.\\n- If the answer is NOT found, append \\"[[[NOT_FOUND]]]\\" at the end.\\n- IMPORTANT: You MUST INCLUDE tags like [[[assist]]] exactly as they appear in the Document in your response."}]},"contents":[{"parts":[{"text":"Question:\\nยอดหนี้เท่าไหร่"}]}],"generationConfig":{"temperature":0.4,"topP":0.4,"topK":20,"thinkingConfig":{"thinkingLevel":"minimal"}}}",
+  "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent",
+}
+`;
+
+exports[`[WRAP-AI W0] wire snapshots — the frozen matrix (B-W1) thinkingBudget set → thinkingConfig present in the body 1`] = `
+{
+  "body": "{"system_instruction":{"parts":[{"text":"---\\n- If the answer is found, append \\"[[[FOUND]]]\\" at the end.\\n- If the answer is NOT found, append \\"[[[NOT_FOUND]]]\\" at the end.\\n- IMPORTANT: You MUST INCLUDE tags like [[[assist]]] exactly as they appear in the Document in your response."}]},"contents":[{"parts":[{"text":"Question:\\nยอดหนี้เท่าไหร่"}]}],"generationConfig":{"temperature":0.4,"topP":0.4,"topK":20,"thinkingConfig":{"thinkingBudget":128}}}",
+  "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent",
+}
+`;
+
+exports[`[WRAP-AI W0] wire snapshots — the frozen matrix (B-W1) with docText 1`] = `
+{
+  "body": "{"system_instruction":{"parts":[{"text":"---\\n- If the answer is found, append \\"[[[FOUND]]]\\" at the end.\\n- If the answer is NOT found, append \\"[[[NOT_FOUND]]]\\" at the end.\\n- IMPORTANT: You MUST INCLUDE tags like [[[assist]]] exactly as they appear in the Document in your response."}]},"contents":[{"parts":[{"text":"Document:\\nthe document body"},{"text":"Question:\\nยอดหนี้เท่าไหร่"}]}],"generationConfig":{"temperature":0.4,"topP":0.4,"topK":20,"thinkingConfig":{"thinkingLevel":"minimal"}}}",
+  "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent",
+}
+`;
+
+exports[`[WRAP-AI W0] wire snapshots — the frozen matrix (B-W1) with rawJson + rawJsonRules 1`] = `
+{
+  "body": "{"system_instruction":{"parts":[{"text":"---\\n- If the answer is found, append \\"[[[FOUND]]]\\" at the end.\\n- If the answer is NOT found, append \\"[[[NOT_FOUND]]]\\" at the end.\\n- IMPORTANT: You MUST INCLUDE tags like [[[assist]]] exactly as they appear in the Document in your response."}]},"contents":[{"parts":[{"text":"[RAW_JSON_PROFILE_START]\\nRaw Json Profile : enable = true\\nRaw Json =\\n{\\n  \\"Path : api/v1/customer\\": {\\n    \\"data\\": {\\n      \\"name\\": \\"x\\"\\n    }\\n  }\\n}\\n[RAW_JSON_PROFILE_END]"},{"text":"[RAW_JSON_PROFILE_RULES_START]\\nfollow these json rules\\n[RAW_JSON_PROFILE_RULES_END]"},{"text":"Question:\\nยอดหนี้เท่าไหร่"}]}],"generationConfig":{"temperature":0.4,"topP":0.4,"topK":20,"thinkingConfig":{"thinkingLevel":"minimal"}}}",
+  "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent",
+}
+`;
+
+exports[`[WRAP-AI W0] wire snapshots — the frozen matrix (B-W1) with rawJson on 1`] = `
+{
+  "body": "{"system_instruction":{"parts":[{"text":"---\\n- If the answer is found, append \\"[[[FOUND]]]\\" at the end.\\n- If the answer is NOT found, append \\"[[[NOT_FOUND]]]\\" at the end.\\n- IMPORTANT: You MUST INCLUDE tags like [[[assist]]] exactly as they appear in the Document in your response."}]},"contents":[{"parts":[{"text":"[RAW_JSON_PROFILE_START]\\nRaw Json Profile : enable = true\\nRaw Json =\\n{\\n  \\"Path : api/v1/customer\\": {\\n    \\"data\\": {\\n      \\"name\\": \\"x\\"\\n    }\\n  }\\n}\\n[RAW_JSON_PROFILE_END]"},{"text":"Question:\\nยอดหนี้เท่าไหร่"}]}],"generationConfig":{"temperature":0.4,"topP":0.4,"topK":20,"thinkingConfig":{"thinkingLevel":"minimal"}}}",
+  "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent",
+}
+`;
+
+exports[`[WRAP-AI W0] wire snapshots — the frozen matrix (B-W1) with siteRules + siteRulesGuide 1`] = `
+{
+  "body": "{"system_instruction":{"parts":[{"text":"---\\n- If the answer is found, append \\"[[[FOUND]]]\\" at the end.\\n- If the answer is NOT found, append \\"[[[NOT_FOUND]]]\\" at the end.\\n- IMPORTANT: You MUST INCLUDE tags like [[[assist]]] exactly as they appear in the Document in your response."}]},"contents":[{"parts":[{"text":"[RAW_SITE_RULES_START]\\nSite Rules =\\n{\\n  \\"SITE_RULES\\": {\\n    \\"role\\": \\"site_rules\\",\\n    \\"data\\": {\\n      \\"min_deposit\\": 100\\n    }\\n  }\\n}\\n[RAW_SITE_RULES_END]"},{"text":"[SITE_RULES_GUIDE_START]\\napply the site rules like so\\n[SITE_RULES_GUIDE_END]"},{"text":"Question:\\nยอดหนี้เท่าไหร่"}]}],"generationConfig":{"temperature":0.4,"topP":0.4,"topK":20,"thinkingConfig":{"thinkingLevel":"minimal"}}}",
+  "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent",
+}
+`;
+
+exports[`[WRAP-AI W0] wire snapshots — the frozen matrix (B-W1) with siteRules on 1`] = `
+{
+  "body": "{"system_instruction":{"parts":[{"text":"---\\n- If the answer is found, append \\"[[[FOUND]]]\\" at the end.\\n- If the answer is NOT found, append \\"[[[NOT_FOUND]]]\\" at the end.\\n- IMPORTANT: You MUST INCLUDE tags like [[[assist]]] exactly as they appear in the Document in your response."}]},"contents":[{"parts":[{"text":"[RAW_SITE_RULES_START]\\nSite Rules =\\n{\\n  \\"SITE_RULES\\": {\\n    \\"role\\": \\"site_rules\\",\\n    \\"data\\": {\\n      \\"min_deposit\\": 100\\n    }\\n  }\\n}\\n[RAW_SITE_RULES_END]"},{"text":"Question:\\nยอดหนี้เท่าไหร่"}]}],"generationConfig":{"temperature":0.4,"topP":0.4,"topK":20,"thinkingConfig":{"thinkingLevel":"minimal"}}}",
+  "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent",
+}
+`;

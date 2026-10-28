@@ -1,0 +1,41 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    // Pinned, because tsc otherwise INFERS rootDir from the files it happened to
+    // compile — and that made the output path depend on the environment.
+    //
+    // A local build sees `z-test/` and infers the repo root, emitting
+    // `dist/src/main.js`. The Docker build excludes `z-test/` via .dockerignore,
+    // so `src` is the only input and the output flattens to `dist/main.js`.
+    //
+    // Two things were wrong with that. `start:prod` is `node dist/main`, so it
+    // could never run a local build. And the Dockerfile's CMD was correct only
+    // as a consequence of a .dockerignore line — unexclude `z-test/` and the
+    // container would fail at start, not at build, which is far harder to find.
+    //
+    // With rootDir pinned the entry point is `dist/main.js` everywhere.
+    "rootDir": "src",
+
+    // [FIX-20260820-EMPTYDIST] OFF for builds, and it must stay off.
+    //
+    // The base config turns `incremental` on, which is right for `tsc --noEmit`.
+    // For a BUILD it contradicts `nest-cli.json`'s `deleteOutDir: true`, and the
+    // two together silently produce NOTHING: `deleteOutDir` removes `dist/`,
+    // then tsc reads `tsconfig.build.tsbuildinfo`, concludes every file is
+    // already emitted, and emits nothing at all. The build exits 0 with no
+    // warning and no `dist/` — so it fails at `node dist/main`, at container
+    // start, not at build time, which is where it is hardest to trace.
+    //
+    // Reproduced 2026-08-20: two consecutive `nest build` runs left `dist/`
+    // absent entirely while both reported success.
+    //
+    // Incremental state cannot be right about an output directory that is
+    // deleted behind its back, so the honest setting is off. It costs a full
+    // recompile per build; the base config keeps typechecking fast.
+    // deleteOutDir กับ incremental อยู่ด้วยกันไม่ได้ · build เงียบ ๆ แล้วไม่ได้ไฟล์เลย.
+    //
+    // revert: delete this line — and expect empty builds to come back.
+    "incremental": false
+  },
+  "exclude": ["node_modules", "test", "dist", "z-test", "**/*spec.ts"]
+}

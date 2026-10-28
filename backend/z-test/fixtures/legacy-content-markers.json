@@ -1,0 +1,1389 @@
+{
+ "parse": {
+  "no markers at all": [],
+  "double spaces, no marker": [],
+  "leading and trailing spaces, no marker": [],
+  "single marker": [
+   [
+    1,
+    "ทักทายลูกค้า"
+   ]
+  ],
+  "two markers": [
+   [
+    1,
+    "หนึ่ง"
+   ],
+   [
+    2,
+    "สอง"
+   ]
+  ],
+  "orphan text before first marker": [
+   [
+    2,
+    "เนื้อหา"
+   ]
+  ],
+  "same slot twice": [
+   [
+    3,
+    "บรรทัดหนึ่ง\nบรรทัดสอง"
+   ]
+  ],
+  "two-bracket form": [
+   [
+    1,
+    "สอง วงเล็บ"
+   ]
+  ],
+  "slot 10": [
+   [
+    10,
+    "ช่องสิบ"
+   ]
+  ],
+  "slot 11 is not a marker": [],
+  "marker with empty body": [],
+  "marker only": [],
+  "uppercase marker": [
+   [
+    2,
+    "ตัวใหญ่"
+   ]
+  ],
+  "empty string": [],
+  "null": [],
+  "undefined": [],
+  "number": []
+ },
+ "strip": {
+  "no markers at all": "สวัสดีครับ ยินดีให้บริการ",
+  "double spaces, no marker": "สวัสดี  ครับ",
+  "leading and trailing spaces, no marker": "   hello   ",
+  "single marker": "ทักทายลูกค้า",
+  "two markers": "หนึ่ง สอง",
+  "orphan text before first marker": "ก่อนหน้า เนื้อหา",
+  "same slot twice": "บรรทัดหนึ่ง บรรทัดสอง",
+  "two-bracket form": "สอง วงเล็บ",
+  "slot 10": "ช่องสิบ",
+  "slot 11 is not a marker": "[[[custom_content_11]]] ไม่ใช่ช่อง",
+  "marker with empty body": "",
+  "marker only": "",
+  "uppercase marker": "ตัวใหญ่",
+  "empty string": "",
+  "null": "",
+  "undefined": "",
+  "number": "12345"
+ },
+ "tagMap": {
+  "declares nothing (undefined) || no markers at all": {
+   "map": {},
+   "declared": []
+  },
+  "declares nothing (undefined) || double spaces, no marker": {
+   "map": {},
+   "declared": []
+  },
+  "declares nothing (undefined) || leading and trailing spaces, no marker": {
+   "map": {},
+   "declared": []
+  },
+  "declares nothing (undefined) || single marker": {
+   "map": {},
+   "declared": []
+  },
+  "declares nothing (undefined) || two markers": {
+   "map": {},
+   "declared": []
+  },
+  "declares nothing (undefined) || orphan text before first marker": {
+   "map": {},
+   "declared": []
+  },
+  "declares nothing (undefined) || same slot twice": {
+   "map": {},
+   "declared": []
+  },
+  "declares nothing (undefined) || two-bracket form": {
+   "map": {},
+   "declared": []
+  },
+  "declares nothing (undefined) || slot 10": {
+   "map": {},
+   "declared": []
+  },
+  "declares nothing (undefined) || slot 11 is not a marker": {
+   "map": {},
+   "declared": []
+  },
+  "declares nothing (undefined) || marker with empty body": {
+   "map": {},
+   "declared": []
+  },
+  "declares nothing (undefined) || marker only": {
+   "map": {},
+   "declared": []
+  },
+  "declares nothing (undefined) || uppercase marker": {
+   "map": {},
+   "declared": []
+  },
+  "declares nothing (undefined) || empty string": {
+   "map": {},
+   "declared": []
+  },
+  "declares nothing (undefined) || null": {
+   "map": {},
+   "declared": []
+  },
+  "declares nothing (undefined) || undefined": {
+   "map": {},
+   "declared": []
+  },
+  "declares nothing (undefined) || number": {
+   "map": {},
+   "declared": []
+  },
+  "declares nothing (empty array) || no markers at all": {
+   "map": {},
+   "declared": []
+  },
+  "declares nothing (empty array) || double spaces, no marker": {
+   "map": {},
+   "declared": []
+  },
+  "declares nothing (empty array) || leading and trailing spaces, no marker": {
+   "map": {},
+   "declared": []
+  },
+  "declares nothing (empty array) || single marker": {
+   "map": {},
+   "declared": []
+  },
+  "declares nothing (empty array) || two markers": {
+   "map": {},
+   "declared": []
+  },
+  "declares nothing (empty array) || orphan text before first marker": {
+   "map": {},
+   "declared": []
+  },
+  "declares nothing (empty array) || same slot twice": {
+   "map": {},
+   "declared": []
+  },
+  "declares nothing (empty array) || two-bracket form": {
+   "map": {},
+   "declared": []
+  },
+  "declares nothing (empty array) || slot 10": {
+   "map": {},
+   "declared": []
+  },
+  "declares nothing (empty array) || slot 11 is not a marker": {
+   "map": {},
+   "declared": []
+  },
+  "declares nothing (empty array) || marker with empty body": {
+   "map": {},
+   "declared": []
+  },
+  "declares nothing (empty array) || marker only": {
+   "map": {},
+   "declared": []
+  },
+  "declares nothing (empty array) || uppercase marker": {
+   "map": {},
+   "declared": []
+  },
+  "declares nothing (empty array) || empty string": {
+   "map": {},
+   "declared": []
+  },
+  "declares nothing (empty array) || null": {
+   "map": {},
+   "declared": []
+  },
+  "declares nothing (empty array) || undefined": {
+   "map": {},
+   "declared": []
+  },
+  "declares nothing (empty array) || number": {
+   "map": {},
+   "declared": []
+  },
+  "not an array || no markers at all": {
+   "map": {},
+   "declared": []
+  },
+  "not an array || double spaces, no marker": {
+   "map": {},
+   "declared": []
+  },
+  "not an array || leading and trailing spaces, no marker": {
+   "map": {},
+   "declared": []
+  },
+  "not an array || single marker": {
+   "map": {},
+   "declared": []
+  },
+  "not an array || two markers": {
+   "map": {},
+   "declared": []
+  },
+  "not an array || orphan text before first marker": {
+   "map": {},
+   "declared": []
+  },
+  "not an array || same slot twice": {
+   "map": {},
+   "declared": []
+  },
+  "not an array || two-bracket form": {
+   "map": {},
+   "declared": []
+  },
+  "not an array || slot 10": {
+   "map": {},
+   "declared": []
+  },
+  "not an array || slot 11 is not a marker": {
+   "map": {},
+   "declared": []
+  },
+  "not an array || marker with empty body": {
+   "map": {},
+   "declared": []
+  },
+  "not an array || marker only": {
+   "map": {},
+   "declared": []
+  },
+  "not an array || uppercase marker": {
+   "map": {},
+   "declared": []
+  },
+  "not an array || empty string": {
+   "map": {},
+   "declared": []
+  },
+  "not an array || null": {
+   "map": {},
+   "declared": []
+  },
+  "not an array || undefined": {
+   "map": {},
+   "declared": []
+  },
+  "not an array || number": {
+   "map": {},
+   "declared": []
+  },
+  "one slot || no markers at all": {
+   "map": {
+    "custom_content_1": "สวัสดีครับ ยินดีให้บริการ"
+   },
+   "declared": [
+    "custom_content_1"
+   ]
+  },
+  "one slot || double spaces, no marker": {
+   "map": {
+    "custom_content_1": "สวัสดี  ครับ"
+   },
+   "declared": [
+    "custom_content_1"
+   ]
+  },
+  "one slot || leading and trailing spaces, no marker": {
+   "map": {
+    "custom_content_1": "   hello   "
+   },
+   "declared": [
+    "custom_content_1"
+   ]
+  },
+  "one slot || single marker": {
+   "map": {
+    "custom_content_1": "ทักทายลูกค้า"
+   },
+   "declared": [
+    "custom_content_1"
+   ]
+  },
+  "one slot || two markers": {
+   "map": {
+    "custom_content_1": "หนึ่ง"
+   },
+   "declared": [
+    "custom_content_1"
+   ]
+  },
+  "one slot || orphan text before first marker": {
+   "map": {
+    "custom_content_1": ""
+   },
+   "declared": [
+    "custom_content_1"
+   ]
+  },
+  "one slot || same slot twice": {
+   "map": {
+    "custom_content_1": ""
+   },
+   "declared": [
+    "custom_content_1"
+   ]
+  },
+  "one slot || two-bracket form": {
+   "map": {
+    "custom_content_1": "สอง วงเล็บ"
+   },
+   "declared": [
+    "custom_content_1"
+   ]
+  },
+  "one slot || slot 10": {
+   "map": {
+    "custom_content_1": ""
+   },
+   "declared": [
+    "custom_content_1"
+   ]
+  },
+  "one slot || slot 11 is not a marker": {
+   "map": {
+    "custom_content_1": "[[[custom_content_11]]] ไม่ใช่ช่อง"
+   },
+   "declared": [
+    "custom_content_1"
+   ]
+  },
+  "one slot || marker with empty body": {
+   "map": {
+    "custom_content_1": ""
+   },
+   "declared": [
+    "custom_content_1"
+   ]
+  },
+  "one slot || marker only": {
+   "map": {
+    "custom_content_1": ""
+   },
+   "declared": [
+    "custom_content_1"
+   ]
+  },
+  "one slot || uppercase marker": {
+   "map": {
+    "custom_content_1": ""
+   },
+   "declared": [
+    "custom_content_1"
+   ]
+  },
+  "one slot || empty string": {
+   "map": {
+    "custom_content_1": ""
+   },
+   "declared": [
+    "custom_content_1"
+   ]
+  },
+  "one slot || null": {
+   "map": {
+    "custom_content_1": ""
+   },
+   "declared": [
+    "custom_content_1"
+   ]
+  },
+  "one slot || undefined": {
+   "map": {
+    "custom_content_1": ""
+   },
+   "declared": [
+    "custom_content_1"
+   ]
+  },
+  "one slot || number": {
+   "map": {
+    "custom_content_1": "12345"
+   },
+   "declared": [
+    "custom_content_1"
+   ]
+  },
+  "two slots || no markers at all": {
+   "map": {
+    "custom_content_1": "สวัสดีครับ ยินดีให้บริการ",
+    "custom_content_2": ""
+   },
+   "declared": [
+    "custom_content_1",
+    "custom_content_2"
+   ]
+  },
+  "two slots || double spaces, no marker": {
+   "map": {
+    "custom_content_1": "สวัสดี  ครับ",
+    "custom_content_2": ""
+   },
+   "declared": [
+    "custom_content_1",
+    "custom_content_2"
+   ]
+  },
+  "two slots || leading and trailing spaces, no marker": {
+   "map": {
+    "custom_content_1": "   hello   ",
+    "custom_content_2": ""
+   },
+   "declared": [
+    "custom_content_1",
+    "custom_content_2"
+   ]
+  },
+  "two slots || single marker": {
+   "map": {
+    "custom_content_1": "ทักทายลูกค้า",
+    "custom_content_2": ""
+   },
+   "declared": [
+    "custom_content_1",
+    "custom_content_2"
+   ]
+  },
+  "two slots || two markers": {
+   "map": {
+    "custom_content_1": "หนึ่ง",
+    "custom_content_2": "สอง"
+   },
+   "declared": [
+    "custom_content_1",
+    "custom_content_2"
+   ]
+  },
+  "two slots || orphan text before first marker": {
+   "map": {
+    "custom_content_1": "",
+    "custom_content_2": "เนื้อหา"
+   },
+   "declared": [
+    "custom_content_1",
+    "custom_content_2"
+   ]
+  },
+  "two slots || same slot twice": {
+   "map": {
+    "custom_content_1": "",
+    "custom_content_2": ""
+   },
+   "declared": [
+    "custom_content_1",
+    "custom_content_2"
+   ]
+  },
+  "two slots || two-bracket form": {
+   "map": {
+    "custom_content_1": "สอง วงเล็บ",
+    "custom_content_2": ""
+   },
+   "declared": [
+    "custom_content_1",
+    "custom_content_2"
+   ]
+  },
+  "two slots || slot 10": {
+   "map": {
+    "custom_content_1": "",
+    "custom_content_2": ""
+   },
+   "declared": [
+    "custom_content_1",
+    "custom_content_2"
+   ]
+  },
+  "two slots || slot 11 is not a marker": {
+   "map": {
+    "custom_content_1": "[[[custom_content_11]]] ไม่ใช่ช่อง",
+    "custom_content_2": ""
+   },
+   "declared": [
+    "custom_content_1",
+    "custom_content_2"
+   ]
+  },
+  "two slots || marker with empty body": {
+   "map": {
+    "custom_content_1": "",
+    "custom_content_2": ""
+   },
+   "declared": [
+    "custom_content_1",
+    "custom_content_2"
+   ]
+  },
+  "two slots || marker only": {
+   "map": {
+    "custom_content_1": "",
+    "custom_content_2": ""
+   },
+   "declared": [
+    "custom_content_1",
+    "custom_content_2"
+   ]
+  },
+  "two slots || uppercase marker": {
+   "map": {
+    "custom_content_1": "",
+    "custom_content_2": "ตัวใหญ่"
+   },
+   "declared": [
+    "custom_content_1",
+    "custom_content_2"
+   ]
+  },
+  "two slots || empty string": {
+   "map": {
+    "custom_content_1": "",
+    "custom_content_2": ""
+   },
+   "declared": [
+    "custom_content_1",
+    "custom_content_2"
+   ]
+  },
+  "two slots || null": {
+   "map": {
+    "custom_content_1": "",
+    "custom_content_2": ""
+   },
+   "declared": [
+    "custom_content_1",
+    "custom_content_2"
+   ]
+  },
+  "two slots || undefined": {
+   "map": {
+    "custom_content_1": "",
+    "custom_content_2": ""
+   },
+   "declared": [
+    "custom_content_1",
+    "custom_content_2"
+   ]
+  },
+  "two slots || number": {
+   "map": {
+    "custom_content_1": "12345",
+    "custom_content_2": ""
+   },
+   "declared": [
+    "custom_content_1",
+    "custom_content_2"
+   ]
+  },
+  "unsorted, lowest is not first || no markers at all": {
+   "map": {
+    "custom_content_5": "",
+    "custom_content_2": "สวัสดีครับ ยินดีให้บริการ"
+   },
+   "declared": [
+    "custom_content_2",
+    "custom_content_5"
+   ]
+  },
+  "unsorted, lowest is not first || double spaces, no marker": {
+   "map": {
+    "custom_content_5": "",
+    "custom_content_2": "สวัสดี  ครับ"
+   },
+   "declared": [
+    "custom_content_2",
+    "custom_content_5"
+   ]
+  },
+  "unsorted, lowest is not first || leading and trailing spaces, no marker": {
+   "map": {
+    "custom_content_5": "",
+    "custom_content_2": "   hello   "
+   },
+   "declared": [
+    "custom_content_2",
+    "custom_content_5"
+   ]
+  },
+  "unsorted, lowest is not first || single marker": {
+   "map": {
+    "custom_content_5": "",
+    "custom_content_2": ""
+   },
+   "declared": [
+    "custom_content_2",
+    "custom_content_5"
+   ]
+  },
+  "unsorted, lowest is not first || two markers": {
+   "map": {
+    "custom_content_5": "",
+    "custom_content_2": "สอง"
+   },
+   "declared": [
+    "custom_content_2",
+    "custom_content_5"
+   ]
+  },
+  "unsorted, lowest is not first || orphan text before first marker": {
+   "map": {
+    "custom_content_5": "",
+    "custom_content_2": "เนื้อหา"
+   },
+   "declared": [
+    "custom_content_2",
+    "custom_content_5"
+   ]
+  },
+  "unsorted, lowest is not first || same slot twice": {
+   "map": {
+    "custom_content_5": "",
+    "custom_content_2": ""
+   },
+   "declared": [
+    "custom_content_2",
+    "custom_content_5"
+   ]
+  },
+  "unsorted, lowest is not first || two-bracket form": {
+   "map": {
+    "custom_content_5": "",
+    "custom_content_2": ""
+   },
+   "declared": [
+    "custom_content_2",
+    "custom_content_5"
+   ]
+  },
+  "unsorted, lowest is not first || slot 10": {
+   "map": {
+    "custom_content_5": "",
+    "custom_content_2": ""
+   },
+   "declared": [
+    "custom_content_2",
+    "custom_content_5"
+   ]
+  },
+  "unsorted, lowest is not first || slot 11 is not a marker": {
+   "map": {
+    "custom_content_5": "",
+    "custom_content_2": "[[[custom_content_11]]] ไม่ใช่ช่อง"
+   },
+   "declared": [
+    "custom_content_2",
+    "custom_content_5"
+   ]
+  },
+  "unsorted, lowest is not first || marker with empty body": {
+   "map": {
+    "custom_content_5": "",
+    "custom_content_2": ""
+   },
+   "declared": [
+    "custom_content_2",
+    "custom_content_5"
+   ]
+  },
+  "unsorted, lowest is not first || marker only": {
+   "map": {
+    "custom_content_5": "",
+    "custom_content_2": ""
+   },
+   "declared": [
+    "custom_content_2",
+    "custom_content_5"
+   ]
+  },
+  "unsorted, lowest is not first || uppercase marker": {
+   "map": {
+    "custom_content_5": "",
+    "custom_content_2": "ตัวใหญ่"
+   },
+   "declared": [
+    "custom_content_2",
+    "custom_content_5"
+   ]
+  },
+  "unsorted, lowest is not first || empty string": {
+   "map": {
+    "custom_content_5": "",
+    "custom_content_2": ""
+   },
+   "declared": [
+    "custom_content_2",
+    "custom_content_5"
+   ]
+  },
+  "unsorted, lowest is not first || null": {
+   "map": {
+    "custom_content_5": "",
+    "custom_content_2": ""
+   },
+   "declared": [
+    "custom_content_2",
+    "custom_content_5"
+   ]
+  },
+  "unsorted, lowest is not first || undefined": {
+   "map": {
+    "custom_content_5": "",
+    "custom_content_2": ""
+   },
+   "declared": [
+    "custom_content_2",
+    "custom_content_5"
+   ]
+  },
+  "unsorted, lowest is not first || number": {
+   "map": {
+    "custom_content_5": "",
+    "custom_content_2": "12345"
+   },
+   "declared": [
+    "custom_content_2",
+    "custom_content_5"
+   ]
+  },
+  "slot 10 || no markers at all": {
+   "map": {
+    "custom_content_10": "สวัสดีครับ ยินดีให้บริการ"
+   },
+   "declared": [
+    "custom_content_10"
+   ]
+  },
+  "slot 10 || double spaces, no marker": {
+   "map": {
+    "custom_content_10": "สวัสดี  ครับ"
+   },
+   "declared": [
+    "custom_content_10"
+   ]
+  },
+  "slot 10 || leading and trailing spaces, no marker": {
+   "map": {
+    "custom_content_10": "   hello   "
+   },
+   "declared": [
+    "custom_content_10"
+   ]
+  },
+  "slot 10 || single marker": {
+   "map": {
+    "custom_content_10": ""
+   },
+   "declared": [
+    "custom_content_10"
+   ]
+  },
+  "slot 10 || two markers": {
+   "map": {
+    "custom_content_10": ""
+   },
+   "declared": [
+    "custom_content_10"
+   ]
+  },
+  "slot 10 || orphan text before first marker": {
+   "map": {
+    "custom_content_10": ""
+   },
+   "declared": [
+    "custom_content_10"
+   ]
+  },
+  "slot 10 || same slot twice": {
+   "map": {
+    "custom_content_10": ""
+   },
+   "declared": [
+    "custom_content_10"
+   ]
+  },
+  "slot 10 || two-bracket form": {
+   "map": {
+    "custom_content_10": ""
+   },
+   "declared": [
+    "custom_content_10"
+   ]
+  },
+  "slot 10 || slot 10": {
+   "map": {
+    "custom_content_10": "ช่องสิบ"
+   },
+   "declared": [
+    "custom_content_10"
+   ]
+  },
+  "slot 10 || slot 11 is not a marker": {
+   "map": {
+    "custom_content_10": "[[[custom_content_11]]] ไม่ใช่ช่อง"
+   },
+   "declared": [
+    "custom_content_10"
+   ]
+  },
+  "slot 10 || marker with empty body": {
+   "map": {
+    "custom_content_10": ""
+   },
+   "declared": [
+    "custom_content_10"
+   ]
+  },
+  "slot 10 || marker only": {
+   "map": {
+    "custom_content_10": ""
+   },
+   "declared": [
+    "custom_content_10"
+   ]
+  },
+  "slot 10 || uppercase marker": {
+   "map": {
+    "custom_content_10": ""
+   },
+   "declared": [
+    "custom_content_10"
+   ]
+  },
+  "slot 10 || empty string": {
+   "map": {
+    "custom_content_10": ""
+   },
+   "declared": [
+    "custom_content_10"
+   ]
+  },
+  "slot 10 || null": {
+   "map": {
+    "custom_content_10": ""
+   },
+   "declared": [
+    "custom_content_10"
+   ]
+  },
+  "slot 10 || undefined": {
+   "map": {
+    "custom_content_10": ""
+   },
+   "declared": [
+    "custom_content_10"
+   ]
+  },
+  "slot 10 || number": {
+   "map": {
+    "custom_content_10": "12345"
+   },
+   "declared": [
+    "custom_content_10"
+   ]
+  },
+  "out-of-range slot is ignored || no markers at all": {
+   "map": {},
+   "declared": []
+  },
+  "out-of-range slot is ignored || double spaces, no marker": {
+   "map": {},
+   "declared": []
+  },
+  "out-of-range slot is ignored || leading and trailing spaces, no marker": {
+   "map": {},
+   "declared": []
+  },
+  "out-of-range slot is ignored || single marker": {
+   "map": {},
+   "declared": []
+  },
+  "out-of-range slot is ignored || two markers": {
+   "map": {},
+   "declared": []
+  },
+  "out-of-range slot is ignored || orphan text before first marker": {
+   "map": {},
+   "declared": []
+  },
+  "out-of-range slot is ignored || same slot twice": {
+   "map": {},
+   "declared": []
+  },
+  "out-of-range slot is ignored || two-bracket form": {
+   "map": {},
+   "declared": []
+  },
+  "out-of-range slot is ignored || slot 10": {
+   "map": {},
+   "declared": []
+  },
+  "out-of-range slot is ignored || slot 11 is not a marker": {
+   "map": {},
+   "declared": []
+  },
+  "out-of-range slot is ignored || marker with empty body": {
+   "map": {},
+   "declared": []
+  },
+  "out-of-range slot is ignored || marker only": {
+   "map": {},
+   "declared": []
+  },
+  "out-of-range slot is ignored || uppercase marker": {
+   "map": {},
+   "declared": []
+  },
+  "out-of-range slot is ignored || empty string": {
+   "map": {},
+   "declared": []
+  },
+  "out-of-range slot is ignored || null": {
+   "map": {},
+   "declared": []
+  },
+  "out-of-range slot is ignored || undefined": {
+   "map": {},
+   "declared": []
+  },
+  "out-of-range slot is ignored || number": {
+   "map": {},
+   "declared": []
+  },
+  "non-numeric slot is ignored || no markers at all": {
+   "map": {},
+   "declared": []
+  },
+  "non-numeric slot is ignored || double spaces, no marker": {
+   "map": {},
+   "declared": []
+  },
+  "non-numeric slot is ignored || leading and trailing spaces, no marker": {
+   "map": {},
+   "declared": []
+  },
+  "non-numeric slot is ignored || single marker": {
+   "map": {},
+   "declared": []
+  },
+  "non-numeric slot is ignored || two markers": {
+   "map": {},
+   "declared": []
+  },
+  "non-numeric slot is ignored || orphan text before first marker": {
+   "map": {},
+   "declared": []
+  },
+  "non-numeric slot is ignored || same slot twice": {
+   "map": {},
+   "declared": []
+  },
+  "non-numeric slot is ignored || two-bracket form": {
+   "map": {},
+   "declared": []
+  },
+  "non-numeric slot is ignored || slot 10": {
+   "map": {},
+   "declared": []
+  },
+  "non-numeric slot is ignored || slot 11 is not a marker": {
+   "map": {},
+   "declared": []
+  },
+  "non-numeric slot is ignored || marker with empty body": {
+   "map": {},
+   "declared": []
+  },
+  "non-numeric slot is ignored || marker only": {
+   "map": {},
+   "declared": []
+  },
+  "non-numeric slot is ignored || uppercase marker": {
+   "map": {},
+   "declared": []
+  },
+  "non-numeric slot is ignored || empty string": {
+   "map": {},
+   "declared": []
+  },
+  "non-numeric slot is ignored || null": {
+   "map": {},
+   "declared": []
+  },
+  "non-numeric slot is ignored || undefined": {
+   "map": {},
+   "declared": []
+  },
+  "non-numeric slot is ignored || number": {
+   "map": {},
+   "declared": []
+  },
+  "row with a hint || no markers at all": {
+   "map": {
+    "custom_content_1": "สวัสดีครับ ยินดีให้บริการ"
+   },
+   "declared": [
+    "custom_content_1"
+   ]
+  },
+  "row with a hint || double spaces, no marker": {
+   "map": {
+    "custom_content_1": "สวัสดี  ครับ"
+   },
+   "declared": [
+    "custom_content_1"
+   ]
+  },
+  "row with a hint || leading and trailing spaces, no marker": {
+   "map": {
+    "custom_content_1": "   hello   "
+   },
+   "declared": [
+    "custom_content_1"
+   ]
+  },
+  "row with a hint || single marker": {
+   "map": {
+    "custom_content_1": "ทักทายลูกค้า"
+   },
+   "declared": [
+    "custom_content_1"
+   ]
+  },
+  "row with a hint || two markers": {
+   "map": {
+    "custom_content_1": "หนึ่ง"
+   },
+   "declared": [
+    "custom_content_1"
+   ]
+  },
+  "row with a hint || orphan text before first marker": {
+   "map": {
+    "custom_content_1": ""
+   },
+   "declared": [
+    "custom_content_1"
+   ]
+  },
+  "row with a hint || same slot twice": {
+   "map": {
+    "custom_content_1": ""
+   },
+   "declared": [
+    "custom_content_1"
+   ]
+  },
+  "row with a hint || two-bracket form": {
+   "map": {
+    "custom_content_1": "สอง วงเล็บ"
+   },
+   "declared": [
+    "custom_content_1"
+   ]
+  },
+  "row with a hint || slot 10": {
+   "map": {
+    "custom_content_1": ""
+   },
+   "declared": [
+    "custom_content_1"
+   ]
+  },
+  "row with a hint || slot 11 is not a marker": {
+   "map": {
+    "custom_content_1": "[[[custom_content_11]]] ไม่ใช่ช่อง"
+   },
+   "declared": [
+    "custom_content_1"
+   ]
+  },
+  "row with a hint || marker with empty body": {
+   "map": {
+    "custom_content_1": ""
+   },
+   "declared": [
+    "custom_content_1"
+   ]
+  },
+  "row with a hint || marker only": {
+   "map": {
+    "custom_content_1": ""
+   },
+   "declared": [
+    "custom_content_1"
+   ]
+  },
+  "row with a hint || uppercase marker": {
+   "map": {
+    "custom_content_1": ""
+   },
+   "declared": [
+    "custom_content_1"
+   ]
+  },
+  "row with a hint || empty string": {
+   "map": {
+    "custom_content_1": ""
+   },
+   "declared": [
+    "custom_content_1"
+   ]
+  },
+  "row with a hint || null": {
+   "map": {
+    "custom_content_1": ""
+   },
+   "declared": [
+    "custom_content_1"
+   ]
+  },
+  "row with a hint || undefined": {
+   "map": {
+    "custom_content_1": ""
+   },
+   "declared": [
+    "custom_content_1"
+   ]
+  },
+  "row with a hint || number": {
+   "map": {
+    "custom_content_1": "12345"
+   },
+   "declared": [
+    "custom_content_1"
+   ]
+  },
+  "row with no label || no markers at all": {
+   "map": {
+    "custom_content_3": "สวัสดีครับ ยินดีให้บริการ"
+   },
+   "declared": [
+    "custom_content_3"
+   ]
+  },
+  "row with no label || double spaces, no marker": {
+   "map": {
+    "custom_content_3": "สวัสดี  ครับ"
+   },
+   "declared": [
+    "custom_content_3"
+   ]
+  },
+  "row with no label || leading and trailing spaces, no marker": {
+   "map": {
+    "custom_content_3": "   hello   "
+   },
+   "declared": [
+    "custom_content_3"
+   ]
+  },
+  "row with no label || single marker": {
+   "map": {
+    "custom_content_3": ""
+   },
+   "declared": [
+    "custom_content_3"
+   ]
+  },
+  "row with no label || two markers": {
+   "map": {
+    "custom_content_3": ""
+   },
+   "declared": [
+    "custom_content_3"
+   ]
+  },
+  "row with no label || orphan text before first marker": {
+   "map": {
+    "custom_content_3": ""
+   },
+   "declared": [
+    "custom_content_3"
+   ]
+  },
+  "row with no label || same slot twice": {
+   "map": {
+    "custom_content_3": "บรรทัดหนึ่ง\nบรรทัดสอง"
+   },
+   "declared": [
+    "custom_content_3"
+   ]
+  },
+  "row with no label || two-bracket form": {
+   "map": {
+    "custom_content_3": ""
+   },
+   "declared": [
+    "custom_content_3"
+   ]
+  },
+  "row with no label || slot 10": {
+   "map": {
+    "custom_content_3": ""
+   },
+   "declared": [
+    "custom_content_3"
+   ]
+  },
+  "row with no label || slot 11 is not a marker": {
+   "map": {
+    "custom_content_3": "[[[custom_content_11]]] ไม่ใช่ช่อง"
+   },
+   "declared": [
+    "custom_content_3"
+   ]
+  },
+  "row with no label || marker with empty body": {
+   "map": {
+    "custom_content_3": ""
+   },
+   "declared": [
+    "custom_content_3"
+   ]
+  },
+  "row with no label || marker only": {
+   "map": {
+    "custom_content_3": ""
+   },
+   "declared": [
+    "custom_content_3"
+   ]
+  },
+  "row with no label || uppercase marker": {
+   "map": {
+    "custom_content_3": ""
+   },
+   "declared": [
+    "custom_content_3"
+   ]
+  },
+  "row with no label || empty string": {
+   "map": {
+    "custom_content_3": ""
+   },
+   "declared": [
+    "custom_content_3"
+   ]
+  },
+  "row with no label || null": {
+   "map": {
+    "custom_content_3": ""
+   },
+   "declared": [
+    "custom_content_3"
+   ]
+  },
+  "row with no label || undefined": {
+   "map": {
+    "custom_content_3": ""
+   },
+   "declared": [
+    "custom_content_3"
+   ]
+  },
+  "row with no label || number": {
+   "map": {
+    "custom_content_3": "12345"
+   },
+   "declared": [
+    "custom_content_3"
+   ]
+  }
+ },
+ "guidelines": {
+  "declares nothing (undefined)": [],
+  "declares nothing (empty array)": [],
+  "not an array": [],
+  "one slot": [
+   {
+    "tag": "{{custom_content_1}}",
+    "desc": "ทักทาย (ช่องเนื้อหาของการ์ดนี้)",
+    "source": "content_tags[no=1]",
+    "example": "AI ใส่ผ่าน [[[custom_content_1]]]",
+    "noPrefix": true
+   }
+  ],
+  "two slots": [
+   {
+    "tag": "{{custom_content_1}}",
+    "desc": "ทักทาย (ช่องเนื้อหาของการ์ดนี้)",
+    "source": "content_tags[no=1]",
+    "example": "AI ใส่ผ่าน [[[custom_content_1]]]",
+    "noPrefix": true
+   },
+   {
+    "tag": "{{custom_content_2}}",
+    "desc": "ปิดท้าย (ช่องเนื้อหาของการ์ดนี้)",
+    "source": "content_tags[no=2]",
+    "example": "AI ใส่ผ่าน [[[custom_content_2]]]",
+    "noPrefix": true
+   }
+  ],
+  "unsorted, lowest is not first": [
+   {
+    "tag": "{{custom_content_2}}",
+    "desc": "สอง (ช่องเนื้อหาของการ์ดนี้)",
+    "source": "content_tags[no=2]",
+    "example": "AI ใส่ผ่าน [[[custom_content_2]]]",
+    "noPrefix": true
+   },
+   {
+    "tag": "{{custom_content_5}}",
+    "desc": "ห้า (ช่องเนื้อหาของการ์ดนี้)",
+    "source": "content_tags[no=5]",
+    "example": "AI ใส่ผ่าน [[[custom_content_5]]]",
+    "noPrefix": true
+   }
+  ],
+  "slot 10": [
+   {
+    "tag": "{{custom_content_10}}",
+    "desc": "สิบ (ช่องเนื้อหาของการ์ดนี้)",
+    "source": "content_tags[no=10]",
+    "example": "AI ใส่ผ่าน [[[custom_content_10]]]",
+    "noPrefix": true
+   }
+  ],
+  "out-of-range slot is ignored": [],
+  "non-numeric slot is ignored": [],
+  "row with a hint": [
+   {
+    "tag": "{{custom_content_1}}",
+    "desc": "ทักทาย — ไม่เกิน 20 คำ",
+    "source": "content_tags[no=1]",
+    "example": "AI ใส่ผ่าน [[[custom_content_1]]]",
+    "noPrefix": true
+   }
+  ],
+  "row with no label": [
+   {
+    "tag": "{{custom_content_3}}",
+    "desc": "ช่อง 3 (ช่องเนื้อหาของการ์ดนี้)",
+    "source": "content_tags[no=3]",
+    "example": "AI ใส่ผ่าน [[[custom_content_3]]]",
+    "noPrefix": true
+   }
+  ]
+ },
+ "named": {
+  "lowest slot": {
+   "custom_content_5": "",
+   "custom_content_2": "คำตอบที่ไม่มี marker เลย"
+  },
+  "undeclared dropped": {
+   "custom_content_1": "เก็บ"
+  }
+ }
+}

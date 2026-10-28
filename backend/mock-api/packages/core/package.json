@@ -1,0 +1,17 @@
+{
+  "name": "@zcrm/core",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": { "development": "./src/index.ts", "types": "./src/index.ts", "default": "./dist/index.js" }
+  },
+  "dependencies": {
+    "@fastify/helmet": "^13.0.0",
+    "@fastify/rate-limit": "^11.0.0",
+    "@fastify/type-provider-typebox": "^6.0.0",
+    "fastify": "^5.12.0",
+    "jose": "^6.2.0",
+    "typebox": "^1.1.14"
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "name": "omnidesk-mock-api",
+  "private": true,
+  "description": "Mock upstreams for the demo CRM: member-api (member data / site rules / top-up) and walletpay-api (wallet pay-in). JSON data, no database.",
+  "type": "module",
+  "engines": { "node": ">=22" },
+  "workspaces": ["packages/*", "apps/*"],
+  "scripts": {
+    "build": "tsc -b",
+    "typecheck": "tsc -b --pretty && tsc -p tsconfig.tests.json",
+    "lint": "eslint .",
+    "test": "node --conditions=development --import tsx --test --test-concurrency=1 \"packages/*/test/**/*.test.ts\" \"apps/*/test/**/*.test.ts\" \"test/**/*.test.ts\"",
+    "start:member": "node --import tsx apps/member-api/src/main.ts",
+    "start:walletpay": "node --import tsx apps/walletpay-api/src/main.ts"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "eslint": "^10.0.0",
+    "tsx": "^4.20.0",
+    "typescript": "~5.9.3",
+    "typescript-eslint": "^8.71.0"
+  }
+}

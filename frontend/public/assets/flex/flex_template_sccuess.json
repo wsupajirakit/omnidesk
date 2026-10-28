@@ -1,0 +1,203 @@
+{
+  "type": "bubble",
+  "size": "mega",
+  "header": {
+    "type": "box",
+    "layout": "horizontal",
+    "contents": [
+      {
+        "type": "image",
+        "url": "https://images.example.com/demo/banner.png",
+        "size": "xxs",
+        "flex": 0,
+        "align": "start",
+        "gravity": "center"
+      },
+      {
+        "type": "text",
+        "text": "status_text",
+        "color": "#ffffff",
+        "size": "xl",
+        "weight": "bold",
+        "gravity": "center",
+        "margin": "md",
+        "flex": 1
+      },
+      {
+        "type": "image",
+        "url": "https://images.example.com/demo/banner.png",
+        "size": "xs",
+        "flex": 0,
+        "align": "end",
+        "gravity": "center"
+      }
+    ],
+    "paddingAll": "20px",
+    "backgroundColor": "#0ed122",
+    "height": "100px"
+  },
+  "body": {
+    "type": "box",
+    "layout": "vertical",
+    "contents": [
+      {
+        "type": "box",
+        "layout": "vertical",
+        "contents": [
+          {
+            "type": "text",
+            "text": "฿ amount",
+            "size": "xxl",
+            "weight": "bold",
+            "align": "start"
+          },
+          {
+            "type": "text",
+            "text": "date_on_slip",
+            "size": "xs",
+            "color": "#b7b7b7",
+            "align": "start"
+          }
+        ],
+        "margin": "lg"
+      },
+      {
+        "type": "box",
+        "layout": "horizontal",
+        "contents": [
+          {
+            "type": "box",
+            "layout": "vertical",
+            "contents": [
+              {
+                "type": "image",
+                "url": "sender_bank_logo",
+                "size": "xxs"
+              },
+              {
+                "type": "text",
+                "text": "ผู้โอน",
+                "size": "xxs",
+                "align": "center",
+                "margin": "xs",
+                "color": "#8c8c8c"
+              }
+            ],
+            "flex": 0
+          },
+          {
+            "type": "box",
+            "layout": "vertical",
+            "contents": [
+              {
+                "type": "text",
+                "text": "sender_name",
+                "size": "sm",
+                "weight": "bold",
+                "color": "#2c3e50",
+                "align": "end"
+              },
+              {
+                "type": "text",
+                "text": "sender_acc_no",
+                "size": "xs",
+                "color": "#b7b7b7",
+                "align": "end"
+              }
+            ],
+            "margin": "lg",
+            "flex": 5
+          }
+        ],
+        "margin": "xxl"
+      },
+      {
+        "type": "box",
+        "layout": "horizontal",
+        "contents": [
+          {
+            "type": "box",
+            "layout": "vertical",
+            "contents": [
+              {
+                "type": "image",
+                "url": "receiver_bank_logo",
+                "size": "xxs"
+              },
+              {
+                "type": "text",
+                "text": "ผู้รับ",
+                "size": "xxs",
+                "align": "center",
+                "margin": "xs",
+                "color": "#8c8c8c"
+              }
+            ],
+            "flex": 0
+          },
+          {
+            "type": "box",
+            "layout": "vertical",
+            "contents": [
+              {
+                "type": "text",
+                "text": "receiver_name",
+                "size": "sm",
+                "weight": "bold",
+                "color": "#2c3e50",
+                "align": "end"
+              },
+              {
+                "type": "text",
+                "text": "receiver_acc_no",
+                "size": "xs",
+                "color": "#b7b7b7",
+                "align": "end"
+              }
+            ],
+            "margin": "lg",
+            "flex": 5
+          }
+        ],
+        "margin": "xxl"
+      },
+      {
+        "type": "box",
+        "layout": "horizontal",
+        "contents": [
+          {
+            "type": "image",
+            "url": "https://images.example.com/demo/banner.png",
+            "size": "xxs",
+            "flex": 0,
+            "gravity": "center"
+          },
+          {
+            "type": "box",
+            "layout": "vertical",
+            "contents": [
+              {
+                "type": "text",
+                "size": "xs",
+                "color": "#6c757d",
+                "weight": "bold",
+                "gravity": "center",
+                "text": "check_text"
+              },
+              {
+                "type": "text",
+                "text": "current_date",
+                "size": "xxs",
+                "color": "#b7b7b7",
+                "gravity": "center"
+              }
+            ],
+            "margin": "md",
+            "flex": 5
+          }
+        ],
+        "margin": "xxl"
+      }
+    ]
+  }
+}

@@ -1,0 +1,17 @@
+# Traefik static configuration for OmniDesk.
+# Routers and middlewares live in ./dynamic and are watched: adding, editing or renaming a
+# file there takes effect in about a second, with no restart.
+entryPoints:
+  web:
+    address: ":80"
+  # For production, add a `websecure` entry point on :443 with your certificate resolver
+  # (Let's Encrypt or a Cloudflare origin certificate) and redirect `web` to it.
+providers:
+  file:
+    directory: /etc/traefik/dynamic
+    watch: true
+log:
+  level: INFO
+accessLog: {}
+api:
+  dashboard: false

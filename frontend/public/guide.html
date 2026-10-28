@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>คู่มือการสร้าง Hook (LINE)</title>
+<style>
+  :root{
+    --bg:#f6f8fb; --card:#fff; --ink:#0f172a; --muted:#64748b; --line:#e2e8f0;
+    --brand:#059669; --brand-soft:#ecfdf5; --warn:#b45309; --warn-soft:#fffbeb;
+    --danger:#dc2626; --danger-soft:#fef2f2; --info:#1d4ed8; --info-soft:#eff6ff;
+  }
+  @media (prefers-color-scheme:dark){
+    :root{ --bg:#0b1220; --card:#111a2b; --ink:#e6edf7; --muted:#94a3b8; --line:#1f2c42;
+      --brand:#34d399; --brand-soft:#052e23; --warn:#fbbf24; --warn-soft:#2a2007;
+      --danger:#f87171; --danger-soft:#2b1112; --info:#93c5fd; --info-soft:#0c1c38; }
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:"IBM Plex Sans Thai","Noto Sans Thai",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    line-height:1.75;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:960px;margin:0 auto;padding:32px 20px 80px}
+  header.top{margin-bottom:28px}
+  h1{font-size:1.9rem;line-height:1.3;margin:0 0 8px}
+  .sub{color:var(--muted);margin:0}
+  h2{font-size:1.3rem;margin:0 0 4px}
+  h3{font-size:1.02rem;margin:22px 0 8px}
+  section{background:var(--card);border:1px solid var(--line);border-radius:14px;
+    padding:22px;margin-bottom:20px}
+  .step-no{display:inline-flex;align-items:center;justify-content:center;
+    min-width:26px;height:26px;border-radius:999px;background:var(--brand);
+    color:#fff;font-size:.8rem;font-weight:700;margin-inline-end:8px;padding:0 8px}
+  @media (prefers-color-scheme:dark){ .step-no{color:#04231a} }
+  .head{display:flex;align-items:flex-start;gap:4px;flex-wrap:wrap;margin-bottom:10px}
+  p{margin:8px 0}
+  ul,ol{margin:8px 0;padding-inline-start:22px}
+  li{margin:5px 0}
+  code{background:var(--info-soft);color:var(--info);padding:2px 6px;border-radius:5px;
+    font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.86em;word-break:break-all}
+  .scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:12px 0}
+  table{border-collapse:collapse;width:100%;min-width:520px;font-size:.93rem}
+  th,td{border:1px solid var(--line);padding:9px 11px;text-align:start;vertical-align:top}
+  th{background:var(--info-soft);color:var(--ink);font-weight:700;white-space:nowrap}
+  .req{color:var(--danger);font-weight:700}
+  .note{border-inline-start:4px solid;padding:12px 14px;border-radius:0 10px 10px 0;margin:14px 0;font-size:.94rem}
+  .n-warn{border-color:var(--warn);background:var(--warn-soft)}
+  .n-danger{border-color:var(--danger);background:var(--danger-soft)}
+  .n-info{border-color:var(--info);background:var(--info-soft)}
+  .n-ok{border-color:var(--brand);background:var(--brand-soft)}
+  .note b{display:block;margin-bottom:2px}
+  a{color:var(--brand)}
+  .video{display:block;background:var(--brand);color:#fff;text-decoration:none;
+    padding:14px 18px;border-radius:12px;font-weight:700;text-align:center;margin:6px 0 2px}
+  @media (prefers-color-scheme:dark){ .video{color:#04231a} }
+  /* [DOC-20260814-VIDEOPAIR] วิดีโอสองรุ่นวางคู่กัน — ต้องรู้ทันทีว่าอันไหนใหม่
+     ปุ่มเดิม (.video) คงสีพื้นเขียวไว้ = รุ่นเก่า · รุ่นใหม่เป็นปุ่มเน้น (.video-new)
+     revert: ลบบล็อกนี้ + คืน <a class="video"> เดี่ยว ๆ ที่ section วิดีโอ */
+  .vrow{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:6px 0 2px}
+  @media (max-width:640px){ .vrow{grid-template-columns:1fr} }
+  .video-new{display:block;text-decoration:none;text-align:center;font-weight:700;
+    padding:14px 18px;border-radius:12px;color:#fff;
+    background:linear-gradient(135deg,var(--brand) 0%,var(--info) 100%);
+    box-shadow:0 0 26px -8px color-mix(in srgb,var(--brand) 85%,transparent);
+    transition:transform .15s,box-shadow .15s}
+  .video-new:hover{transform:translateY(-1px);
+    box-shadow:0 0 38px -6px color-mix(in srgb,var(--brand) 95%,transparent)}
+  .vbadge{display:block;font-size:.74rem;font-weight:800;letter-spacing:.04em;
+    opacity:.92;margin-bottom:3px}
+  .video .vbadge{opacity:.85}
+  /* [DOC-20260814-GUIDEVIDEO] การ์ดวิดีโอบนสุด — thumbnail + ปุ่มเล่น
+     ใช้ตัวแปรสีชุดเดิมของไฟล์ทั้งหมด จึงเข้าธีมสว่าง/มืดเองโดยไม่ต้องแก้อะไรเพิ่ม
+     revert: ลบบล็อก .vcard…-.vplay และ <a class="vcard"> ใต้ <header> */
+  .vcard{display:flex;gap:18px;align-items:center;text-decoration:none;
+    background:var(--card);border:1px solid var(--line);border-radius:16px;
+    padding:18px 20px;margin-bottom:22px;position:relative;overflow:hidden;
+    transition:border-color .2s,transform .2s,box-shadow .2s}
+  /* เรืองแสงรอบการ์ดทั้งใบ — หนาขึ้นตอน hover */
+  .vcard{box-shadow:0 0 0 1px transparent,0 8px 24px -12px color-mix(in srgb,var(--brand) 55%,transparent)}
+  .vcard:hover{border-color:var(--brand);transform:translateY(-2px);
+    box-shadow:0 0 0 1px color-mix(in srgb,var(--brand) 45%,transparent),
+               0 16px 40px -14px color-mix(in srgb,var(--brand) 75%,transparent)}
+  /* กรอบรูปย่อ 16:9 — ไม่ฝัง iframe เพราะ Google Drive บล็อกการฝังในบางสิทธิ์
+     การ์ดนี้จึงเปิดแท็บใหม่แทน ซึ่งทำงานเสมอไม่ว่าไฟล์ตั้งสิทธิ์แบบไหน */
+  .vthumb{flex:0 0 190px;aspect-ratio:16/9;border-radius:12px;position:relative;
+    background:linear-gradient(135deg,var(--brand) 0%,var(--info) 100%);
+    display:flex;align-items:center;justify-content:center;overflow:hidden;
+    box-shadow:0 0 28px -6px color-mix(in srgb,var(--brand) 80%,transparent)}
+  /* วงแสงหมุนช้า ๆ หลังปุ่มเล่น ให้ดูมีชีวิตโดยไม่รบกวนสายตา */
+  .vthumb::after{content:"";position:absolute;inset:-40%;
+    background:conic-gradient(from 0deg,transparent 0deg,rgba(255,255,255,.35) 60deg,transparent 130deg);
+    animation:vspin 6s linear infinite}
+  @keyframes vspin{to{transform:rotate(360deg)}}
+  .vplay{width:54px;height:54px;border-radius:50%;background:rgba(255,255,255,.95);
+    display:flex;align-items:center;justify-content:center;position:relative;z-index:1;
+    color:#0f172a;font-size:1.25rem;padding-left:5px;
+    box-shadow:0 0 0 8px rgba(255,255,255,.18),0 6px 18px rgba(0,0,0,.28)}
+  .vcard:hover .vplay{box-shadow:0 0 0 12px rgba(255,255,255,.22),0 8px 22px rgba(0,0,0,.32)}
+  .vmeta b{display:block;font-size:1.08rem;color:var(--ink);margin-bottom:5px}
+  .vmeta span{color:var(--muted);font-size:.9rem;line-height:1.5}
+  /* ป้าย "วิดีโอ" มุมซ้ายบน ให้รู้ทันทีว่ากดแล้วได้อะไร */
+  .vtag{display:inline-block;font-size:.72rem;font-weight:800;letter-spacing:.04em;
+    color:var(--brand);background:var(--brand-soft);border:1px solid var(--brand);
+    border-radius:999px;padding:2px 10px;margin-bottom:8px}
+  @media (max-width:520px){ .vcard{flex-direction:column;align-items:stretch}
+    .vthumb{flex:none;width:100%} }
+
+  /* [DOC-20260814-HOOKONSHOT] ภาพ "เปิดใช้งาน" ใต้การ์ดวิดีโอ — กดเพื่อซูม
+     ใช้เรืองแสงชุดเดียวกับการ์ดวิดีโอ ให้สองบล็อกบนสุดเป็นชุดเดียวกัน
+     revert: ลบบล็อก .shotwrap…#lightbox + <figure> ใต้ <a class="vcard"> + ฟังก์ชัน zoom */
+  .shotwrap{background:var(--card);border:1px solid var(--line);border-radius:16px;
+    padding:18px;margin:0 0 22px;text-align:center;
+    box-shadow:0 8px 24px -14px color-mix(in srgb,var(--brand) 50%,transparent)}
+  .shotwrap figcaption{font-weight:800;color:var(--ink);margin:0 0 12px;font-size:1.02rem}
+  .shotwrap figcaption span{display:block;font-weight:400;color:var(--muted);
+    font-size:.88rem;margin-top:3px}
+  .shot{max-width:100%;height:auto;border-radius:12px;cursor:zoom-in;
+    border:1px solid var(--line);
+    box-shadow:0 0 30px -8px color-mix(in srgb,var(--brand) 70%,transparent);
+    transition:transform .2s,box-shadow .2s}
+  .shot:hover{transform:scale(1.01);
+    box-shadow:0 0 44px -6px color-mix(in srgb,var(--brand) 90%,transparent)}
+  /* กล่องซูมเต็มจอ — กดที่ไหนก็ปิด หรือกด Esc */
+  #lightbox{position:fixed;inset:0;background:rgba(2,6,23,.86);backdrop-filter:blur(3px);
+    display:none;align-items:center;justify-content:center;z-index:60;padding:24px;cursor:zoom-out}
+  #lightbox.show{display:flex}
+  #lightbox img{max-width:96vw;max-height:92vh;border-radius:12px;
+    box-shadow:0 0 60px -10px rgba(255,255,255,.25)}
+
+  /* เคารพผู้ใช้ที่ปิดแอนิเมชันในระบบ */
+  @media (prefers-reduced-motion:reduce){ .vthumb::after{animation:none}
+    .vcard:hover{transform:none} .shot:hover{transform:none} }
+  .toc{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 22px;margin-bottom:22px}
+  .toc ol{margin:6px 0 0}
+  .clip{display:inline-flex;align-items:center;gap:6px;text-decoration:none;font-weight:700;
+    font-size:.88rem;background:var(--brand-soft);color:var(--brand);
+    border:1px solid var(--brand);border-radius:10px;padding:8px 14px;margin:6px 0 2px}
+  .tag{display:inline-block;font-size:.72rem;font-weight:700;padding:2px 8px;border-radius:999px;
+    background:var(--info-soft);color:var(--info);margin-inline-start:6px;vertical-align:middle}
+  footer{color:var(--muted);font-size:.86rem;text-align:center;margin-top:30px}
+
+  @keyframes provider-glow{
+    0%,100%{ box-shadow:0 0 6px 0 rgba(220,38,38,.45), inset 0 0 0 1px rgba(220,38,38,.55) }
+    50%{ box-shadow:0 0 18px 4px rgba(220,38,38,.85), inset 0 0 0 1px rgba(220,38,38,.9) }
+  }
+  @media (prefers-color-scheme:dark){
+    @keyframes provider-glow{
+      0%,100%{ box-shadow:0 0 8px 0 rgba(248,113,113,.5), inset 0 0 0 1px rgba(248,113,113,.6) }
+      50%{ box-shadow:0 0 20px 5px rgba(248,113,113,.95), inset 0 0 0 1px rgba(248,113,113,1) }
+    }
+  }
+  .provider-warn{
+    display:block;margin:14px 0;padding:14px 16px;border-radius:12px;
+    background:var(--danger-soft);border:1px solid var(--danger);
+    animation:provider-glow 1.8s ease-in-out infinite;
+  }
+  .provider-warn b.big{
+    display:block;color:var(--danger);font-size:1.05rem;font-weight:800;
+    letter-spacing:.2px;margin-bottom:4px;
+  }
+  .provider-warn p{margin:4px 0 0;color:var(--ink);font-size:.94rem}
+  /* ==== [FEAT-20260803-PROVIDERGUIDE] modal อธิบายเรื่อง Provider
+     เดิมเขียนเป็นกฎตายตัว "1 Provider : 1 OA ห้ามรวมเด็ดขาด" ซึ่งไม่ตรงกับการใช้งานจริง
+     เพราะการรวมเป็นทางที่ถูกเมื่อ OA หลายตัวเสิร์ฟเว็บเดียวกัน
+     ทำเป็น modal ที่เด้งขึ้นมาเองครั้งแรก เพราะเป็นเรื่องที่ตัดสินใจผิดแล้วต้องรื้อทีหลัง
+     ⚠️ modal ปิดได้ แต่ไม่ปิดเองอัตโนมัติ · ยังมีกล่องสรุปคาไว้ในหน้าให้กดอ่านซ้ำ */
+  @keyframes prov-modal-in{
+    0%{ opacity:0; transform:translateY(12px) scale(.97) }
+    100%{ opacity:1; transform:translateY(0) scale(1) }
+  }
+  @keyframes prov-pulse{
+    0%,100%{ box-shadow:0 0 0 0 rgba(220,38,38,.55) }
+    50%{ box-shadow:0 0 0 12px rgba(220,38,38,0) }
+  }
+  .prov-backdrop{
+    position:fixed; inset:0; z-index:9999; display:none;
+    align-items:center; justify-content:center; padding:16px;
+    background:rgba(15,23,42,.62); backdrop-filter:blur(3px);
+  }
+  .prov-backdrop.show{ display:flex }
+  .prov-modal{
+    background:var(--card,#fff); border-radius:16px; max-width:760px; width:100%;
+    max-height:88vh; overflow:auto; border:2px solid var(--danger);
+    animation:prov-modal-in .28s cubic-bezier(.2,.8,.3,1) both;
+    box-shadow:0 24px 60px rgba(0,0,0,.35);
+  }
+  .prov-modal .ph{
+    padding:16px 20px; border-bottom:1px solid var(--danger);
+    background:var(--danger-soft); display:flex; align-items:center; gap:12px;
+    position:sticky; top:0;
+  }
+  .prov-modal .ph .dot{
+    width:38px;height:38px;border-radius:999px;flex:0 0 auto;
+    display:flex;align-items:center;justify-content:center;font-size:1.2rem;
+    background:var(--danger); color:#fff; animation:prov-pulse 1.8s ease-out infinite;
+  }
+  .prov-modal .ph b{ display:block; color:var(--danger); font-size:1.08rem; font-weight:800 }
+  .prov-modal .ph span{ color:var(--muted); font-size:.86rem }
+  .prov-body{ padding:18px 20px }
+  .prov-body h4{ margin:0 0 6px; font-size:1rem }
+  .prov-body p{ margin:0 0 10px; font-size:.95rem; line-height:1.65 }
+  .prov-case{
+    border:1px solid var(--line,#e2e8f0); border-radius:12px; padding:14px 16px; margin:12px 0;
+  }
+  .prov-case.join{ border-color:var(--danger); background:var(--danger-soft) }
+  .prov-case.split{ border-color:#7c3aed; background:rgba(124,58,237,.07) }
+  .prov-case h5{ margin:0 0 8px; font-size:.98rem; font-weight:800 }
+  .prov-case.join h5{ color:var(--danger) }
+  .prov-case.split h5{ color:#7c3aed }
+  .prov-case .flow{
+    font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; font-size:.82rem;
+    line-height:1.9; white-space:pre-wrap; word-break:break-word;
+    background:rgba(148,163,184,.14); border-radius:8px; padding:10px 12px; margin:8px 0;
+  }
+  .prov-case ul{ margin:8px 0 0; padding-inline-start:20px }
+  .prov-case li{ font-size:.9rem; line-height:1.7 }
+  .prov-foot{
+    padding:14px 20px; border-top:1px solid var(--line,#e2e8f0);
+    display:flex; justify-content:flex-end; gap:10px; position:sticky; bottom:0;
+    background:var(--card,#fff);
+  }
+  .prov-foot button{
+    font:inherit; font-weight:800; font-size:.92rem; cursor:pointer;
+    padding:9px 18px; border-radius:10px; border:0;
+    background:var(--danger); color:#fff;
+  }
+  .prov-open{
+    display:inline-flex; align-items:center; gap:6px; cursor:pointer;
+    font-weight:800; font-size:.82rem; color:#fff; background:var(--danger);
+    padding:4px 12px; border-radius:999px; border:0; font-family:inherit;
+    animation:provider-glow 1.8s ease-in-out infinite;
+  }
+  /* ==== [FEAT-20260803-PROVIDERGUIDE] END */
+  .provider-pill{
+    display:inline-flex;align-items:center;gap:5px;font-weight:800;font-size:.78rem;
+    color:#fff;background:var(--danger);padding:3px 10px;border-radius:999px;
+    margin-inline-start:6px;vertical-align:middle;white-space:nowrap;
+    animation:provider-glow 1.8s ease-in-out infinite;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="top">
+  <h1>คู่มือการสร้าง Hook (LINE)</h1>
+  <p class="sub">วิธีเชื่อม LINE Official Account เข้าระบบ — อธิบายทีละช่องตามหน้าจอจริงในระบบ</p>
+</header>
+
+<!-- [DOC-20260814-GUIDEVIDEO] วิดีโอสอนทั้งกระบวนการ วางบนสุดก่อนสารบัญ
+     เปิดแท็บใหม่ (ไม่ฝัง iframe — ดูเหตุผลที่ .vthumb ใน <style>) -->
+<a class="vcard" href="https://drive.google.com/file/d/EXAMPLE_FILE_ID/view?usp=drive_link"
+   target="_blank" rel="noopener noreferrer">
+  <span class="vthumb"><span class="vplay">▶</span></span>
+  <span class="vmeta">
+    <span class="vtag">วิดีโอสอน · V2 ใหม่ล่าสุด</span>
+    <b>วิธีสร้าง provider + oa + ตั้งค่า Hook</b>
+    <span>ดูทั้งกระบวนการตั้งแต่สร้าง provider จนตั้งค่า Hook เสร็จ — เปิดในแท็บใหม่</span>
+  </span>
+</a>
+
+<!-- [DOC-20260814-HOOKONSHOT] ภาพหน้าจอจุดเปิดใช้งาน วางต่อจากวิดีโอ · กดที่ภาพเพื่อซูม -->
+
+<!-- กล่องซูม: กดที่ใดก็ปิด (cursor เป็น zoom-out ทั้งพื้นที่) หรือกด Esc -->
+<div id="lightbox" onclick="closeShot()"><img id="lightboxImg" src="" alt=""></div>
+
+<div class="toc">
+  <b>ขั้นตอนทั้งหมด</b>
+  <!-- [DOC-20260729-MENUMAP] แผนผังเมนูอยู่นอกลำดับขั้นตอน (ไม่ใช่ step) จึงแยกบรรทัดไว้บนสุด -->
+  <p style="margin:6px 0 10px"><a href="#smenu">📍 แผนผังเมนู — หาแต่ละหน้าได้ที่ไหน</a></p>
+  <ol>
+    <li><a href="#s0">สร้าง <b>กลุ่มเครือข่าย</b> (ต้องมีก่อนทุกอย่าง)</a></li>
+    <li><a href="#s1">สร้าง <b>ผู้ใช้งาน</b> + คัดลอกผู้ใช้งาน (Clone)</a></li>
+    <li><a href="#s2">เตรียมค่าจากฝั่ง LINE (Channel ID / Secret / Access Token)</a></li>
+    <li><a href="#s3">ตั้งค่า Response settings ที่ LINE OA Manager</a></li>
+    <li><a href="#s4">สร้าง Hook ในระบบ — แท็บ ข้อมูลทั่วไป</a></li>
+    <li><a href="#s5">แท็บ การเชื่อมต่อ Channel + คัดลอก Webhook Endpoint</a></li>
+    <li><a href="#s6">แท็บ AI &amp; Responses</a></li>
+    <li><a href="#s7">แท็บที่ไม่บังคับ (Slip / แจ้งเตือน)</a></li>
+    <li><a href="#s8">นำ Webhook Endpoint ไป Verify ที่ LINE</a></li>
+    <li><a href="#s9">ตรวจสอบว่าเชื่อมต่อสมบูรณ์</a></li>
+  </ol>
+</div>
+
+<!-- ==== [FEAT-20260803-PROVIDERGUIDE] กล่องสรุปคาไว้ในหน้า + ปุ่มเปิด modal อ่านเต็ม -->
+<div class="provider-warn">
+  <b class="big">🔴 เรื่อง Provider — ตัดสินใจก่อนสร้าง OA ตัวแรก</b>
+  <p>การเลือกว่าจะให้ OA อยู่ Provider เดียวกันหรือแยกกัน ขึ้นอยู่กับว่าเว็บไซต์ที่ OA เหล่านั้นให้บริการ
+  ใช้ฐานข้อมูลลูกค้าร่วมกันหรือไม่ ไม่ใช่กฎตายตัว
+  <button class="prov-open" type="button" onclick="openProv()">อ่านก่อนตัดสินใจ</button></p>
+</div>
+
+<!-- modal คำเตือน — เด้งเองครั้งแรกที่เปิดหน้า -->
+<div class="prov-backdrop" id="provBackdrop" onclick="if(event.target===this)closeProv()">
+  <div class="prov-modal" role="dialog" aria-modal="true" aria-labelledby="provTitle">
+    <div class="ph">
+      <div class="dot">!</div>
+      <div>
+        <b id="provTitle">รวมหรือแยก Provider — เลือกให้ตรงกับโครงสร้างเว็บ</b>
+        <span>เปลี่ยนทีหลังหมายถึงการย้าย OA ซึ่งต้องตั้งค่า webhook ใหม่ทั้งหมด</span>
+      </div>
+    </div>
+
+    <div class="prov-body">
+      <p>Provider คือกล่องที่ LINE ใช้จัดกลุ่ม OA ของเจ้าของเดียวกัน สิ่งที่ต้องดูคือ
+      <b>เว็บไซต์ปลายทางของแต่ละ OA ใช้ฐานข้อมูลลูกค้าเดียวกันหรือคนละชุด</b>
+      ห้องแชทของแต่ละ OA แยกจากกันเสมอไม่ว่าจะเลือกแบบไหน</p>
+
+      <div class="prov-case join">
+        <h5>รวม Provider — เว็บเดียว ข้อมูลลูกค้าชุดเดียว</h5>
+        <div class="flow">[ ลูกค้า ] --ทัก--&gt; [ LINE OA 01 ] --&gt; [ ห้องแชทของ OA 01 ] \
+[ ลูกค้า ] --ทัก--&gt; [ LINE OA 02 ] --&gt; [ ห้องแชทของ OA 02 ]  &gt;-- [ เว็บไซต์เดียว · ข้อมูลลูกค้าชุดเดียวกัน ]
+[ ลูกค้า ] --ทัก--&gt; [ LINE OA 03 ] --&gt; [ ห้องแชทของ OA 03 ] /</div>
+        <ul>
+          <li>ใช้เมื่อ OA หลายตัวเป็นช่องทางเข้าของเว็บเดียวกัน เช่น แยกตามแคมเปญหรือแยกตามทีมที่ดูแล</li>
+          <li>ห้องแชทยังแยกกันตาม OA ที่ลูกค้าทักเข้ามา แต่ยอดเงินและประวัติที่ดึงมาแสดงเป็นข้อมูลชุดเดียวกัน</li>
+          <li>ลูกค้าคนเดียวทักเข้ามาคนละ OA จะเห็นข้อมูลบัญชีตรงกันทุกทาง</li>
+        </ul>
+      </div>
+
+      <div class="prov-case split">
+        <h5>แยก Provider — คนละเว็บ คนละฐานข้อมูล</h5>
+        <div class="flow">[ ลูกค้า ] --ทัก--&gt; [ LINE OA (A) ] --&gt; [ เว็บไซต์ A · ข้อมูลของ A ]
+[ ลูกค้า ] --ทัก--&gt; [ LINE OA (B) ] --&gt; [ เว็บไซต์ B · ข้อมูลของ B ]
+[ ลูกค้า ] --ทัก--&gt; [ LINE OA (C) ] --&gt; [ เว็บไซต์ C · ข้อมูลของ C ]</div>
+        <ul>
+          <li>ใช้เมื่อแต่ละ OA ให้บริการคนละเว็บ ซึ่งมีทะเบียนลูกค้า ยอดเงิน และกติกาของตัวเอง</li>
+          <li>ข้อมูลของแต่ละเว็บไม่ปนกัน ลูกค้าที่สมัครไว้กับเว็บ A จะไม่ถูกมองว่าเป็นลูกค้าของเว็บ B</li>
+          <li>เหมาะกับกรณีที่เจ้าของเว็บเป็นคนละราย หรือต้องการให้สิทธิ์การเข้าถึงแยกขาดจากกัน</li>
+        </ul>
+      </div>
+
+      <p style="margin-top:14px"><b>ข้อควรระวัง</b> — หากรวม OA ที่เสิร์ฟคนละเว็บไว้ Provider เดียวกัน
+      ข้อมูลลูกค้าจากคนละเว็บจะถูกอ่านเป็นชุดเดียวกัน และแอดมินจะเห็นยอดเงินของอีกเว็บหนึ่งในห้องแชทที่ไม่เกี่ยวข้อง</p>
+    </div>
+
+    <div class="prov-foot">
+      <button type="button" onclick="closeProv()">รับทราบ</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  /* [FEAT-20260803-PROVIDERGUIDE] เปิดด้วยการกดปุ่มเท่านั้น — ไม่เด้งเอง
+     ผู้ใช้สั่ง 2026-08-03: ให้กดดูเอง
+     ⚠️ ถอด localStorage ออกด้วย เพราะเคยมีไว้จำว่า "เด้งไปแล้ว" อย่างเดียว
+        ไม่เด้งเองแล้วก็ไม่มีอะไรต้องจำ · เก็บไว้ = ค่าค้างในเครื่องคนใช้โดยไม่มีประโยชน์ */
+  function openProv(){ document.getElementById('provBackdrop').classList.add('show'); }
+  function closeProv(){ document.getElementById('provBackdrop').classList.remove('show'); }
+
+  /* [DOC-20260814-HOOKONSHOT] ซูมภาพหน้าจอ — กดที่ภาพเพื่อเปิด, กดที่ใดก็ปิด
+     ⚠️ ใช้ตัวจัดการ Escape ตัวเดียวกับกล่อง provider ด้านบน ไม่ผูก listener ซ้อน
+     revert: ลบสองฟังก์ชันนี้ + บรรทัด closeShot() ใน keydown ด้านล่าง */
+  function zoomShot(src){
+    var box = document.getElementById('lightbox');
+    document.getElementById('lightboxImg').src = src;
+    box.classList.add('show');
+  }
+  function closeShot(){ document.getElementById('lightbox').classList.remove('show'); }
+
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'Escape') { closeProv(); closeShot(); }
+  });
+</script>
+<!-- ==== [FEAT-20260803-PROVIDERGUIDE] END -->
+
+<section>
+  <!-- [DOC-20260814-VIDEOPAIR] สองรุ่นคู่กัน — รุ่นใหม่อยู่ซ้าย/บน (อ่านก่อน)
+       คลิปเก่ายังเก็บไว้ เพราะบางขั้นตอนในนั้นยังตรงกับหน้าจอปัจจุบัน -->
+  <div class="vrow">
+    <a class="video-new" href="https://drive.google.com/file/d/EXAMPLE_FILE_ID/view?usp=drive_link" target="_blank" rel="noopener noreferrer">
+      <span class="vbadge">V2 · ใหม่ล่าสุด — แนะนำ</span>
+      🎬 สร้าง provider + OA + ตั้งค่า Hook
+    </a>
+    <a class="video" href="https://drive.google.com/file/d/EXAMPLE_FILE_ID/view?usp=sharing" target="_blank" rel="noopener">
+      <span class="vbadge">V1 · คลิปเก่า</span>
+      🎬 ดูวิดีโอสอนตั้งค่า (เปิดใน Google Drive)
+    </a>
+  </div>
+  <p style="text-align:center;margin:8px 0 0;color:var(--muted);font-size:.9rem">
+    <b>V1 (เก่า):</b> มี OA อยู่แล้ว → เริ่มดูที่ <b>นาทีที่ 3:25</b> · ถ้ายังไม่มี OA → ดูตั้งแต่ต้นคลิป
+  </p>
+  <div class="note n-info">
+    <b>เว็บที่ต้องใช้ 2 ตัว (คนละตัวกัน อย่าสับสน)</b>
+    <ul style="margin-bottom:0">
+      <li><b>LINE Developers Console</b> — <code>developers.line.biz/console</code> → เอา Channel ID / Secret / Access Token และตั้ง Webhook</li>
+      <!-- [DOC-20260729-MENUMAP] เติม "(หรือ auto response)" + ทางออกกรณีปิดไม่ได้ -->
+      <li><b>LINE OA Manager</b> — <code>manager.line.biz</code> → ปิด auto-reply (หรือ auto response) / เปิด Chat — หากปิดไม่ได้ ให้เลือกเป็น <b>Manual</b></li>
+    </ul>
+  </div>
+  <p style="margin-bottom:0"><b>เป้าหมาย:</b> เอาค่า 3 อย่างจาก LINE → กรอกลงระบบ → คัดลอก Webhook Endpoint กลับไปใส่ที่ LINE → Verify ให้ขึ้น Success</p>
+</section>
+
+<!-- [DOC-20260729-MENUMAP] START — แผนผังเมนู
+     เดิมคู่มือเขียนว่า "เมนูซ้าย" ทุกจุด แต่ระบบย้ายมาใช้เมนูบน (mega menu)
+     และบางเมนูอยู่คนละกลุ่มกับที่เขียนไว้ ("กลุ่มเครือข่าย" อยู่ใต้ "แอป"
+     ไม่ใช่ "จัดการทั่วไป") ตารางนี้ลอกจากของจริงใน components/MegaMenu.tsx
+     (SECTIONS) + ชื่อไทยจาก i18n/translations/th.json ไม่ได้เขียนจากความจำ
+     ⚠️ ถ้าแก้เมนูในโค้ด ต้องมาอัปเดตตารางนี้ด้วย
+     revert: ลบ <section id="smenu"> ทั้งก้อน -->
+<section id="smenu">
+  <div class="head"><span class="step-no">📍</span><h2>แผนผังเมนู — หาแต่ละหน้าได้ที่ไหน</h2></div>
+  <div class="note">
+    <b>เมนูอยู่ด้านบนแถบเดียว</b> (ไม่มีเมนูซ้ายแล้ว) —
+    กดชื่อกลุ่มแล้วจะกางรายการหน้าย่อยลงมา
+  </div>
+  <div class="scroll">
+  <table>
+    <thead><tr><th>กลุ่มเมนู</th><th>หน้าย่อย</th><th>ใช้ทำอะไร</th></tr></thead>
+    <tbody>
+      <tr><td rowspan="5"><b>จัดการทั่วไป</b></td><td>ช่องทาง ( Hook )</td><td>สร้าง/แก้ Hook ของแต่ละ LINE OA</td></tr>
+      <tr><td>ตรวจสอบสลิป</td><td>ตั้งค่าและดูผลตรวจสลิปโอนเงิน</td></tr>
+      <tr><td>จัดการ Flex Message</td><td>ออกแบบข้อความ Flex ที่บอทส่ง</td></tr>
+      <tr><td>จัดการแท็กไดนามิก</td><td>แท็กอัตโนมัติที่ดึงค่าจาก API ปลายทาง</td></tr>
+      <tr><td>เครื่องมือเชื่อมต่อ</td><td>ตั้งค่า API ปลายทาง (custom tools) ที่ Hook เรียกใช้</td></tr>
+      <tr><td rowspan="5"><b>สนับสนุน</b></td><td>Ticket Support (Chat)</td><td>หน้าหลักรับ–จ่ายงานซัพพอร์ต + แชทกับลูกค้า</td></tr>
+      <!-- [FEAT-20260729-LEGACYDEV] เมนูนี้เห็นเฉพาะ username dev — ระบุไว้ในคู่มือ
+           เพื่อไม่ให้คนอื่นตามหาแล้วไม่เจอ -->
+      <tr><td>จัดการงาน (Legacy)</td><td>หน้าตารางแบบเดิม — <b>เห็นเฉพาะบัญชี <code>dev</code></b> ไว้ใช้ตรวจเทียบ</td></tr>
+      <tr><td>รายงานเชิงลึก</td><td>สถิติงานซัพพอร์ต</td></tr>
+      <tr><td>ประวัติจ่ายงาน</td><td>ย้อนดูว่าใครรับ/โอนเคสไหน</td></tr>
+      <tr><td>Contacts</td><td>ข้อมูลผู้ติดต่อ (ต้องมีสิทธิ์ <code>contact.manage</code>)</td></tr>
+      <tr><td rowspan="2"><b>พื้นที่จัดเก็บ</b></td><td>หมวดหมู่ Object</td><td>จัดหมวดคลังรูป/ไฟล์</td></tr>
+      <tr><td>อัลบั้มรูป Object</td><td>คลังรูปที่ใช้ตอบลูกค้า</td></tr>
+      <tr><td><b>แชท</b></td><td>— (กดแล้วเข้าหน้าแชทเลย)</td><td>ทางลัดเข้าหน้าแชท ไม่มีเมนูย่อย</td></tr>
+      <tr><td rowspan="5"><b>แอป</b></td><td>กลุ่มเครือข่าย</td><td>จัดกลุ่ม Hook + คุมว่าใครเห็นข้อมูลกลุ่มไหน</td></tr>
+      <tr><td>ผู้ใช้งาน</td><td>สร้าง/แก้ผู้ใช้งานและสิทธิ์</td></tr>
+      <tr><td>ประวัติ Webhook</td><td>log ที่ LINE ยิงเข้ามาและที่ระบบยิงออกไป</td></tr>
+      <tr><td>บันทึกการเปลี่ยนแปลง</td><td>ใครแก้อะไรเมื่อไหร่</td></tr>
+      <tr><td>ตั้งค่าระบบ</td><td>ค่าคอนฟิกกลางของระบบ</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="note">
+    <b>💡 ไม่เห็นบางเมนู?</b> เมนูจะแสดงตาม <b>สิทธิ์ของบัญชีที่ล็อกอินอยู่</b> เท่านั้น
+    ถ้าไม่มีสิทธิ์ของหน้านั้น เมนูจะไม่ขึ้นเลย (ไม่ใช่ขึ้นแล้วกดไม่ได้) —
+    ติดต่อผู้ดูแลให้เพิ่มสิทธิ์ที่หน้า <b>แอป → ผู้ใช้งาน</b>
+  </div>
+</section>
+<!-- [DOC-20260729-MENUMAP] END -->
+
+<!-- 0 -->
+<section id="s0">
+  <div class="head"><span class="step-no">1</span><h2>สร้าง “กลุ่มเครือข่าย” ก่อน</h2></div>
+  <div class="note n-danger">
+    <b>🔴 ต้องทำก่อนเสมอ — ไม่มีกลุ่มเครือข่าย = สร้าง Hook ไม่ได้</b>
+    ในฟอร์มสร้าง Hook ช่อง <b>กลุ่มเครือข่าย</b> เป็นช่องบังคับ (<span class="req">*</span>) และเป็น <b>dropdown ให้เลือกเท่านั้น พิมพ์เองไม่ได้</b>
+    ถ้ายังไม่เคยสร้างกลุ่มไว้ dropdown จะว่าง แล้วจะติดที่ “จำเป็นต้องกรอก” บันทึกไม่ผ่าน
+  </div>
+
+  <p><b>กลุ่มเครือข่ายคืออะไร:</b> เป็นตัวจัดกลุ่มว่า Hook ตัวไหนเป็นของลูกค้า/ทีมไหน
+    และใช้คุมว่า <b>ผู้ใช้งานคนไหนเห็นข้อมูลของกลุ่มไหนได้บ้าง</b> —
+    ผู้ใช้งานจะเห็นเฉพาะ Hook ที่อยู่ในกลุ่มเครือข่ายที่ตัวเองถูกกำหนดไว้เท่านั้น</p>
+
+  <h3>วิธีสร้าง</h3>
+  <ol>
+    <!-- [DOC-20260729-MENUMAP] เดิมเขียนว่า "เมนูซ้าย หัวข้อ จัดการทั่วไป" ซึ่งผิด 2 ชั้น:
+         (1) ตอนนี้ใช้เมนูบน (mega menu) ไม่ใช่เมนูซ้ายแล้ว
+         (2) "กลุ่มเครือข่าย" อยู่ใต้กลุ่ม "แอป" ไม่ใช่ "จัดการทั่วไป"
+         ตรวจจาก SECTIONS ใน components/MegaMenu.tsx + i18n/translations/th.json จริง -->
+    <li>เมนู หัวข้อ <b>แอป</b> → <b>กลุ่มเครือข่าย</b></li>
+    <li>กดปุ่มเพิ่ม → เปิดฟอร์ม <b>สร้างกลุ่มเครือข่าย</b></li>
+    <li>กรอกข้อมูลตามตารางด้านล่าง → บันทึก</li>
+  </ol>
+  <div class="scroll">
+  <table>
+    <thead><tr><th>ช่อง</th><th>กรอกอะไร</th><th>บังคับ</th></tr></thead>
+    <tbody>
+      <tr><td>ชื่อกลุ่มเครือข่าย</td><td>ชื่อกลุ่ม เช่น <code>การตลาด</code></td><td class="req">*</td></tr>
+      <tr><td>คำอธิบาย</td><td>อธิบายว่ากลุ่มนี้ใช้กับอะไร เช่น “LINE OA สำหรับกลุ่มเครือข่าย”</td><td>—</td></tr>
+      <tr><td>สถานะ</td><td>ต้อง <b>เปิดใช้งาน</b> — ถ้าปิด จะไม่ขึ้นให้เลือกในฟอร์ม Hook</td><td>—</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="note n-warn">
+    <b>⚠️ กลุ่มที่ปิดสถานะจะไม่โผล่ใน dropdown</b>
+    ฟอร์ม Hook ดึงเฉพาะกลุ่มที่ <b>เปิดใช้งาน</b> เท่านั้น ถ้าหากลุ่มที่เคยสร้างไม่เจอ ให้กลับมาเช็คสถานะก่อน
+  </div>
+</section>
+
+<!-- 1 -->
+<section id="s1">
+  <div class="head"><span class="step-no">2</span><h2>สร้างผู้ใช้งาน + คัดลอกผู้ใช้งาน (Clone)</h2></div>
+  <div class="note n-info">
+    <b>💡 ทำไมต้องทำต่อจากกลุ่มเครือข่าย</b>
+    ฟอร์มสร้างผู้ใช้งานบังคับให้เลือก <b>กลุ่มเครือข่าย อย่างน้อย 1 กลุ่ม</b> —
+    ถ้ายังไม่ได้สร้างกลุ่มในขั้นตอนที่ 1 จะไม่มีอะไรให้เลือก และสร้างผู้ใช้งานไม่ได้
+  </div>
+  <!-- [DOC-20260729-MENUMAP] "เมนูซ้าย" → "เมนูบน" (กลุ่ม "แอป" ถูกต้องอยู่แล้ว) -->
+  <p>เมนู หัวข้อ <b>แอป</b> → <b>ผู้ใช้งาน</b> → เข้าหน้า <b>จัดการผู้ใช้งาน</b></p>
+
+  <h3>สร้างผู้ใช้งานใหม่</h3>
+  <p>กดปุ่มเพิ่ม → เปิดฟอร์ม <b>สร้างผู้ใช้งาน</b></p>
+  <div class="scroll">
+  <table>
+    <thead><tr><th>ช่อง</th><th>กรอกอะไร</th><th>บังคับ</th></tr></thead>
+    <tbody>
+      <tr><td>ชื่อผู้ใช้</td><td>ชื่อที่ใช้ล็อกอิน เช่น <code>john</code></td><td class="req">*</td></tr>
+      <tr><td>รหัสผ่าน</td><td>รหัสผ่านสำหรับเข้าระบบ (มีปุ่ม 👁 ดูค่าได้)</td><td class="req">*</td></tr>
+      <tr><td>ยืนยันรหัสผ่าน</td><td>ต้องตรงกับช่องรหัสผ่าน ไม่งั้นขึ้น “รหัสผ่านไม่ตรงกัน”</td><td class="req">*</td></tr>
+      <tr><td>ชื่อแสดง</td><td>ชื่อที่โชว์ในระบบ เช่น <code>John Doe</code></td><td class="req">*</td></tr>
+      <tr><td>อีเมล</td><td>เช่น <code>john@example.com</code></td><td>—</td></tr>
+      <tr><td>เบอร์โทรศัพท์</td><td>เช่น <code>0812345678</code></td><td>—</td></tr>
+      <tr><td>ระดับสิทธิ์</td><td>เลือกบทบาทจากรายการ</td><td class="req">*</td></tr>
+      <tr><td>กลุ่มเครือข่าย</td><td>เลือกได้หลายกลุ่ม — <b>ต้องเลือกอย่างน้อย 1 กลุ่ม</b></td><td class="req">*</td></tr>
+      <tr><td>สิทธิ์</td><td>พิมพ์แล้วกด Enter — <b>ต้องเลือกอย่างน้อย 1 สิทธิ์</b></td><td class="req">*</td></tr>
+      <tr><td>สถานะ</td><td>เปิด/ปิดการใช้งานบัญชีนี้</td><td>—</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="note n-info">
+    <b>💡 กลุ่มเครือข่ายเป็นตัวกำหนดว่าคนนี้เห็นอะไรได้บ้าง</b>
+    ผู้ใช้งานจะเห็นเฉพาะข้อมูลของกลุ่มเครือข่ายที่ถูกกำหนดให้เท่านั้น —
+    ถ้าเลือกกลุ่มผิด คนนั้นจะเห็น Hook ผิดชุด หรือไม่เห็นอะไรเลย
+  </div>
+  <div class="note n-warn">
+    <b>⚠️ แก้ไขผู้ใช้งานที่มีอยู่ = เตะออกจากระบบ</b>
+    เวลากดแก้ไขผู้ใช้งาน ระบบจะเตือนก่อนว่า <b>session ของคนนั้นจะถูกเคลียร์และถูกบังคับออกจากระบบ</b>
+    ต้องล็อกอินใหม่ — ถ้าเขากำลังทำงานอยู่ ควรแจ้งก่อน
+  </div>
+
+  <h3>คัดลอกผู้ใช้งาน (Clone) — สร้างทีละหลายคน</h3>
+  <p>ใช้เมื่อต้องการสร้างผู้ใช้งานหลายคนที่มี <b>บทบาท กลุ่มเครือข่าย และสิทธิ์เหมือนกัน</b>
+    เช่น เปิดทีมแอดมินใหม่ 5 คนที่ดูแลกลุ่มเดียวกัน — ไม่ต้องมานั่งตั้งสิทธิ์ทีละคน</p>
+  <ol>
+    <li>หาผู้ใช้งาน <b>ต้นทาง</b> ที่มีสิทธิ์ตรงกับที่ต้องการอยู่แล้ว</li>
+    <li>กดไอคอน <b>คัดลอกผู้ใช้งาน</b> (รูปสองแผ่นซ้อนกัน) ที่ท้ายแถวของคนนั้น</li>
+    <li>เปิดหน้าต่าง <b>คัดลอกผู้ใช้งานหลายรายการ</b> — ด้านบนจะโชว์ <b>สิทธิ์ที่คัดลอกมา (จากผู้ใช้งานต้นทาง)</b> ให้ตรวจก่อน</li>
+    <li>กรอก <b>ชื่อผู้ใช้</b> + <b>รหัสผ่าน</b> ของแต่ละคน (ส่วนนี้ต้องกรอกเอง ไม่ถูกคัดลอกมา)</li>
+    <li>ต้องการเพิ่มคน → กด <b>เพิ่มแถว</b> · ต้องการลบ → กด <b>ลบแถว</b></li>
+    <li>กดปุ่ม <b>สร้าง N รายการ</b> ด้านล่าง</li>
+  </ol>
+  <div class="scroll">
+  <table>
+    <thead><tr><th>สิ่งที่คัดลอกมาให้อัตโนมัติ</th><th>สิ่งที่ต้องกรอกเองทุกแถว</th></tr></thead>
+    <tbody>
+      <tr><td>บทบาท (ระดับสิทธิ์)<br>กลุ่มเครือข่าย<br>สิทธิ์ทั้งหมด</td><td>ชื่อผู้ใช้<br>รหัสผ่าน</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="note n-warn">
+    <b>⚠️ ข้อจำกัดและข้อผิดพลาดที่เจอบ่อย</b>
+    <ul style="margin-bottom:0">
+      <li><b>สูงสุด 10 รายการต่อครั้ง</b> — เกินกว่านี้ต้องแบ่งทำหลายรอบ</li>
+      <li><b>ชื่อผู้ใช้ซ้ำกันเองในรายการ</b> → ขึ้น “ชื่อผู้ใช้งานซ้ำในรายการนี้”</li>
+      <li>ถ้ามีแถวไหนผิด จะขึ้น “กรุณาแก้ไขแถวที่มีข้อผิดพลาดก่อนดำเนินการต่อ” — ต้องแก้ให้ครบก่อนถึงจะกดสร้างได้</li>
+    </ul>
+  </div>
+  <div class="note n-ok">
+    <b>✅ สำเร็จแล้วจะขึ้น</b>
+    “สร้างผู้ใช้งาน N รายการ ด้วยสิทธิ์เดียวกับ …” — จากนั้นแจกชื่อผู้ใช้/รหัสผ่านให้แต่ละคนไปล็อกอินได้เลย
+  </div>
+</section>
+
+<!-- 2 -->
+<section id="s2">
+  <div class="head"><span class="step-no">3</span><h2>เตรียมค่าจากฝั่ง LINE</h2></div>
+  <p>ค่า 3 อย่างนี้หาได้ที่ <b>LINE Developers Console</b> เท่านั้น (ไม่ใช่ OA Manager) → เลือก Provider ที่ OA ตัวนี้อยู่ → เลือก channel แบบ <b>Messaging API</b> ของ OA ตัวนั้น</p>
+  <!-- [FEAT-20260803-PROVIDERGUIDE] เดิมบอกว่า "ต้องอยู่คนละ Provider เสมอ" ซึ่งไม่จริง
+       เปลี่ยนเป็นเตือนเรื่องที่ผิดพลาดได้จริงตรงขั้นนี้: หยิบค่าจาก channel ผิดตัว -->
+  <div class="provider-warn">
+    <b class="big">🔴 ตรวจให้แน่ใจว่าอยู่ที่ channel ของ OA ตัวที่กำลังตั้งค่า</b>
+    <p>Provider หนึ่งอาจมี OA หลายตัวอยู่ข้างใน ค่าที่หยิบมาต้องเป็นของ channel ตัวที่ตรงกับ OA ที่กำลังตั้งค่าเท่านั้น
+    หากหยิบผิด channel ระบบจะเชื่อมต่อได้แต่ข้อความจะวิ่งเข้าผิด OA
+    <button class="prov-open" type="button" onclick="openProv()">รวมหรือแยก Provider?</button></p>
+  </div>
+  <div class="scroll">
+  <table>
+    <thead><tr><th>ค่าที่ต้องเอา</th><th>อยู่ที่แท็บไหน</th><th>หน้าตา</th></tr></thead>
+    <tbody>
+      <tr><td>Channel ID</td><td>Basic settings (บนสุด)</td><td>ตัวเลขล้วน เช่น <code>2001234567</code></td></tr>
+      <tr><td>Channel secret</td><td>Basic settings (เลื่อนลง)</td><td>ตัวอักษร+ตัวเลข เช่น <code>a1b2c3…</code></td></tr>
+      <tr><td>Channel access token</td><td>Messaging API → กดปุ่ม <b>Issue</b></td><td>token ยาวมาก (long-lived)</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="note n-warn">
+    <b>⚠️ Access token ต้องกด Issue ก่อน</b>
+    ถ้ายังไม่เคยออก token จะยังไม่มีค่าให้ copy — กด <b>Issue</b> แล้ว copy เก็บไว้ทันที
+  </div>
+</section>
+
+<!-- 3 -->
+<section id="s3">
+  <div class="head"><span class="step-no">4</span><h2>ตั้งค่า Response settings ที่ LINE OA Manager</h2></div>
+  <p>ส่วนนี้ทำที่ <a href="https://manager.line.biz/" target="_blank" rel="noopener"><code>https://manager.line.biz/</code></a> → เลือก OA → มุมขวาบน <b>Settings ⚙️</b> → เมนูซ้าย <b>Response settings</b></p>
+  <div class="scroll">
+  <table>
+    <thead><tr><th>รายการ</th><th>ต้องตั้งเป็น</th></tr></thead>
+    <tbody>
+      <tr><td>Chat (แชท)</td><td>✅ เปิด (ON)</td></tr>
+      <!-- [DOC-20260729-MENUMAP] เดิมมีวงเล็บซ้อนวงเล็บ อ่านยาก:
+           "(Auto-response messages (ตอบกลับอัตโนมัติ) ต้องปิด)" → จัดใหม่เป็นประโยคเดียว
+           + เติมทางออกกรณีปิดไม่ได้ ตามที่ผู้ใช้แจ้ง -->
+      <tr><td>Response method</td><td>เลือก <b>Manual Chat</b> — ต้องปิด <b>Auto-response messages</b> (ตอบกลับอัตโนมัติ) หากปิดไม่ได้ ให้เลือกเป็น <b>Manual</b></td></tr>
+      <tr><td>Greeting messages (ข้อความทักทาย)</td><td>เปิดหรือปิดก็ได้ ตามต้องการ</td></tr>
+      <tr><td>Webhooks</td><td>✅ เปิด (ON)</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="note n-danger">
+    <b>🔴 สำคัญที่สุด — ต้องปิด “Auto-response messages” (หรือ auto response)</b>
+    ถ้าไม่ปิด พอลูกค้าทักมา LINE จะตอบข้อความอัตโนมัติของตัวเองทันที ทำให้ลูกค้าได้รับ <b>2 ข้อความซ้อน</b>
+    (ของ LINE + ของบอท/แอดมิน) ทำให้สับสนและเสียภาพลักษณ์ · ปิดแล้ว = ให้ระบบเราตอบเพียงทางเดียว
+    <!-- [DOC-20260729-MENUMAP] เติมทางออกกรณีปิดไม่ได้ ให้ครบทุกจุดที่พูดถึง auto response -->
+    <br><b style="display:inline">หากปิดไม่ได้</b> ให้เลือกเป็น <b>Manual</b> แทน
+  </div>
+</section>
+
+<!-- 4 -->
+<section id="s4">
+  <div class="head"><span class="step-no">5</span><h2>สร้าง Hook ในระบบ — แท็บ “ข้อมูลทั่วไป”</h2></div>
+  <!-- [DOC-20260729-MENUMAP] "เมนูซ้าย" → "เมนูบน" (กลุ่ม "จัดการทั่วไป" ถูกต้องอยู่แล้ว) -->
+  <p>เมนู หัวข้อ <b>จัดการทั่วไป</b> → <b>ช่องทาง ( Hook )</b> → เข้าหน้า <b>จัดการ Webhook</b> → กดปุ่ม <b>เพิ่มใหม่</b> → จะเปิดฟอร์ม <b>สร้าง Webhook</b> ที่มี 6 แท็บ</p>
+  <p>ช่องที่มี <span class="req">*</span> คือ <b>บังคับกรอก</b> ถ้าไม่ครบจะบันทึกไม่ได้</p>
+  <div class="scroll">
+  <table>
+    <thead><tr><th>ช่อง</th><th>กรอกอะไร</th><th>บังคับ</th></tr></thead>
+    <tbody>
+      <tr><td>เว็บ</td><td>ชื่อบริษัท/เว็บ เช่น <code>ABC</code></td><td class="req">*</td></tr>
+      <tr><td>Channel</td><td>เลือก <b>LINE</b> (ตอนนี้รองรับ LINE อย่างเดียว)</td><td>—</td></tr>
+      <tr><td>ชื่อ LINE OA</td><td>ชื่อ OA ตัวนี้ ใช้อ้างอิงในระบบ</td><td class="req">*</td></tr>
+      <tr><td>Alias นามแฝง</td><td>ชื่อสั้น ๆ ภาษาอังกฤษ — <b>ค่านี้ถูกใช้ประกอบเป็น Webhook URL</b></td><td class="req">*</td></tr>
+      <tr><td>กลุ่มเครือข่าย</td><td>เลือกจากรายการที่มีอยู่</td><td class="req">*</td></tr>
+      <tr><td>คำอธิบาย</td><td>อธิบายว่า Hook นี้ใช้กับอะไร (ภาษาไทยได้)</td><td class="req">*</td></tr>
+      <tr><td>แท็ก</td><td>พิมพ์แล้วกด Enter — สูงสุด 5 แท็ก, ภาษาอังกฤษเท่านั้น</td><td>—</td></tr>
+      <tr><td>เปิดปิด assist ออโต้</td><td>จำนวนนาที (ค่าเริ่มต้น 30) ถ้าแอดมินเงียบเกินเวลานี้ บอทจะกลับมาตอบเอง</td><td>—</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="note n-warn">
+    <b>⚠️ ช่องที่ต้องเป็นภาษาอังกฤษ/ตัวเลขเท่านั้น</b>
+    <b>เว็บ</b>, <b>ชื่อ LINE OA</b>, <b>Alias</b>, <b>Channel URL</b>, <b>Channel ID</b>, <b>Channel Secret</b>, <b>Access Token</b>, <b>Custom AI Key</b> และ <b>แท็ก</b>
+    — ถ้าใส่ภาษาไทยจะขึ้นเตือน “ต้องเป็นตัวอักษรภาษาอังกฤษเท่านั้น” · ส่วน <b>คำอธิบาย</b> ใส่ไทยได้
+  </div>
+  <div class="note n-info">
+    <b>💡 Alias ตั้งให้ดีตั้งแต่แรก</b>
+    Alias เป็นส่วนหนึ่งของ Webhook URL ถ้าแก้ทีหลัง URL จะเปลี่ยน แล้วต้องกลับไปแก้ที่ LINE ใหม่ทั้งหมด
+  </div>
+</section>
+
+<!-- 5 -->
+<section id="s5">
+  <div class="head"><span class="step-no">6</span><h2>แท็บ “การเชื่อมต่อ Channel”</h2></div>
+  <p>เอาค่าที่ได้จากขั้นตอนที่ 3 มากรอกที่นี่</p>
+  <div class="scroll">
+  <table>
+    <thead><tr><th>ช่อง</th><th>กรอกอะไร</th><th>บังคับ</th></tr></thead>
+    <tbody>
+      <tr><td>Channel ID</td><td>เลขจาก Basic settings</td><td class="req">*</td></tr>
+      <tr><td>Channel Secret</td><td>ค่าจาก Basic settings (มีปุ่ม 👁 กดดูค่าได้)</td><td class="req">*</td></tr>
+      <tr><td>Access Token</td><td>token ยาวที่กด Issue มา (ช่องใหญ่ วางได้ทั้งก้อน)</td><td class="req">*</td></tr>
+      <tr><td>Channel URL</td><td>ลิงก์ OA เช่น <code>https://line.me/…</code></td><td class="req">*</td></tr>
+      <tr><td>Webhook Endpoint</td><td><b>ระบบสร้างให้อัตโนมัติ</b> จาก Alias — แก้ไม่ได้ มีปุ่มคัดลอก</td><td>—</td></tr>
+      <tr><td>Chat Bot ID</td><td>ไม่บังคับ (เช่น <code>U1234567890abcdef…</code>)</td><td>—</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="note n-ok">
+    <b>✅ Webhook Endpoint ไม่ต้องพิมพ์เอง</b>
+    ระบบสร้างให้จาก Alias โดยอัตโนมัติ (รูปแบบ <code>&lt;โดเมนระบบ&gt;/&lt;alias&gt;/webhook</code>)
+    — กดปุ่ม <b>คัดลอก</b> ข้าง ๆ ช่อง แล้วเก็บไว้ใช้ในขั้นตอนที่ 9
+  </div>
+  <div class="note n-danger">
+    <b>🔒 เก็บเป็นความลับ</b>
+    Channel Secret และ Access Token ห้ามส่งต่อ/แชร์ในแชทสาธารณะ ใครได้ไปจะส่งข้อความในนาม OA ของคุณได้
+  </div>
+</section>
+
+<!-- 6 -->
+<section id="s6">
+  <div class="head"><span class="step-no">7</span><h2>แท็บ “AI &amp; Responses”</h2></div>
+  <p>แท็บนี้มีช่องบังคับอยู่ 1 ช่องคือ <b>Training Document</b> และ <b>Custom AI Key</b></p>
+  <div class="scroll">
+  <table>
+    <thead><tr><th>ช่อง</th><th>กรอกอะไร</th><th>บังคับ</th></tr></thead>
+    <tbody>
+      <tr><td>Training Document (ข้อมูลทั่วไป)</td><td>ข้อมูลที่ใช้สอน AI ให้ตอบลูกค้า · แปะ <code>[[[assist]]]</code> ในคำตอบเพื่อส่งต่อให้แอดมิน (<a href="#assist">ดูวิธีใช้</a>)</td><td class="req">*</td></tr>
+      <tr><td>Training Document (ข้อมูลบริษัท) — ไม่บังคับ</td><td>ข้อมูลเฉพาะบริษัท</td><td>—</td></tr>
+      <tr><td>Training Document (no ProfileData) — ไม่บังคับ</td><td>ใช้ตอบคนที่ยังไม่ลงทะเบียน — เลือกได้ว่า <b>ใช้ร่วมกันกับ ข้อมูลทั่วไป</b> หรือ <b>แยก document</b></td><td>—</td></tr>
+      <tr><td>Custom AI Key</td><td>Google Gemini API Key</td><td class="req">*</td></tr>
+      <tr><td>ข้อความตอบกลับเริ่มต้น (กรณีไม่พบคำตอบ)</td><td>ข้อความเมื่อ AI หาคำตอบไม่พบ (มีค่าเริ่มต้นให้แล้ว)</td><td>—</td></tr>
+      <tr><td>ข้อความเมื่อไม่พบข้อมูล API</td><td>ข้อความเมื่อดึงข้อมูลจาก API ไม่ได้</td><td>—</td></tr>
+      <tr><td>ค่าตอบกลับเมื่อพบรูปภาพ</td><td>ข้อความเมื่อลูกค้าส่งรูปมา</td><td>—</td></tr>
+      <tr><td>ลิงก์คำตอบ (Answer Link) — ไม่บังคับ</td><td>ใส่ <code>[[link]]</code> ในข้อความตอบ ระบบจะแทนที่ด้วยลิงก์นี้ ถ้าไม่ได้ใช้ <code>[[link]]</code> ก็ไม่ต้องกรอก</td><td>—</td></tr>
+      <tr><td>Doc ID</td><td>รหัสอ้างอิงเอกสาร — ไม่บังคับ</td><td>—</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <h3 id="assist">ใส่ <code>[[[assist]]]</code> ใน Training Document เพื่อส่งต่อให้แอดมิน</h3>
+  <p>ถ้าอยากให้เรื่องไหน <b>หยุดให้บอทตอบ แล้วเปิด Ticket ส่งต่อให้แอดมินคน</b>
+    ให้เขียนคำตอบนั้นใน Training Document แล้วแปะ <code>[[[assist]]]</code> ลงไปในคำตอบ</p>
+
+  <div class="scroll">
+  <table>
+    <thead><tr><th>เขียนใน Training Document แบบนี้</th><th>สิ่งที่เกิดขึ้นจริง</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>ขอโทษค่ะ เรื่องนี้ต้องให้เจ้าหน้าที่ดูแลนะคะ รอสักครู่ค่ะ [[[assist]]]</code></td>
+        <td>
+          ① ลูกค้าได้รับข้อความ <b>“ขอโทษค่ะ เรื่องนี้ต้องให้เจ้าหน้าที่ดูแลนะคะ รอสักครู่ค่ะ”</b> (ไม่เห็นคำว่า <code>[[[assist]]]</code>)<br>
+          ② ระบบ <b>สร้าง Ticket</b> ให้อัตโนมัติ<br>
+          ③ <b>บอทหยุดตอบห้องนี้</b> รอแอดมินเข้ามาคุยต่อ<br>
+          ④ ถ้าตั้ง Telegram ไว้ จะมี <b>แจ้งเตือนเข้า Telegram</b> ด้วย
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="note n-info">
+    <b>💡 ระบบตัด <code>[[[assist]]]</code> ออกก่อนส่งเสมอ</b>
+    <!-- [DOC-20260729-MENUMAP] ปรับถ้อยคำให้เป็นทางการขึ้น -->
+    ลูกค้าจะไม่เห็นคำนี้ในแชท — เป็นสัญญาณสำหรับระบบเท่านั้น
+    จึงระบุไว้ท้ายประโยคได้ โดยข้อความที่ลูกค้าได้รับจะไม่เปลี่ยนแปลง
+  </div>
+
+  <div class="note n-warn">
+    <b>⚠️ ข้อควรรู้</b>
+    <ul style="margin-bottom:0">
+      <li>ต้องพิมพ์ <b>วงเล็บ 3 ชั้น</b> ให้ตรงเป๊ะ → <code>[[[assist]]]</code> (ถ้าพิมพ์ <code>[[assist]]</code> ชั้นเดียวจะไม่ทำงาน)</li>
+      <li>ถ้าห้องนั้น <b>กำลังถูกแอดมินดูแลอยู่แล้ว</b> ระบบจะไม่สร้าง Ticket ซ้ำ</li>
+      <li>ไม่ได้ตั้ง Telegram ก็ยัง <b>ใช้งานได้ปกติ</b> — Ticket ยังถูกสร้างและบอทยังหยุดตอบ แค่ไม่มีแจ้งเตือนเข้า Telegram</li>
+      <li>เมื่อแอดมินคุยจบแล้ว บอทจะกลับมาตอบเองตามเวลาที่ตั้งไว้ในช่อง <b>เปิดปิด assist ออโต้</b> (แท็บข้อมูลทั่วไป)</li>
+    </ul>
+  </div>
+
+  <h3>ตั้งค่า AI ขั้นสูง (Gemini) <span class="tag">ไม่ต้องแก้ก็ได้</span></h3>
+  <div class="scroll">
+  <table>
+    <thead><tr><th>ค่า</th><th>ค่าเริ่มต้น</th><th>ความหมาย</th></tr></thead>
+    <tbody>
+      <tr><td>Gemini Temperature (ความสร้างสรรค์)</td><td>0.5</td><td>ความสร้างสรรค์ (0.0–1.0) · ต่ำ = แม่นยำเป็นแบบแผน, สูง = หลากหลายแต่คุมยาก</td></tr>
+      <tr><td>Gemini Top K</td><td>20</td><td>จำกัดตัวเลือกคำ (1–100) · ต่ำ = คำศัพท์แคบ มั่นใจสูง</td></tr>
+      <tr><td>Gemini Top P</td><td>0.9</td><td>จำกัดกลุ่มคำตามความน่าจะเป็น (0.0–1.0)</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="note n-info">
+    <b>💡 ทดสอบ AI Key ก่อนได้</b>
+    ที่หน้า <b>จัดการ Webhook</b> มีปุ่ม <b>ทดสอบคีย์</b> — วาง API Key แล้วกดทดสอบ ถ้าขึ้น “คีย์ใช้งานได้” แปลว่าใช้ได้จริง
+  </div>
+</section>
+
+<!-- 7 -->
+<section id="s7">
+  <div class="head"><span class="step-no">8</span><h2>แท็บที่ไม่บังคับ — ข้ามไปก่อนได้</h2></div>
+  <p>แท็บเหล่านี้ <b>ไม่จำเป็นต้องกรอกตอนสร้างครั้งแรก</b> เปิดใช้ทีหลังได้เมื่อต้องการ</p>
+
+  <h3>Slip Verification (ตรวจสลิปโอนเงิน)</h3>
+  <p>ตั้งค่าบัญชีที่จะใช้ตรวจสลิป ได้ที่ Dashboard ของผู้ให้บริการ <b>Swiftcheck</b></p>
+  <div class="scroll">
+  <table>
+    <thead><tr><th>ลิงก์ Swiftcheck</th><th>ใช้ทำอะไร</th></tr></thead>
+    <tbody>
+      <tr><td><a href="https://developer.swiftcheck.example.com/auth/sign-in" target="_blank" rel="noopener">เข้าสู่ระบบ (Sign in)</a></td><td>ล็อกอินเข้า Swiftcheck</td></tr>
+      <tr><td><a href="https://developer.swiftcheck.example.com/dashboard" target="_blank" rel="noopener">Dashboard</a></td><td>ตั้งค่าบัญชีตรวจสอบรับเงิน + ดูรายการตรวจสลิป</td></tr>
+      <tr><td><a href="https://help.swiftcheck.example.com/" target="_blank" rel="noopener">ศูนย์ช่วยเหลือ (help.swiftcheck.example.com)</a></td><td>คู่มือการใช้งานของ Swiftcheck เอง</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="note n-danger">
+    <b>⚠️ เข้าทาง API LOGIN ด้วย E-mail เท่านั้น</b>
+    ถ้า login ด้วยวิธีอื่นจะไม่เห็นเมนูตั้งค่าบัญชีตรวจสอบ
+  </div>
+
+  <p><b>ขั้นตอนเพิ่มบัญชีตรวจสอบที่ Swiftcheck:</b></p>
+  <ol>
+    <li>เข้าสู่ระบบ → แดชบอร์ด → แท็บ <b>บัญชี</b> → กดปุ่ม <b>+ เพิ่ม</b> ที่หัวข้อ “บัญชีตรวจสอบรับเงิน”</li>
+    <li>กรอกรายละเอียดบัญชี — เลือกธนาคาร, เลขบัญชี, ประเภท (นิติบุคคล/บุคคลธรรมดา), ชื่อบัญชีไทย+อังกฤษ (ตามสมุดบัญชี ไม่ต้องใส่คำนำหน้า) → กด <b>บันทึก</b></li>
+    <li>เพิ่มเสร็จจะเห็นบัญชีอยู่ในรายการ — เอา <b>เลขบัญชี</b> นี้ไปใส่ในช่อง <b>เลขบัญชีที่ต้องการตรวจสอบ</b> ของระบบเรา</li>
+  </ol>
+
+  <div class="note n-info">
+    <b>📖 ดูคู่มือพร้อมภาพในหน้าจอได้เลย</b>
+    ในแท็บ Slip Verification กดปุ่ม <b>?</b> ข้างช่อง <b>Slip Verify Key</b> หรือ <b>Match Account</b> จะเปิดคู่มือพร้อมภาพประกอบ (คลิกที่ภาพเพื่อขยายได้)
+  </div>
+  <ul>
+    <li><b>เปิดใช้งาน Slip Verification</b> — สวิตช์เปิด/ปิดฟีเจอร์</li>
+    <li><b>Slip Verify Key</b> — คีย์จากผู้ให้บริการตรวจสลิป</li>
+    <li><b>Match Account (ตรวจสอบเลขบัญชี)</b> + <b>เลขบัญชีที่ต้องการตรวจสอบ (Match Account Number)</b> — บังคับให้สลิปต้องโอนเข้าบัญชีนี้เท่านั้น</li>
+    <li><b>ยอดเงินต่ำสุดที่ยอมรับ (บาท)</b> / <b>ยอดเงินสูงสุดที่ยอมรับ</b> / <b>ระยะเวลาสลิปที่ยอมรับ (นาที)</b> — เงื่อนไขการรับสลิป</li>
+    <li><b>ข้อความเมื่อตรวจพบว่าเป็นรูปภาพทั่วไป (ไม่ใช่ QR Code)</b> — ตอบกลับเมื่อลูกค้าส่งรูปที่ไม่ใช่สลิป</li>
+    <li><b>Flex …</b> หลายช่อง — เลือกรูปแบบข้อความตอบกลับแต่ละกรณี (สำเร็จ / ล้มเหลว / ซ้ำ / เกินยอด / หมดอายุ)</li>
+    <li><b>Callback URL (เมื่อตรวจสอบสลิปเสร็จ)</b> + <b>Callback Token (สิทธิ์การเข้าถึง Callback)</b> — ส่งผลตรวจสลิปไปยังระบบอื่น</li>
+    <li><b>เหตุการณ์ที่ต้องการให้ Callback</b> — ทั้งหมด / เฉพาะรายการที่สำเร็จเท่านั้น / ไม่มี (ไม่ส่ง Callback)</li>
+  </ul>
+  <div class="note n-warn">
+    <b>⚠️ ถ้าใส่ Callback URL ต้องใส่ Callback Token ด้วย</b>
+    ไม่งั้นจะขึ้นเตือน “กรุณากรอก Callback Token เมื่อมีการระบุ Callback URL”
+  </div>
+
+  <h3>การแจ้งเตือน (Telegram)</h3>
+  <a class="clip" href="https://drive.google.com/file/d/EXAMPLE_FILE_ID/view?usp=sharing" target="_blank" rel="noopener">🎬 คลิปสอนการตั้งค่า Telegram Bot</a>
+  <ul>
+    <li><b>Telegram Key</b> — token ของ Telegram bot (ไม่บังคับ) · ขอ key ได้ที่ <a href="https://t.me/BotFather" target="_blank" rel="noopener">@BotFather</a></li>
+    <li><b>Telegram Chat ID</b> — กรอกเองก็ได้ หรือกดปุ่ม <b>ดึงข้อมูล chat id</b> แล้วค้นด้วย keyword ที่เคยพิมพ์ในแชท</li>
+    <li><b>ประเภทการแจ้งเตือน Telegram</b> — ทั้งหมด (ข้อความและรูปภาพ) / เฉพาะข้อความ / เฉพาะรูปภาพ</li>
+  </ul>
+
+  <div class="note n-ok">
+    <b>✅ กรอกครบแล้วกด “บันทึกการเปลี่ยนแปลง”</b>
+    ถ้ามีช่องไหนไม่ผ่าน ระบบจะแจ้งเป็นรายการว่า <b>ช่องไหน อยู่แท็บไหน</b> และเด้งไปแท็บแรกที่ผิดให้อัตโนมัติ
+  </div>
+</section>
+
+<!-- 8 -->
+<section id="s8">
+  <div class="head"><span class="step-no">9</span><h2>นำ Webhook Endpoint ไป Verify ที่ LINE</h2></div>
+  <p>นี่คือหัวใจ — ถ้า webhook ไม่ติด บอทจะไม่รับข้อความอะไรเลย (พิมพ์อะไรไปก็เงียบ)</p>
+  <ol>
+    <li><b>คัดลอก URL:</b> เปิด Hook ที่สร้างไว้ → แท็บ <b>การเชื่อมต่อ Channel</b> → กดปุ่มคัดลอกข้าง <b>Webhook Endpoint</b></li>
+    <li><b>เปิด LINE Developers:</b> <code>developers.line.biz/console</code> → เลือก Provider ที่ OA ตัวนี้อยู่ → เลือก <b>channel เดิม</b> ที่หยิบค่ามาตอนขั้นที่ 3 <!-- [FEAT-20260803-PROVIDERGUIDE] เลิกอ้างกฎ 1:1 --></li>
+    <li><b>ไปแท็บ Messaging API</b> → เลื่อนหาหัวข้อ <b>Webhook settings</b></li>
+    <li><b>วาง URL:</b> ช่อง Webhook URL กด <b>Edit</b> → วางลิงก์ที่ copy มา → กด <b>Update</b></li>
+    <li><b>กด Verify:</b> ต้องขึ้น <b>Success</b> (แปลว่า LINE ยิงทดสอบมาแล้วระบบตอบกลับ 200)</li>
+    <li><b>เปิดสวิตช์ Use webhook</b> ให้เป็น ON</li>
+  </ol>
+  <div class="note n-danger">
+    <b>❌ ถ้า Verify ไม่ขึ้น Success</b>
+    <ul style="margin-bottom:0">
+      <li><b>status code other than 200</b> → วาง URL ผิด/ตกตัวอักษร หรือระบบยังไม่พร้อม — ให้ copy จากปุ่มเท่านั้น อย่าพิมพ์เอง</li>
+      <li><b>error occurred while connecting / timeout</b> → โดเมน/SSL ยังไม่พร้อม หรือถูก firewall บล็อก — รอ deploy เสร็จแล้วลองใหม่</li>
+      <li>แก้ URL แล้วต้องกด <b>Update</b> ก่อน ค่อยกด <b>Verify</b></li>
+    </ul>
+  </div>
+  <div class="note n-warn">
+    <b>⚠️ Verify ผ่านอย่างเดียวยังไม่พอ</b>
+    ต้องเปิด <b>Use webhook</b> ด้วย ไม่งั้นบอทยังไม่ได้รับ event จริง
+  </div>
+</section>
+
+<!-- 9 -->
+<section id="s9">
+  <div class="head"><span class="step-no">10</span><h2>ตรวจสอบว่าเชื่อมต่อสมบูรณ์</h2></div>
+  <h3>ฝั่งระบบเรา</h3>
+  <div class="scroll">
+  <table>
+    <thead><tr><th>เช็คอะไร</th><th>ทำยังไง</th><th>ผลที่ถูกต้อง</th></tr></thead>
+    <tbody>
+      <tr><td>Hook ถูกสร้างแล้ว</td><td>หน้า <b>จัดการ Webhook</b></td><td>เห็นรายการ พร้อมชื่อ OA / เว็บ / Alias</td></tr>
+      <tr><td>สถานะเปิดใช้งาน</td><td>คอลัมน์ <b>สถานะ</b> ในตาราง</td><td>สลับเป็น <b>เปิดใช้งานแล้ว</b></td></tr>
+      <tr><td>AI Key ใช้ได้</td><td>ปุ่ม <b>ทดสอบคีย์</b></td><td>ขึ้น <b>คีย์ใช้งานได้</b></td></tr>
+      <tr><td>รายละเอียดการเชื่อมต่อ</td><td>ปุ่ม <b>ดูรายละเอียดการเชื่อมต่อ</b> ในแถวนั้น</td><td>ค่าครบ ไม่มีช่องว่าง</td></tr>
+      <tr><td>บอทตอบข้อความ</td><td>ทักเข้าไปที่ OA ใน LINE</td><td>ได้รับคำตอบกลับ = webhook รับ event ได้จริง</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <h3>ฝั่ง LINE</h3>
+  <div class="scroll">
+  <table>
+    <thead><tr><th>เช็คที่ไหน</th><th>ต้องเป็น</th></tr></thead>
+    <tbody>
+      <tr><td>Developers → Messaging API → Verify</td><td>ขึ้น <b>Success</b></td></tr>
+      <tr><td>Developers → Messaging API → Use webhook</td><td>เปิด (ON)</td></tr>
+      <!-- [DOC-20260729-MENUMAP] เติมคำเตือน: กด Issue ใหม่ = token เดิมใช้ไม่ได้ทันที -->
+      <tr><td>Developers → Channel access token</td><td>มี token แล้ว และเป็นตัวเดียวกับที่กรอกในระบบ — <b class="req">⚠️ ระวังการกด Issue ซ้ำ</b> เพราะ token จะเปลี่ยน ต้องนำตัวใหม่มากรอกในระบบทุกครั้ง</td></tr>
+      <!-- [DOC-20260729-MENUMAP] เติมทางออกกรณีปิดไม่ได้ -->
+      <tr><td>OA Manager → Response settings → Auto-response (หรือ auto response)</td><td>ปิด (OFF) — หากปิดไม่ได้ เลือกเป็น <b>Manual</b></td></tr>
+      <tr><td>OA Manager → Response settings → Chat</td><td>เปิด (ON)</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="note n-ok">
+    <b>🎉 ครบทั้ง 2 ฝั่ง = เชื่อมต่อสมบูรณ์</b>
+    ถ้ามีข้อไหนไม่ผ่าน ให้ย้อนกลับไปทำขั้นตอนที่เกี่ยว —
+    token ผิด → ขั้นตอนที่ 3 (Issue ใหม่) · บอทเงียบ / Verify ไม่ผ่าน → ขั้นตอนที่ 9 · ตอบ 2 ข้อความซ้อน → ขั้นตอนที่ 4 (ปิด Auto-response หากปิดไม่ได้ เลือกเป็น Manual)
+  </div>
+</section>
+
+
+<footer>คู่มือการสร้าง Hook (LINE)</footer>
+
+</div>
+</body>
+</html>

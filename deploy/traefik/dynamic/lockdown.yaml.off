@@ -1,0 +1,21 @@
+# Edge lockdown switch. Rename to `lockdown.yaml` to turn it ON, back to `.off` to turn it OFF.
+# ON: the public API host answers 403 for everything except the allowlist below — the paths
+# that external platforms must reach (webhooks, callbacks, uploads, health). Takes effect in
+# about a second (file provider watch), no restart.
+http:
+  middlewares:
+    deny-all:
+      ipAllowList:
+        sourceRange: ["127.0.0.1/32"]   # nobody else; replace with an admin IP if you need one
+  routers:
+    api-allow:
+      entryPoints: [web]
+      priority: 300
+      rule: "Host(`api.localhost`) && (PathRegexp(`^/webhook/?$`) || PathRegexp(`^/[^/]+/webhook/?$`) || PathPrefix(`/api/telegram/webhook`) || PathPrefix(`/api/handoff/callback`) || PathPrefix(`/customer-link`) || PathPrefix(`/uploads`) || PathPrefix(`/bank-logos`) || PathPrefix(`/health`))"
+      service: omnidesk-api
+    api-deny:
+      entryPoints: [web]
+      priority: 250
+      rule: "Host(`api.localhost`) && PathPrefix(`/`)"
+      middlewares: [deny-all]
+      service: omnidesk-api

@@ -1,0 +1,12 @@
+# keep the build context to what the image needs (package*.json + server.js)
+.git
+node_modules
+.env
+.env.*
+*.log
+.DS_Store
+test
+todo
+README.md
+Dockerfile
+.dockerignore

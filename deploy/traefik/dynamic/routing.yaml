@@ -1,0 +1,57 @@
+# Console origin → API. The console calls the API on its OWN origin; Traefik forwards the API
+# prefixes to the backend and injects the internal proxy secret, so the API can refuse any
+# request that did not come through this route (app-level gate, INTERNAL_PROXY_SECRET).
+http:
+  middlewares:
+    omnidesk-secret-inject:
+      headers:
+        customRequestHeaders:
+          X-Internal-Secret: '{{ env "INTERNAL_PROXY_SECRET" }}'
+    omnidesk-compress:
+      compress: {}
+    ws-strip:
+      stripPrefix:
+        prefixes: ["/ws"]
+
+  services:
+    omnidesk-api:
+      loadBalancer:
+        servers:
+          - url: "http://api:3000"
+    omnidesk-console:
+      loadBalancer:
+        servers:
+          - url: "http://console:5173"
+    omnidesk-ws:
+      loadBalancer:
+        servers:
+          - url: "http://ws:8080"
+
+  routers:
+    console-api:
+      entryPoints: [web]
+      priority: 200
+      rule: "Host(`console.localhost`) && (PathPrefix(`/api`) || PathPrefix(`/hook`) || PathPrefix(`/webhook`) || PathPrefix(`/config`) || PathPrefix(`/configs`) || PathPrefix(`/audit`) || PathPrefix(`/stats`) || PathPrefix(`/customer-link`) || PathPrefix(`/payment`) || PathPrefix(`/uploads`) || PathPrefix(`/bank-logos`) || PathRegexp(`^/[^/]+/webhook/?$`))"
+      middlewares: [omnidesk-secret-inject, omnidesk-compress]
+      service: omnidesk-api
+
+    console-ws:
+      entryPoints: [web]
+      priority: 150
+      rule: "Host(`console.localhost`) && PathPrefix(`/ws`)"
+      middlewares: [ws-strip]
+      service: omnidesk-ws
+
+    console-spa:
+      entryPoints: [web]
+      priority: 50
+      rule: "Host(`console.localhost`)"
+      service: omnidesk-console
+
+    # Public API host: messaging-platform webhooks, payment callbacks and health only.
+    # The lockdown switch (lockdown.yaml) closes everything else on this host.
+    api-public:
+      entryPoints: [web]
+      priority: 100
+      rule: "Host(`api.localhost`)"
+      service: omnidesk-api

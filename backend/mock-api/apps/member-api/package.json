@@ -1,0 +1,8 @@
+{
+  "name": "@zcrm/member-api",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Mock member-data upstream (replaces the old partner member API): profile, link/edit/unlink, site rules, slip top-up.",
+  "dependencies": { "@fastify/formbody": "^9.0.0", "@fastify/multipart": "^10.0.0", "@zcrm/core": "*", "fastify": "^5.12.0", "typebox": "^1.1.14" }
+}
