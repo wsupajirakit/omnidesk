@@ -1,0 +1,5 @@
+# Fake test fixtures in the initial commit (not real keys). Later commits mark the same lines
+# inline with gitleaks:allow; these entries cover the history scan.
+5796a85609856d44f66fc9f4136e26886584c1ae:backend/z-test/unit/crypto.spec.ts:generic-api-key:13
+5796a85609856d44f66fc9f4136e26886584c1ae:backend/z-test/unit/mask-creds.spec.ts:stripe-access-token:11
+5796a85609856d44f66fc9f4136e26886584c1ae:backend/z-test/unit/sec-compare-leak.spec.ts:generic-api-key:27

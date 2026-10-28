@@ -10,7 +10,7 @@ describe('CryptoService', () => {
     // [FIX-20260820-SESSIONCEILING] 0 = the feature is off, which is what this
     // suite exercises — CryptoService never reads it.
     sessionMaxLifetimeMin: 0,
-    encryptionKey: 'test-encryption-key-12345',
+    encryptionKey: 'test-encryption-key-12345', // gitleaks:allow (test fixture, not a real key)
     tempKeySecret: 'temp-key-secret',
   };
 

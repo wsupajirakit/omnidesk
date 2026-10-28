@@ -24,7 +24,7 @@ const configsFixture = () => ({
       baseUrl: 'https://api.example.test',
       username: 'svc_user',
       password: 'sup3r-s3cret-pw',
-      api_key: 'ak_live_1234567890',
+      api_key: 'ak_live_1234567890', // gitleaks:allow (test fixture, not a real key)
     },
     endpoints: [{ key: 'PROFILE', method: 'GET', path: 'v1/customer' }],
     source: 'system_config',
@@ -44,7 +44,7 @@ describe('[SEC-COMPARELEAK] credentials never leave in the compare response', ()
     expect(out.current.config.password).not.toBe('sup3r-s3cret-pw');
     expect(out.target.password).not.toBe('another-s3cret');
     // And the api_key that rode along inside `current`.
-    expect(out.current.config.api_key).not.toBe('ak_live_1234567890');
+    expect(out.current.config.api_key).not.toBe('ak_live_1234567890'); // gitleaks:allow (test fixture, not a real key)
   });
 
   it('no raw secret survives anywhere in the serialised body', () => {
@@ -54,7 +54,7 @@ describe('[SEC-COMPARELEAK] credentials never leave in the compare response', ()
     for (const secret of [
       'sup3r-s3cret-pw',
       'another-s3cret',
-      'ak_live_1234567890',
+      'ak_live_1234567890', // gitleaks:allow (test fixture, not a real key)
     ]) {
       expect(json).not.toContain(secret);
     }

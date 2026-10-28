@@ -3,12 +3,12 @@ import { maskCredsDeep, maskString } from '@/common/utils/mask-creds';
 describe('maskCreds', () => {
   it('masks string revealing head ~20%', () => {
     expect(maskString('123')).toBe('•••');
-    expect(maskString('sk_live_abcd1234')).toBe('sk_l••••••••••••');
+    expect(maskString('sk_live_abcd1234')).toBe('sk_l••••••••••••'); // gitleaks:allow (test fixture, not a real key)
   });
 
   it('masks object payload credential values deeply', () => {
     const payload = {
-      api_key: 'sk_live_1234567890',
+      api_key: 'sk_live_1234567890', // gitleaks:allow (test fixture, not a real key)
       user: {
         password: 'mySecretPassword123',
         id: 'a0d00000000000000000006a', // ObjectId -> kept
